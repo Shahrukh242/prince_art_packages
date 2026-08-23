@@ -1,6 +1,8 @@
 node_modules/
 .env
+.env.remote
 *.log
 .DS_Store
 public/uploads/*
 !public/uploads/.gitkeep
+tools/dump-website_cms.sql
