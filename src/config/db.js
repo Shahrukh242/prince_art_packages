@@ -2,12 +2,26 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 const dbConfig = require('./db.config');
 
+// Prefer the full platform-provided env set when DB_HOST is present; otherwise
+// fall back to the committed free-DB config. We never mix the two (a hybrid of
+// localhost host + remote password would fail to connect).
+const envProvided = !!(process.env.DB_HOST && process.env.DB_HOST.trim());
+const cfg = envProvided
+  ? {
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT, 10) || 3306,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME
+    }
+  : dbConfig;
+
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || dbConfig.DB_HOST,
-  port: parseInt(process.env.DB_PORT, 10) || dbConfig.DB_PORT,
-  user: process.env.DB_USER || dbConfig.DB_USER,
-  password: process.env.DB_PASSWORD || dbConfig.DB_PASSWORD,
-  database: process.env.DB_NAME || dbConfig.DB_NAME,
+  host: cfg.host,
+  port: parseInt(cfg.port, 10) || 3306,
+  user: cfg.user,
+  password: cfg.password,
+  database: cfg.database,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -33,9 +47,7 @@ async function checkConnection() {
     return {
       status: 'disconnected',
       error: error.message,
-      code: error.code,
-      seenHost: process.env.DB_HOST || '(empty)',
-      seenPort: process.env.DB_PORT || '(empty)'
+      code: error.code
     };
   }
 }
