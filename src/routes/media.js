@@ -56,7 +56,7 @@ router.get('/', async (req, res, next) => {
     const params = [];
 
     if (search) {
-      queryStr += ' AND (file_name LIKE ? OR alt_text LIKE ? OR caption LIKE ?)';
+      queryStr += ' AND (filename LIKE ? OR alt_text LIKE ? OR original_name LIKE ?)';
       const pattern = `%${search}%`;
       params.push(pattern, pattern, pattern);
     }
@@ -82,6 +82,22 @@ router.get('/', async (req, res, next) => {
 });
 
 /**
+ * GET /api/media/:id
+ * Retrieve a single media item by ID.
+ */
+router.get('/:id', async (req, res, next) => {
+  try {
+    const media = await db.query('SELECT * FROM media WHERE id = ?', [req.params.id]);
+    if (media.length === 0) {
+      return res.status(404).json({ success: false, error: 'Media file not found' });
+    }
+    res.json({ success: true, data: media[0] });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * POST /api/media/upload
  * PROTECTED - Upload new file.
  */
@@ -98,14 +114,16 @@ router.post('/upload', requireAuth, (req, res, next) => {
     try {
       const { alt_text, caption, description } = req.body;
       const fileName = req.file.filename;
+      const originalName = req.file.originalname;
       const filePath = `/uploads/${fileName}`;
       const mimeType = req.file.mimetype;
       const fileSize = req.file.size;
+      const uploadedBy = req.user ? req.user.id : null;
 
       const result = await db.query(
-        `INSERT INTO media (file_name, file_path, mime_type, file_size, alt_text, caption, description)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [fileName, filePath, mimeType, fileSize, alt_text || null, caption || null, description || null]
+        `INSERT INTO media (filename, original_name, file_path, file_type, mime_type, file_size, alt_text, uploaded_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [fileName, originalName, filePath, mimeType, mimeType, fileSize, alt_text || null, uploadedBy]
       );
 
       const [newMedia] = await db.query('SELECT * FROM media WHERE id = ?', [result.insertId]);
@@ -129,7 +147,7 @@ router.post('/upload', requireAuth, (req, res, next) => {
  */
 router.put('/:id', requireAuth, async (req, res, next) => {
   try {
-    const { alt_text, caption, description } = req.body;
+    const { alt_text } = req.body;
     const mediaId = req.params.id;
 
     const existing = await db.query('SELECT * FROM media WHERE id = ?', [mediaId]);
@@ -137,16 +155,11 @@ router.put('/:id', requireAuth, async (req, res, next) => {
       return res.status(404).json({ success: false, error: 'Media file not found' });
     }
 
-    await db.query(
-      `UPDATE media SET alt_text = ?, caption = ?, description = ? WHERE id = ?`,
-      [alt_text !== undefined ? alt_text : existing[0].alt_text,
-       caption !== undefined ? caption : existing[0].caption,
-       description !== undefined ? description : existing[0].description,
-       mediaId]
-    );
+    const newAltText = alt_text !== undefined ? alt_text : existing[0].alt_text;
+    await db.query('UPDATE media SET alt_text = ? WHERE id = ?', [newAltText, mediaId]);
 
     const [updated] = await db.query('SELECT * FROM media WHERE id = ?', [mediaId]);
-    logActivity(req.user ? req.user.id : null, 'Updated Media Metadata', 'media', mediaId, { alt_text });
+    logActivity(req.user ? req.user.id : null, 'Updated Media Metadata', 'media', mediaId, { alt_text: newAltText });
 
     res.json({
       success: true,

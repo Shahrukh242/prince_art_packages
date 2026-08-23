@@ -45,19 +45,20 @@ async function initCmsTables() {
     `);
 
     // 3. media table
-    await db.query(`
+    await db.query(` 
       CREATE TABLE IF NOT EXISTS media (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        file_name VARCHAR(191) NOT NULL,
+        filename VARCHAR(255) NOT NULL,
+        original_name VARCHAR(255) NULL,
         file_path VARCHAR(255) NOT NULL,
+        file_type VARCHAR(100) NULL,
         mime_type VARCHAR(100) NULL,
         file_size INT NULL,
         alt_text VARCHAR(255) NULL,
-        caption TEXT NULL,
-        description TEXT NULL,
+        uploaded_by INT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        INDEX idx_file_name (file_name)
+        INDEX idx_filename (filename)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
@@ -97,13 +98,15 @@ async function initCmsTables() {
     `);
 
     // 6. redirects table
-    await db.query(`
+    await db.query(` 
       CREATE TABLE IF NOT EXISTS redirects (
         id INT AUTO_INCREMENT PRIMARY KEY,
         source_url VARCHAR(191) NOT NULL,
         target_url VARCHAR(255) NOT NULL,
+        destination_url VARCHAR(255) NULL,
         status_code INT NOT NULL DEFAULT 301,
         is_active TINYINT(1) NOT NULL DEFAULT 1,
+        active TINYINT(1) NOT NULL DEFAULT 1,
         notes TEXT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

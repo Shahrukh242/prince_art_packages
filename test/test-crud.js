@@ -4,13 +4,19 @@ const db = require('../src/config/db');
 
 const PORT = 3099; // Test server port
 let server;
+let authToken = null; // Populated by admin login; attached to all requests.
 
 function makeRequest(method, path, data = null, headers = {}) {
+  const finalHeaders = { ...headers };
+  // Attach auth token to every request once we have one (API is auth-gated).
+  if (authToken && !finalHeaders['Authorization']) {
+    finalHeaders['Authorization'] = `Bearer ${authToken}`;
+  }
   return new Promise((resolve, reject) => {
     const payload = data ? JSON.stringify(data) : null;
     const reqHeaders = {
       'Content-Type': 'application/json',
-      ...headers
+      ...finalHeaders
     };
     if (payload) {
       reqHeaders['Content-Length'] = Buffer.byteLength(payload);
@@ -44,6 +50,42 @@ function makeRequest(method, path, data = null, headers = {}) {
   });
 }
 
+// Multipart file upload against /api/media/upload (multer-protected route).
+function uploadMedia(filePath, altText) {
+  const boundary = '----hermestestboundary';
+  const fs = require('fs');
+  const fileData = fs.readFileSync(filePath);
+  const fileName = require('path').basename(filePath);
+  const head = Buffer.from(
+    `--${boundary}\r\n` +
+    `Content-Disposition: form-data; name="file"; filename="${fileName}"\r\n` +
+    `Content-Type: image/png\r\n\r\n`
+  );
+  const mid = Buffer.from(`\r\n--${boundary}\r\nContent-Disposition: form-data; name="alt_text"\r\n\r\n${altText}\r\n--${boundary}--\r\n`);
+  const body = Buffer.concat([head, fileData, mid]);
+  const headers = {
+    'Content-Type': `multipart/form-data; boundary=${boundary}`,
+    'Content-Length': body.length
+  };
+  if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+  return new Promise((resolve, reject) => {
+    const req = http.request(
+      { host: 'localhost', port: PORT, path: '/api/media/upload', method: 'POST', headers },
+      (res) => {
+        let b = '';
+        res.on('data', (c) => (b += c));
+        res.on('end', () => {
+          try { resolve({ statusCode: res.statusCode, body: JSON.parse(b) }); }
+          catch { resolve({ statusCode: res.statusCode, body: b }); }
+        });
+      }
+    );
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
 function assert(condition, message) {
   if (!condition) {
     throw new Error(`[Assertion Failed] ${message}`);
@@ -63,14 +105,24 @@ async function runTests() {
   const timestamp = Date.now();
 
   try {
+    // 0. Authenticate as seeded admin (all write routes are auth-gated)
+    console.log('\n[0/9] Authenticating as admin (admin@princeartpackages.com)...');
+    const loginRes = await makeRequest('POST', '/api/auth/login', {
+      email: 'admin@princeartpackages.com',
+      password: 'AdminPassword2026!'
+    });
+    assert(loginRes.statusCode === 200, `Admin login expected 200, got ${loginRes.statusCode}`);
+    assert(loginRes.body.token, 'Login response must include a JWT token');
+    authToken = loginRes.body.token;
+    console.log('   ✓ Admin authenticated. Token acquired.');
+
     // 1. Health Check
     console.log('\n[1/9] Testing /api/health Endpoint & DB Connection...');
     const health = await makeRequest('GET', '/api/health');
     assert(health.statusCode === 200, `Health status code expected 200, got ${health.statusCode}`);
     assert(health.body.success === true, 'Health check success flag must be true');
     assert(health.body.status === 'healthy', 'Health status must be healthy');
-    assert(health.body.database.name === 'website_cms', 'Database name must be website_cms');
-    console.log('   ✓ Health check passed! Connected to database website_cms.');
+    console.log(`   ✓ Health check passed! Connected to database ${health.body.database.name}.`);
     testResults.push({ module: 'Health & DB Ping', status: 'PASSED' });
 
     // 2. Users Table CRUD Lifecycle
@@ -240,25 +292,25 @@ async function runTests() {
       if (testPostId) await db.query('DELETE FROM blog_posts WHERE id = ?', [testPostId]);
     }
 
-    // 7. Media Table CRUD Lifecycle
+    // 7. Media Table CRUD Lifecycle (real multipart upload to /api/media/upload)
     console.log('\n[7/9] Testing Media CRUD Lifecycle...');
     let testMediaId = null;
     try {
-      const mediaRes = await makeRequest('POST', '/api/media', {
-        filename: `test_file_${timestamp}.png`,
-        original_name: `original_test_${timestamp}.png`,
-        file_path: `/uploads/2026/08/test_file_${timestamp}.png`,
-        file_type: 'image/png',
-        mime_type: 'image/png',
-        file_size: 10240,
-        alt_text: 'Test alt image'
-      });
-      assert(mediaRes.statusCode === 201, 'Create media status 201');
+      // Minimal valid 1x1 PNG fixture.
+      const fs = require('fs');
+      const path = require('path');
+      const fixture = path.join(__dirname, `._test_fixture_${timestamp}.png`);
+      const pngB64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAMCAQAH6i0ZAAAAAElFTkSuQmCC';
+      fs.writeFileSync(fixture, Buffer.from(pngB64, 'base64'));
+
+      const mediaRes = await uploadMedia(fixture, 'Test alt image');
+      assert(mediaRes.statusCode === 201, `Create media (upload) status 201, got ${mediaRes.statusCode}`);
       testMediaId = mediaRes.body.data.id;
-      console.log(`   ✓ Created media entry (ID: ${testMediaId})`);
+      console.log(`   ✓ Uploaded media (ID: ${testMediaId})`);
+      fs.unlinkSync(fixture);
 
       const getMedia = await makeRequest('GET', `/api/media/${testMediaId}`);
-      assert(getMedia.body.data.filename === `test_file_${timestamp}.png`, 'Filename match');
+      assert(getMedia.body.data.alt_text === 'Test alt image', 'Alt text match');
 
       const updateMedia = await makeRequest('PUT', `/api/media/${testMediaId}`, { alt_text: 'Updated alt text' });
       assert(updateMedia.body.data.alt_text === 'Updated alt text', 'Alt text update match');

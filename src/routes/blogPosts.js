@@ -73,7 +73,7 @@ router.post('/', requireAuth, async (req, res, next) => {
     const result = await db.query(
       `INSERT INTO blog_posts (title, slug, excerpt, content, featured_image, category, author, status, meta_title, meta_description, focus_keyword, published_at) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [title, slug, excerpt || null, content || '', featured_image || null, category || null, author || null, postStatus, meta_title || null, meta_description || null, focus_keyword || null, publishedAt]
+      [title, slug, excerpt || null, content || null, featured_image || null, category || null, author || null, postStatus, meta_title || null, meta_description || null, focus_keyword || null, publishedAt]
     );
 
     const [newPost] = await db.query('SELECT * FROM blog_posts WHERE id = ?', [result.insertId]);

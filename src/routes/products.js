@@ -57,7 +57,7 @@ router.get('/:id', async (req, res, next) => {
  */
 router.post('/', requireAuth, async (req, res, next) => {
   try {
-    const { name, slug, category, category_id, short_description, full_description, featured_image, status, meta_title, meta_description, focus_keyword } = req.body;
+    const { name, slug, category, category_id, short_description, full_description, featured_image, status, meta_title, meta_description, focus_keyword, price, stock } = req.body;
 
     if (!name || !slug) {
       return res.status(400).json({
@@ -68,11 +68,13 @@ router.post('/', requireAuth, async (req, res, next) => {
     }
 
     const prodStatus = status || 'draft';
+    const prodPrice = (price === undefined || price === null || price === '') ? null : parseFloat(price);
+    const prodStock = (stock === undefined || stock === null || stock === '') ? null : parseInt(stock, 10);
 
     const result = await db.query(
-      `INSERT INTO products (name, slug, category, category_id, short_description, full_description, featured_image, status, meta_title, meta_description, focus_keyword) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, slug, category || null, category_id || null, short_description || null, full_description || null, featured_image || null, prodStatus, meta_title || null, meta_description || null, focus_keyword || null]
+      `INSERT INTO products (name, slug, category, category_id, short_description, full_description, featured_image, status, meta_title, meta_description, focus_keyword, price, stock) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, slug, category || null, category_id || null, short_description || null, full_description || null, featured_image || null, prodStatus, meta_title || null, meta_description || null, focus_keyword || null, prodPrice, prodStock]
     );
 
     const [newProduct] = await db.query('SELECT * FROM products WHERE id = ?', [result.insertId]);
@@ -95,7 +97,7 @@ router.post('/', requireAuth, async (req, res, next) => {
 router.put('/:id', requireAuth, async (req, res, next) => {
   try {
     const productId = req.params.id;
-    const { name, slug, category, category_id, short_description, full_description, featured_image, status, meta_title, meta_description, focus_keyword } = req.body;
+    const { name, slug, category, category_id, short_description, full_description, featured_image, status, meta_title, meta_description, focus_keyword, price, stock } = req.body;
 
     const existing = await db.query('SELECT id FROM products WHERE id = ?', [productId]);
     if (existing.length === 0) {
@@ -116,6 +118,8 @@ router.put('/:id', requireAuth, async (req, res, next) => {
     if (meta_title !== undefined) { fieldsToUpdate.push('meta_title = ?'); params.push(meta_title); }
     if (meta_description !== undefined) { fieldsToUpdate.push('meta_description = ?'); params.push(meta_description); }
     if (focus_keyword !== undefined) { fieldsToUpdate.push('focus_keyword = ?'); params.push(focus_keyword); }
+    if (price !== undefined) { fieldsToUpdate.push('price = ?'); params.push(parseFloat(price)); }
+    if (stock !== undefined) { fieldsToUpdate.push('stock = ?'); params.push(parseInt(stock, 10)); }
 
     if (fieldsToUpdate.length === 0) {
       return res.status(400).json({ success: false, error: 'No fields provided for update' });
