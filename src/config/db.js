@@ -14,7 +14,13 @@ const cfg = envProvided
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME
     }
-  : dbConfig;
+  : {
+      host: dbConfig.DB_HOST,
+      port: dbConfig.DB_PORT,
+      user: dbConfig.DB_USER,
+      password: dbConfig.DB_PASSWORD,
+      database: dbConfig.DB_NAME
+    };
 
 const pool = mysql.createPool({
   host: cfg.host,
