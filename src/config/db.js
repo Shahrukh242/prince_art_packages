@@ -32,7 +32,9 @@ async function checkConnection() {
     return {
       status: 'disconnected',
       error: error.message,
-      code: error.code
+      code: error.code,
+      seenHost: process.env.DB_HOST || '(empty)',
+      seenPort: process.env.DB_PORT || '(empty)'
     };
   }
 }
