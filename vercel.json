@@ -2,6 +2,12 @@
   "version": 2,
   "buildCommand": "npm install",
   "installCommand": "npm install",
-  "framework": null,
-  "includeFiles": ["src/**", "public/**", "tools/**", "package.json"]
+  "env": {
+    "DB_HOST": "sql12.freesqldatabase.com",
+    "DB_PORT": "3306",
+    "DB_USER": "sql12835813",
+    "DB_PASSWORD": "cBYPlgVUqa",
+    "DB_NAME": "sql12835813",
+    "JWT_SECRET": "prince...free"
+  }
 }
