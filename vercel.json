@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "buildCommand": "npm install",
+  "installCommand": "npm install",
+  "framework": null,
+  "includeFiles": ["src/**", "public/**", "tools/**", "package.json"]
+}

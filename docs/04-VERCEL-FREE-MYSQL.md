@@ -67,3 +67,6 @@ free remote MySQL and the dashboard opens.
 - If you later add content in the admin panel, it lives on the free host.
   Re-run `dump-db.js` locally only if you want a backup copy on your laptop.
 - Free hosts may sleep or have size limits; fine for a brochure B2B site.
+- **Redeploy gotcha:** after adding the env vars in Vercel, push a new commit
+  (or use Deployments → Redeploy) so the live function rebuilds and reads them.
+  Saving vars alone does not restart the running deployment.
