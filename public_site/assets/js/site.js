@@ -67,53 +67,8 @@ function updatePageSEO(seoData = {}) {
   if (ogImgMeta) ogImgMeta.setAttribute('content', ogImg);
 }
 
-// Single Page Section Routing
+// Page Navigation & CTA Click Handling
 function setupPageRouting() {
-  function navigateTo(pageId, targetHash) {
-    const cleanId = pageId.replace(/^page-/, '');
-    const targetSection = document.getElementById(`page-${cleanId}`);
-    
-    if (targetSection) {
-      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-      targetSection.classList.add('active');
-
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        if (link.dataset.page === cleanId || link.getAttribute('href') === `#${cleanId}`) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
-      });
-
-      window.location.hash = cleanId;
-
-      // Update Section SEO Tags
-      const pageTitles = {
-        'home': 'Pharmaceutical Secondary Packaging Manufacturer',
-        'about': 'About Us & cGMP Quality Infrastructure',
-        'products': 'Folding Cartons, Leaflets & Security Labels Catalog',
-        'capabilities': 'High-Volume Production Capacity & Offset Machinery',
-        'industries': 'Pharmaceutical & Healthcare Packaging Solutions',
-        'blogs': 'Packaging Insights & Regulatory Technical Articles',
-        'contact': 'Request a Quotation & Plant Audit Visit'
-      };
-
-      updatePageSEO({
-        title: pageTitles[cleanId] || cleanId.toUpperCase(),
-        meta_description: `Prince Art Packages (Private) Limited - ${pageTitles[cleanId] || cleanId} section.`
-      });
-
-      if (targetHash) {
-        const subElement = document.getElementById(targetHash);
-        if (subElement) {
-          subElement.scrollIntoView({ behavior: 'smooth' });
-          return;
-        }
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-
   // Mobile Menu Drawer Handler
   const mobileNavBtn = document.getElementById('btn-mobile-nav');
   const navLinks = document.querySelector('.nav-links');
@@ -133,7 +88,7 @@ function setupPageRouting() {
     });
   }
 
-  // Global Event Delegation for ALL CTA buttons and links
+  // Global Event Listener for Mobile Drawer Closing & In-page Smooth Anchors
   document.addEventListener('click', (e) => {
     // Auto-close mobile drawer when any link is clicked
     if (navLinks && navLinks.classList.contains('mobile-open')) {
@@ -141,75 +96,20 @@ function setupPageRouting() {
       if (mobileNavBtn) mobileNavBtn.innerHTML = '<i class="ri-menu-3-line"></i>';
     }
 
-    const link = e.target.closest('a, button[data-action], button[data-page]');
+    const link = e.target.closest('a');
     if (!link) return;
 
     const href = link.getAttribute('href') || '';
-    const dataPage = link.dataset.page;
-    const dataAction = link.dataset.action;
-    const productType = link.dataset.product;
 
-    // 1. Quote Action or Contact Link
-    if (dataAction === 'quote' || href === '#contact' || dataPage === 'contact') {
-      e.preventDefault();
-      navigateTo('contact');
-
-      if (productType) {
-        const select = document.getElementById('rfq-product-type');
-        if (select) {
-          for (let i = 0; i < select.options.length; i++) {
-            const optVal = select.options[i].value.toLowerCase();
-            const targetVal = productType.toLowerCase();
-            if (optVal === targetVal || optVal.includes(targetVal) || targetVal.includes(optVal)) {
-              select.selectedIndex = i;
-              break;
-            }
-          }
-        }
-      }
-      return;
-    }
-
-    // 2. data-page Attribute
-    if (dataPage) {
-      e.preventDefault();
-      navigateTo(dataPage);
-      return;
-    }
-
-    // 3. Hash links (e.g. href="#about", href="#products", href="#capabilities", href="#blogs", href="#industries", href="#home")
-    if (href && href.startsWith('#') && href.length > 1) {
-      const targetId = href.substring(1);
-      
-      // Page section match
-      if (document.getElementById(`page-${targetId}`)) {
-        e.preventDefault();
-        navigateTo(targetId);
-        return;
-      }
-
-      // Element within a page section match
-      const targetElement = document.getElementById(targetId);
+    // Handle In-page Anchor Links (e.g. href="#contact-form")
+    if (href.startsWith('#') && href.length > 1) {
+      const targetElement = document.getElementById(href.substring(1));
       if (targetElement) {
-        const parentSection = targetElement.closest('.page-section');
-        if (parentSection) {
-          e.preventDefault();
-          const pageId = parentSection.id.replace('page-', '');
-          navigateTo(pageId, targetId);
-          return;
-        }
+        e.preventDefault();
+        targetElement.scrollIntoView({ behavior: 'smooth' });
       }
     }
   });
-
-  // Handle initial page load with URL hash
-  const currentHash = window.location.hash.replace('#', '');
-  if (currentHash) {
-    const cleanId = currentHash.replace(/^page-/, '');
-    if (document.getElementById(`page-${cleanId}`)) {
-      navigateTo(cleanId);
-    }
-  }
 }
 
 // Product Capabilities Spec Sheet Tabs

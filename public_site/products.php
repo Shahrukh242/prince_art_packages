@@ -27,7 +27,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-gold btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="Folding Cartons">Request a Quote &rarr;</a>
+              <a href="contact.php?product=Folding+Cartons" class="btn btn-gold btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-gold btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="Leaf-inserts">Request a Quote &rarr;</a>
+              <a href="contact.php?product=Leaf-inserts" class="btn btn-gold btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-gold btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="Printed Labels">Request a Quote &rarr;</a>
+              <a href="contact.php?product=Printed+Labels" class="btn btn-gold btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-gold btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="Honeycomb Separators">Request a Quote &rarr;</a>
+              <a href="contact.php?product=Honeycomb+Separators" class="btn btn-gold btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>
@@ -107,7 +107,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-gold btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="Pill-folders">Request a Quote &rarr;</a>
+              <a href="contact.php?product=Pill-folders" class="btn btn-gold btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-gold btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="Temper Evident Cartons & Labels">Request a Quote &rarr;</a>
+              <a href="contact.php?product=Temper+Evident+Cartons+%26+Labels" class="btn btn-gold btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-teal btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="3D-ENGRAVIX">Request a Quote &rarr;</a>
+              <a href="contact.php?product=3D-ENGRAVIX" class="btn btn-teal btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ require __DIR__ . '/includes/header.php';
               </ul>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="#contact" class="btn btn-gold btn-sm" style="width:100%; text-align:center;" data-action="quote" data-product="Cold-seal Wallet">Request a Quote &rarr;</a>
+              <a href="contact.php?product=Cold-seal+Wallet" class="btn btn-gold btn-sm" style="width:100%; text-align:center;">Request a Quote &rarr;</a>
             </div>
           </div>
         </div>

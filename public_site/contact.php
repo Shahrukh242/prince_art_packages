@@ -95,16 +95,30 @@ require __DIR__ . '/includes/header.php';
               <div class="form-row">
                 <div class="form-group">
                   <label>Product Category *</label>
-                  <select name="product_type" class="form-control" required>
-                    <option value="Folding Cartons">Folding Cartons</option>
-                    <option value="Leaf-inserts">Leaf-inserts</option>
-                    <option value="Printed Labels">Printed Labels</option>
-                    <option value="Honeycomb Separators">Honeycomb Separators</option>
-                    <option value="Pill-folders">Pill-folders</option>
-                    <option value="Temper Evident Cartons & Labels">Temper Evident Cartons & Labels</option>
-                    <option value="3D-ENGRAVIX">3D-ENGRAVIX</option>
-                    <option value="Cold-seal Wallet">Cold-seal Wallet</option>
-                    <option value="Others">Others</option>
+                  <select name="product_type" class="form-control" id="rfq-product-type" required>
+                    <?php 
+                    $preProduct = trim($_GET['product'] ?? '');
+                    $productOptions = [
+                      'Folding Cartons',
+                      'Leaf-inserts',
+                      'Printed Labels',
+                      'Honeycomb Separators',
+                      'Pill-folders',
+                      'Temper Evident Cartons & Labels',
+                      '3D-ENGRAVIX',
+                      'Cold-seal Wallet',
+                      'Others'
+                    ];
+                    foreach ($productOptions as $opt): 
+                      $isSelected = false;
+                      if ($preProduct !== '') {
+                          if (strcasecmp($preProduct, $opt) === 0 || stripos($opt, $preProduct) !== false || stripos($preProduct, $opt) !== false) {
+                              $isSelected = true;
+                          }
+                      }
+                    ?>
+                      <option value="<?= h($opt) ?>" <?= $isSelected ? 'selected' : '' ?>><?= h($opt) ?></option>
+                    <?php endforeach; ?>
                   </select>
                 </div>
                 <div class="form-group">
