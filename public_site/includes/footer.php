@@ -452,6 +452,6 @@
   }
   </script>
 
-  <script src="assets/js/site.js" defer></script>
+  <script src="assets/js/site.js?v=<?= file_exists(__DIR__ . '/../assets/js/site.js') ? filemtime(__DIR__ . '/../assets/js/site.js') : time() ?>" defer></script>
 </body>
 </html>

@@ -9,8 +9,13 @@ $stmt = $pdo->prepare("SELECT * FROM blog_posts WHERE slug = ? AND is_published 
 $stmt->execute([$slug]);
 $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// If not found, fetch the latest post
+// If not found, return 404 when slug was specified, or fetch latest post as direct fallback
 if (!$post) {
+    if ($slug !== '') {
+        http_response_code(404);
+        require __DIR__ . '/404.php';
+        exit;
+    }
     $fallbackStmt = $pdo->query("SELECT * FROM blog_posts WHERE is_published = 1 ORDER BY published_at DESC LIMIT 1");
     $post = $fallbackStmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -189,4 +194,33 @@ require __DIR__ . '/includes/header.php';
   </div>
 <?php endif; ?>
 
+<?php
+// BlogPosting Structured Data
+if (isset($post) && $post) {
+    $blogSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BlogPosting',
+        'headline' => htmlspecialchars($post['title'] ?? '', ENT_QUOTES, 'UTF-8'),
+        'description' => htmlspecialchars(substr(strip_tags($post['excerpt'] ?? $post['content'] ?? ''), 0, 200), ENT_QUOTES, 'UTF-8'),
+        'url' => 'https://princeartpackages.com/blog/' . urlencode($post['slug'] ?? ''),
+        'datePublished' => $post['published_at'] ?? '',
+        'dateModified' => $post['published_at'] ?? '',
+        'author' => [
+            '@type' => 'Organization',
+            'name' => 'Prince Art Packages (Private) Limited'
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Prince Art Packages (Private) Limited',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => 'https://princeartpackages.com/assets/images/logo.png'
+            ]
+        ],
+        'image' => 'https://princeartpackages.com/assets/images/engravix.jpg',
+        'mainEntityOfPage' => 'https://princeartpackages.com/blog/' . urlencode($post['slug'] ?? '')
+    ];
+?>
+<script type="application/ld+json"><?= json_encode($blogSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?></script>
+<?php } ?>
 <?php require __DIR__ . '/includes/footer.php'; ?>

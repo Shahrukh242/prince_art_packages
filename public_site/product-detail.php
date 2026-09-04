@@ -261,6 +261,11 @@ if (!$currentProduct && $slug !== '') {
 
 // Default fallback if nothing matched
 if (!$currentProduct) {
+    if ($slug !== '' || $id > 0) {
+        http_response_code(404);
+        require __DIR__ . '/404.php';
+        exit;
+    }
     $currentSlug = 'printed-cartons';
     $currentProduct = $productSpecsCatalog['printed-cartons'];
 }

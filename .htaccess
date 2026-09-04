@@ -25,7 +25,8 @@ ErrorDocument 404 /404.php
 RewriteCond %{THE_REQUEST} \s/+(public_site/)?index\.php[?\s] [NC]
 RewriteRule ^ https://%{HTTP_HOST}/ [R=301,L]
 
-# Strip .php extension from URL in browser address bar (301 Redirect)
+# Strip .php extension from URL in browser address bar (301 Redirect, skip POST)
+RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{THE_REQUEST} \s/+(?:public_site/)?([^.]+)\.php[\s?] [NC]
 RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
@@ -41,7 +42,13 @@ RewriteCond %{REQUEST_URI} !^/includes/
 RewriteRule ^(.*)$ public_site/$1 [L]
 
 # ------------------------------------------------------------------------------
-# 5. Clean URLs: Extensionless PHP File Mapping
+# 5. Pretty URLs: Products and Technical Articles
+# ------------------------------------------------------------------------------
+RewriteRule ^product/([a-zA-Z0-9_-]+)/?$ public_site/product-detail.php?slug=$1 [NC,L,QSA]
+RewriteRule ^blog/([a-zA-Z0-9_-]+)/?$ public_site/blog-post.php?slug=$1 [NC,L,QSA]
+
+# ------------------------------------------------------------------------------
+# 6. Clean URLs: Extensionless PHP File Mapping
 # ------------------------------------------------------------------------------
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -51,12 +58,6 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 # Inside public_site rewrite:
 RewriteCond %{DOCUMENT_ROOT}/public_site/$1.php -f
 RewriteRule ^([^\.]+)$ public_site/$1.php [NC,L]
-
-# ------------------------------------------------------------------------------
-# 6. Pretty URLs: Products and Technical Articles
-# ------------------------------------------------------------------------------
-RewriteRule ^product/([a-zA-Z0-9_-]+)/?$ public_site/product-detail.php?slug=$1 [NC,L,QSA]
-RewriteRule ^blog/([a-zA-Z0-9_-]+)/?$ public_site/blog-post.php?slug=$1 [NC,L,QSA]
 
 # ------------------------------------------------------------------------------
 # 7. Gzip / Deflate Compression (mod_deflate)
@@ -124,7 +125,7 @@ RewriteRule ^blog/([a-zA-Z0-9_-]+)/?$ public_site/blog-post.php?slug=$1 [NC,L,QS
 <IfModule mod_headers.c>
     # 1-Year Cache for Static Assets
     <FilesMatch "\.(ico|jpe?g|png|gif|webp|svg|woff|woff2|ttf|otf)$">
-        Header set Cache-Control "max-age=31536000, public, immutable"
+        Header set Cache-Control "max-age=31536000, public"
     </FilesMatch>
 
     # 1-Month Cache for CSS and JS
