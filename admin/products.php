@@ -1,217 +1,207 @@
 <?php
-// admin/products.php — Complete Products CRUD Management
 require __DIR__ . '/includes/layout_top.php';
 $pdo = get_db();
 
-$message = '';
+$saved = false;
 $error = '';
 
-// Helper to generate slug
-function make_slug($text) {
-    $text = preg_replace('~[^\pL\d]+~u', '-', $text);
-    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-    $text = preg_replace('~[^-\w]+~', '', $text);
-    $text = trim($text, '-');
-    $text = preg_replace('~-+~', '-', $text);
-    return strtolower($text ?: 'n-a');
+// Seed standard products if table is empty
+$productCount = (int)$pdo->query("SELECT COUNT(*) FROM products")->fetchColumn();
+if ($productCount === 0) {
+    $seedProducts = [
+        ['Printed Cartons', 'folding-cartons', 'Secondary Packaging', 'Reverse tuck, crash lock, tamper-evident, and child-resistant cartons printed on food & pharma-grade virgin board.', 'assets/images/prod_cartons.jpg', 1],
+        ['Leaf-Inserts', 'leaf-inserts', 'Patient Information', 'Ultra-thin 27gsm to 60gsm prescribing information inserts, cross-folded or miniature outserts for automated packaging lines.', 'assets/images/prod_leaflets.jpg', 1],
+        ['Printed Labels', 'printed-labels', 'Container Labeling', 'Self-adhesive roll labels for vials, bottles, ampoules, and destructible tamper-evident security seals with 2D barcode serialization.', 'assets/images/prod_labels.jpg', 1],
+        ['Honeycomb Separators', 'honeycomb-separators', 'Protective Partitions', 'Protective cardboard honeycomb dividers and grid partitions designed to safeguard glass ampoules and liquid vials.', 'assets/images/prod_honeycomb.jpg', 1],
+        ['Pill-Folders', 'pill-folders', 'Dose Adherence', 'Paperboard medicine packaging wallets with integrated dose-tracking calendar compartments engineered to support patient adherence.', 'assets/images/prod_pill_folders.jpg', 1],
+        ['Tamper Evident Cartons & Labels', 'tamper-evident', 'Security Seals', 'Destructible security seals and tamper-evident carton structures that provide immediate, irreversible visual evidence.', 'assets/images/prod_tamper_labels.jpg', 1],
+        ['3D-ENGRAVIX™', '3d-engravix', 'Optical Anti-Counterfeit', 'Proprietary micro-structured optical security feature integrated directly onto printed cartons for instant visual authentication.', 'assets/images/engravix.jpg', 1],
+        ['ColdSeal Blister Wallet', 'coldseal-blister-wallet', 'Pressure-Sealed Eco Packaging', 'Pressure-sealed (non-heat-sealed) paperboard blister packaging wallet encapsulating blister cards without heat.', 'assets/images/coldseal.jpg', 1],
+    ];
+
+    $insStmt = $pdo->prepare("INSERT INTO products (name, slug, category, short_description, description, image_path, is_published) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    foreach ($seedProducts as $sp) {
+        $insStmt->execute([$sp[0], $sp[1], $sp[2], $sp[3], $sp[3], $sp[4], $sp[5]]);
+    }
 }
 
-// 1. Handle Form Submissions (Create / Update / Delete / Toggle)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify($_POST['csrf_token'] ?? null)) {
-    $action = $_POST['action'] ?? '';
+/* -----------------------------------------------------------------------
+   POST Handlers (Add, Edit, Delete)
+----------------------------------------------------------------------- */
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrf_verify($_POST['csrf_token'] ?? null)) {
+        $error = 'Security token mismatch. Please refresh and try again.';
+    } else {
+        $action = $_POST['action'] ?? '';
 
-    // Save (Insert or Update) Product
-    if ($action === 'save_product') {
-        $id = (int)($_POST['product_id'] ?? 0);
-        $name = trim($_POST['name'] ?? '');
-        $category = trim($_POST['category'] ?? '');
-        $short_desc = trim($_POST['short_description'] ?? '');
-        $desc = trim($_POST['description'] ?? '');
-        $spec_sheet = trim($_POST['spec_sheet'] ?? '');
-        $image_path = trim($_POST['image_path'] ?? '');
-        $meta_title = trim($_POST['meta_title'] ?? '');
-        $meta_desc = trim($_POST['meta_description'] ?? '');
-        $is_published = isset($_POST['is_published']) ? 1 : 0;
-        
-        $slug = trim($_POST['slug'] ?? '');
-        if (empty($slug)) {
-            $slug = make_slug($name);
-        } else {
-            $slug = make_slug($slug);
-        }
+        // Add Product
+        if ($action === 'add') {
+            $name     = trim($_POST['name'] ?? '');
+            $category = trim($_POST['category'] ?? '');
+            $desc     = trim($_POST['description'] ?? '');
+            $image    = trim($_POST['image_path'] ?? '');
+            $slug     = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
 
-        if (empty($name)) {
-            $error = "Product Name is required.";
-        } else {
-            if ($id > 0) {
-                // Update
-                $stmt = $pdo->prepare(
-                    "UPDATE products SET name = ?, slug = ?, category = ?, short_description = ?, description = ?, spec_sheet = ?, image_path = ?, meta_title = ?, meta_description = ?, is_published = ? WHERE id = ?"
-                );
-                $stmt->execute([$name, $slug, $category, $short_desc, $desc, $spec_sheet, $image_path, $meta_title, $meta_desc, $is_published, $id]);
-                $message = "Product updated successfully.";
+            if ($name !== '') {
+                $stmt = $pdo->prepare("INSERT INTO products (name, slug, category, short_description, description, image_path, is_published) VALUES (?, ?, ?, ?, ?, ?, 1)");
+                $stmt->execute([$name, $slug, $category, $desc, $desc, $image]);
+                $saved = 'Product "' . htmlspecialchars($name) . '" added successfully.';
             } else {
-                // Insert
-                $stmt = $pdo->prepare(
-                    "INSERT INTO products (name, slug, category, short_description, description, spec_sheet, image_path, meta_title, meta_description, is_published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                );
-                $stmt->execute([$name, $slug, $category, $short_desc, $desc, $spec_sheet, $image_path, $meta_title, $meta_desc, $is_published]);
-                $message = "Product added successfully.";
+                $error = 'Product Name is required.';
             }
         }
-    }
 
-    // Toggle Published Status
-    if ($action === 'toggle_publish') {
-        $id = (int)($_POST['product_id'] ?? 0);
-        if ($id > 0) {
-            $stmt = $pdo->prepare("UPDATE products SET is_published = NOT is_published WHERE id = ?");
-            $stmt->execute([$id]);
-            $message = "Publish status updated.";
+        // Update Product
+        elseif ($action === 'update') {
+            $id       = (int)$_POST['product_id'];
+            $name     = trim($_POST['name'] ?? '');
+            $category = trim($_POST['category'] ?? '');
+            $desc     = trim($_POST['description'] ?? '');
+            $image    = trim($_POST['image_path'] ?? '');
+            $isPub    = isset($_POST['is_published']) ? 1 : 0;
+
+            if ($name !== '') {
+                $stmt = $pdo->prepare("UPDATE products SET name = ?, category = ?, short_description = ?, description = ?, image_path = ?, is_published = ? WHERE id = ?");
+                $stmt->execute([$name, $category, $desc, $desc, $image, $isPub, $id]);
+                $saved = 'Product updated successfully.';
+            } else {
+                $error = 'Product Name cannot be empty.';
+            }
         }
-    }
 
-    // Delete Product
-    if ($action === 'delete_product') {
-        $id = (int)($_POST['product_id'] ?? 0);
-        if ($id > 0) {
-            $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
-            $stmt->execute([$id]);
-            $message = "Product deleted successfully.";
+        // Delete Product
+        elseif ($action === 'delete') {
+            $id = (int)$_POST['product_id'];
+            $pdo->prepare("DELETE FROM products WHERE id = ?")->execute([$id]);
+            $saved = 'Product deleted successfully.';
         }
     }
 }
 
-// 2. Fetch Product for Editing if requested
-$editProduct = null;
-if (isset($_GET['edit'])) {
-    $editId = (int)$_GET['edit'];
-    $stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
-    $stmt->execute([$editId]);
-    $editProduct = $stmt->fetch();
-}
-
-// 3. Fetch All Products
-$products = $pdo->query("SELECT * FROM products ORDER BY category ASC, name ASC")->fetchAll();
+$products = $pdo->query("SELECT * FROM products ORDER BY id ASC")->fetchAll();
+$allMedia = get_all_media();
 ?>
 
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-    <h1>Product Catalog Management</h1>
-    <?php if (!$editProduct && !isset($_GET['new'])): ?>
-        <a href="products.php?new=1" class="btn-primary" style="display:inline-block; padding:0.6rem 1.2rem; background:#0284c7; color:#fff; text-decoration:none; border-radius:6px; font-weight:600;">+ Add New Product</a>
-    <?php endif; ?>
+<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+  <div>
+    <h1><i class="ri-box-3-line"></i> Product Catalog</h1>
+    <p class="page-subtitle">Manage individual pharmaceutical products, categories, descriptions, and packaging images.</p>
+  </div>
+  <a href="../public_site/products.php" target="_blank"
+     style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 1.1rem;background:var(--navy);border-radius:8px;font-size:0.85rem;font-weight:600;color:#fff;text-decoration:none;">
+    <i class="ri-external-link-line"></i> View Products Page
+  </a>
 </div>
 
-<?php if ($message): ?><p class="success-msg"><?= h($message) ?></p><?php endif; ?>
-<?php if ($error): ?><p class="error-msg" style="color:#ef4444; background:#fef2f2; padding:0.75rem; border-radius:6px; margin-bottom:1rem;"><?= h($error) ?></p><?php endif; ?>
+<?php if ($saved): ?><p class="success-msg"><i class="ri-check-line"></i> <?= $saved ?></p><?php endif; ?>
+<?php if ($error):  ?><p class="error-msg"><i class="ri-error-warning-line"></i> <?= h($error) ?></p><?php endif; ?>
 
-<?php if ($editProduct || isset($_GET['new'])): ?>
-    <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:1.5rem; margin-bottom:2rem; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-        <h2><?= $editProduct ? 'Edit Product: ' . h($editProduct['name']) : 'Add New Product' ?></h2>
-        <form method="post">
-            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
-            <input type="hidden" name="action" value="save_product">
-            <?php if ($editProduct): ?>
-                <input type="hidden" name="product_id" value="<?= (int)$editProduct['id'] ?>">
-            <?php endif; ?>
+<!-- Products List -->
+<div class="panel" style="margin-bottom:1.5rem;">
+  <h3>
+    <i class="ri-list-check"></i> All Products
+    <span style="margin-left:auto;font-size:0.8rem;font-weight:400;color:var(--muted);"><?= count($products) ?> item<?= count($products) !== 1 ? 's' : '' ?></span>
+  </h3>
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom:1rem;">
-                <label style="display:block; font-weight:600; font-size:0.9rem;">Product Name *
-                    <input type="text" name="name" value="<?= h($editProduct['name'] ?? '') ?>" required style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px;">
-                </label>
-                <label style="display:block; font-weight:600; font-size:0.9rem;">Category
-                    <select name="category" style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px;">
-                        <?php 
-                        $cats = ['Folding Cartons', 'Cold-Seal Packaging', 'Leaf-Inserts & Outserts', 'Printed Labels', 'Anti-Counterfeit'];
-                        $curCat = $editProduct['category'] ?? 'Folding Cartons';
-                        foreach ($cats as $c): ?>
-                            <option value="<?= h($c) ?>" <?= $curCat === $c ? 'selected' : '' ?>><?= h($c) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </label>
-            </div>
-
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom:1rem;">
-                <label style="display:block; font-weight:600; font-size:0.9rem;">Slug (URL Identifier)
-                    <input type="text" name="slug" value="<?= h($editProduct['slug'] ?? '') ?>" placeholder="auto-generated-if-blank" style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px;">
-                </label>
-                <label style="display:block; font-weight:600; font-size:0.9rem;">Image Asset Path
-                    <input type="text" name="image_path" value="<?= h($editProduct['image_path'] ?? '') ?>" placeholder="assets/images/prod_cartons.jpg" style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px;">
-                </label>
-            </div>
-
-            <label style="display:block; font-weight:600; font-size:0.9rem; margin-bottom:1rem;">Short Description (Summary)
-                <input type="text" name="short_description" value="<?= h($editProduct['short_description'] ?? '') ?>" style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px;">
-            </label>
-
-            <label style="display:block; font-weight:600; font-size:0.9rem; margin-bottom:1rem;">Full Specifications / Description
-                <textarea name="description" rows="5" style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px; font-family:inherit;"><?= h($editProduct['description'] ?? '') ?></textarea>
-            </label>
-
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom:1rem;">
-                <label style="display:block; font-weight:600; font-size:0.9rem;">Meta Title (SEO)
-                    <input type="text" name="meta_title" value="<?= h($editProduct['meta_title'] ?? '') ?>" maxlength="160" style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px;">
-                </label>
-                <label style="display:block; font-weight:600; font-size:0.9rem;">Meta Description (SEO)
-                    <input type="text" name="meta_description" value="<?= h($editProduct['meta_description'] ?? '') ?>" maxlength="300" style="width:100%; padding:0.6rem; margin-top:0.3rem; border:1px solid #cbd5e1; border-radius:4px;">
-                </label>
-            </div>
-
-            <div style="margin-bottom:1.5rem;">
-                <label style="font-weight:600; font-size:0.9rem; cursor:pointer;">
-                    <input type="checkbox" name="is_published" value="1" <?= (!isset($editProduct) || !empty($editProduct['is_published'])) ? 'checked' : '' ?>> Published (Visible on Public Website)
-                </label>
-            </div>
-
-            <div style="display:flex; gap:1rem;">
-                <button type="submit" style="padding:0.75rem 1.5rem; background:#0284c7; color:#fff; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Save Product</button>
-                <a href="products.php" style="padding:0.75rem 1.5rem; background:#e2e8f0; color:#334155; text-decoration:none; border-radius:6px; font-weight:600; display:inline-block;">Cancel</a>
-            </div>
-        </form>
-    </div>
-<?php endif; ?>
-
-<table class="data-table">
-    <thead>
-        <tr>
-            <th>Product Name</th>
-            <th>Category</th>
-            <th>Short Description</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+  <?php if (empty($products)): ?>
+    <p style="color:var(--muted);font-size:0.9rem;">No products in catalog yet. Add one below.</p>
+  <?php else: ?>
     <?php foreach ($products as $p): ?>
-        <tr>
-            <td><strong><?= h($p['name']) ?></strong><br><small style="color:#64748b;"><?= h($p['slug']) ?></small></td>
-            <td><?= h($p['category']) ?></td>
-            <td><?= h($p['short_description']) ?></td>
-            <td>
-                <form method="post" style="display:inline;">
-                    <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="toggle_publish">
-                    <input type="hidden" name="product_id" value="<?= (int)$p['id'] ?>">
-                    <button type="submit" style="background:none; border:none; cursor:pointer; font-weight:600; padding:0; color:<?= $p['is_published'] ? '#166534' : '#92400e' ?>;">
-                        <?= $p['is_published'] ? '● Published' : '○ Draft' ?>
-                    </button>
-                </form>
-            </td>
-            <td>
-                <a href="products.php?edit=<?= (int)$p['id'] ?>" style="color:#0284c7; text-decoration:none; font-weight:600; margin-right:0.75rem;">Edit</a>
-                <form method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                    <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
-                    <input type="hidden" name="action" value="delete_product">
-                    <input type="hidden" name="product_id" value="<?= (int)$p['id'] ?>">
-                    <button type="submit" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:600; padding:0;">Delete</button>
-                </form>
-            </td>
-        </tr>
+    <details style="border:1px solid var(--border);border-radius:8px;margin-bottom:0.75rem;background:#fff;">
+      <summary style="padding:0.85rem 1.1rem;cursor:pointer;display:flex;align-items:center;gap:0.75rem;font-weight:600;font-size:0.9rem;list-style:none;user-select:none;flex-wrap:wrap;">
+        <span style="color:var(--navy);font-weight:700;font-size:0.95rem;"><?= h($p['name']) ?></span>
+        <span style="font-size:0.75rem;color:var(--teal);background:rgba(28,124,140,0.1);padding:2px 8px;border-radius:20px;font-weight:600;"><?= h($p['category'] ?: 'Uncategorized') ?></span>
+        <?php if (!$p['is_published']): ?>
+          <span style="font-size:0.72rem;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:20px;font-weight:700;">Draft</span>
+        <?php else: ?>
+          <span style="font-size:0.72rem;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:20px;font-weight:700;">Active</span>
+        <?php endif; ?>
+
+        <span style="flex:1;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.82rem;font-weight:400;color:var(--muted);margin-left:0.5rem;">
+          <?= h($p['short_description']) ?>
+        </span>
+
+        <i class="ri-arrow-down-s-line" style="margin-left:auto;color:var(--muted);"></i>
+      </summary>
+
+      <div style="padding:1.25rem 1.25rem 1.5rem;border-top:1px solid var(--border);background:#fafbfc;">
+        <form method="post" class="content-form" style="margin-bottom:0.5rem;">
+          <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+          <input type="hidden" name="action"     value="update">
+          <input type="hidden" name="product_id" value="<?= (int)$p['id'] ?>">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:0.85rem;">
+            <label>Product Name <sup style="color:var(--teal);">*</sup>
+              <input type="text" name="name" value="<?= h($p['name']) ?>" required>
+            </label>
+            <label>Category
+              <input type="text" name="category" value="<?= h($p['category']) ?>" placeholder="e.g. Secondary Packaging">
+            </label>
+          </div>
+
+          <label style="margin-bottom:0.85rem;">Description
+            <textarea name="description" rows="3" style="width:100%;padding:0.65rem 0.8rem;border:1.5px solid var(--border);border-radius:7px;font-family:inherit;font-size:0.9rem;"><?= h($p['description']) ?></textarea>
+          </label>
+
+          <label style="margin-bottom:0.85rem;">Product Image Path
+            <input type="text" name="image_path" value="<?= h($p['image_path']) ?>" placeholder="assets/images/prod_cartons.jpg">
+          </label>
+
+          <label style="display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:1.25rem;font-size:0.88rem;font-weight:600;">
+            <input type="checkbox" name="is_published" <?= $p['is_published'] ? 'checked' : '' ?>>
+            Published (Visible in catalog)
+          </label>
+
+          <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+            <button type="submit" style="background:var(--teal);"><i class="ri-save-line"></i> Save Changes</button>
+            <a href="../public_site/product-detail.php?slug=<?= urlencode($p['slug']) ?>" target="_blank" style="padding:0.45rem 0.85rem; border:1px solid var(--teal); color:var(--teal); border-radius:6px; font-size:0.85rem; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:0.35rem; background:#fff;">
+              <i class="ri-external-link-line"></i> View Specification Page
+            </a>
+            <button type="button"
+                    onclick="if(confirm('Delete product \'<?= addslashes(h($p['name'])) ?>\' permanently?')){ document.getElementById('del-prod-<?= (int)$p['id'] ?>').submit(); }"
+                    style="background:#b91c1c;">
+              <i class="ri-delete-bin-line"></i> Delete Product
+            </button>
+          </div>
+        </form>
+
+        <form method="post" id="del-prod-<?= (int)$p['id'] ?>" style="display:none;">
+          <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+          <input type="hidden" name="action"     value="delete">
+          <input type="hidden" name="product_id" value="<?= (int)$p['id'] ?>">
+        </form>
+      </div>
+    </details>
     <?php endforeach; ?>
-    <?php if (empty($products)): ?>
-        <tr><td colspan="5" style="text-align:center; color:#64748b; padding:2rem;">No products in database yet. Click "+ Add New Product" above.</td></tr>
-    <?php endif; ?>
-    </tbody>
-</table>
+  <?php endif; ?>
+</div>
+
+<!-- Add New Product -->
+<div class="panel">
+  <h3><i class="ri-add-circle-line"></i> Add New Product</h3>
+  <form method="post" class="content-form">
+    <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+    <input type="hidden" name="action"     value="add">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+      <label>Product Name <sup style="color:var(--teal);">*</sup>
+        <input type="text" name="name" placeholder="e.g. Child-Resistant Blister Wallets" required>
+      </label>
+      <label>Category
+        <input type="text" name="category" placeholder="e.g. Dose Adherence">
+      </label>
+    </div>
+
+    <label style="margin-bottom:1rem;">Description
+      <textarea name="description" rows="3" placeholder="Brief technical specifications and applications"></textarea>
+    </label>
+
+    <label style="margin-bottom:1rem;">Image Path
+      <input type="text" name="image_path" placeholder="assets/images/filename.jpg">
+    </label>
+
+    <button type="submit"><i class="ri-add-line"></i> Add Product</button>
+  </form>
+</div>
 
 <?php require __DIR__ . '/includes/layout_bottom.php'; ?>

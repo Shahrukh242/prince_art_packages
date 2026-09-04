@@ -16,7 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
 /** Call at the top of every admin page (except login.php) to enforce login. */
 function require_login(): void {
     if (empty($_SESSION['admin_id'])) {
-        header('Location: /admin/login.php');
+        header('Location: login.php');
         exit;
     }
 }

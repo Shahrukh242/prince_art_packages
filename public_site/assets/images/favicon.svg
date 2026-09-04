@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180">
+  <g id="logo-mark" transform="translate(0, 5)">
+    <!-- Top Teal Diamond Chevron -->
+    <path d="M 110 15 L 20 80 L 50 100 L 110 55 L 170 100 L 200 80 Z" fill="#139EA8"/>
+    <path d="M 110 50 L 65 83 L 110 115 L 155 83 Z" fill="#139EA8"/>
+    <!-- Bottom Charcoal Box Base -->
+    <path d="M 35 75 L 110 130 L 185 75 L 210 93 L 110 160 L 10 93 Z" fill="#595959"/>
+  </g>
+</svg>
