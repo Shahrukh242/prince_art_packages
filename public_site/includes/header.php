@@ -5,7 +5,16 @@ $meta       = get_page_meta($pageSlug ?? 'home');
 $meta['meta_title'] = $metaTitle ?? $meta['meta_title'];
 $meta['meta_description'] = $metaDesc ?? $meta['meta_description'];
 $navCurrent = $pageSlug ?? 'home';
-$navLinks   = get_nav_links(); // DB-driven nav; falls back to [] if table missing
+$rawNav     = get_nav_links(); // DB-driven nav; falls back to [] if table missing
+$navLinks   = [];
+$seenNav    = [];
+foreach ($rawNav as $l) {
+    $norm = strtolower(trim($l['label'] ?? ''));
+    if (!isset($seenNav[$norm])) {
+        $seenNav[$norm] = true;
+        $navLinks[] = $l;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -7,15 +7,15 @@ $error = '';
 
 // Standard official navigation items manifest
 $defaultNavItems = [
-    ['Home',         'index.php',        10],
-    ['About',        'about.php',        20],
-    ['Products',     'products.php',     30],
-    ['Capabilities', 'capabilities.php', 40],
-    ['Innovation',   'innovation.php',   50],
-    ['Quality',      'quality.php',      60],
-    ['Industries',   'industries.php',   70],
-    ['Blog',         'blog.php',         80],
-    ['Contact',      'contact.php',      90],
+    ['Home',         'index',        10],
+    ['About',        'about',        20],
+    ['Products',     'products',     30],
+    ['Capabilities', 'capabilities', 40],
+    ['Innovation',   'innovation',   50],
+    ['Quality',      'quality',      60],
+    ['Industries',   'industries',   70],
+    ['Blog',         'blog',         80],
+    ['Contact',      'contact',      90],
 ];
 
 // Helper to check if a link is in the standard default list
@@ -126,23 +126,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 /* -----------------------------------------------------------------------
-   Load all nav links
+   Load all nav links & clean duplicate rows
 ----------------------------------------------------------------------- */
+// Auto-clean any duplicate links by label (safety cleanup)
+$pdo->exec("DELETE n1 FROM nav_links n1 INNER JOIN nav_links n2 WHERE n1.id > n2.id AND LOWER(TRIM(n1.label)) = LOWER(TRIM(n2.label))");
+
 $links = $pdo->query("SELECT * FROM nav_links ORDER BY sort_order ASC, id ASC")->fetchAll();
 
-// Which default items are missing?
-$existingUrls = array_column($links, 'url');
-$missingItems = array_filter($defaultNavItems, fn($d) => !in_array($d[1], $existingUrls));
-
-// If any default links were missing completely from table, auto-insert them now
-if (!empty($missingItems)) {
+// Only auto-insert default links if table is COMPLETELY empty
+if (empty($links)) {
     $insStmt = $pdo->prepare("INSERT INTO nav_links (label, url, sort_order, is_active, open_new_tab) VALUES (?, ?, ?, 1, 0)");
-    foreach ($missingItems as [$dLabel, $dUrl, $dOrder]) {
+    foreach ($defaultNavItems as [$dLabel, $dUrl, $dOrder]) {
         $insStmt->execute([$dLabel, $dUrl, $dOrder]);
     }
     $links = $pdo->query("SELECT * FROM nav_links ORDER BY sort_order ASC, id ASC")->fetchAll();
-    $missingItems = [];
 }
+$missingItems = [];
 
 // Which ID is being edited (from URL param)?
 $editingId = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
