@@ -81,7 +81,7 @@ function get_content(string $pageSlug, string $blockKey, string $fallback = ''):
         preload_content($pageSlug);
     }
     $val = $_pac_content_cache[$pageSlug][$blockKey] ?? null;
-    return ($val !== null && $val !== '') ? $val : $fallback;
+    return clean_mojibake(($val !== null && $val !== '') ? $val : $fallback);
 }
 
 /**
@@ -135,7 +135,7 @@ function get_product_by_slug(string $slug): ?array {
 function get_all_media(): array {
     $pdo = get_db();
     return $pdo->query(
-        "SELECT id, filename, filepath, mime_type, uploaded_at FROM media ORDER BY uploaded_at DESC"
+        "SELECT id, filename, filepath, alt_text, uploaded_at FROM media ORDER BY uploaded_at DESC"
     )->fetchAll();
 }
 
@@ -143,15 +143,47 @@ function get_media_by_id(?int $id): ?array {
     if (!$id) return null;
     $pdo = get_db();
     $stmt = $pdo->prepare(
-        "SELECT id, filename, filepath, mime_type, uploaded_at FROM media WHERE id = ? LIMIT 1"
+        "SELECT id, filename, filepath, alt_text, uploaded_at FROM media WHERE id = ? LIMIT 1"
     );
     $stmt->execute([$id]);
     return $stmt->fetch() ?: null;
 }
 
+/**
+ * Clean double-encoded or legacy CP437/Windows-1252 mojibake characters
+ * (e.g. "01 ΓÇó PRINTING" -> "01 • PRINTING", "1ΓÇô6 Color" -> "1–6 Color", "3D-EngravixΓäó" -> "3D-Engravix™")
+ */
+function clean_mojibake(?string $str): string {
+    if ($str === null || $str === '') return '';
+    static $mojibakeMap = [
+        "\xce\x93\xc3\x87\xc3\xb3" => '•',
+        "\xce\x93\xc3\x87\xc3\xb4" => '–',
+        "\xce\x93\xc3\x87\xc3\xb6" => '—',
+        "\xce\x93\xc3\xa4\xc3\xb3" => '™',
+        "\xce\x93\xc3\x87\xc3\x96" => '’',
+        "\xce\x93\xc3\x87\xc2\xa3" => '“',
+        "\xce\x93\xc3\x87\xc2\xa5" => '”',
+        "\xc2\xba\xc2\xb0"         => '°',
+        'ΓÇó' => '•',
+        'ΓÇô' => '–',
+        'ΓÇö' => '—',
+        'Γäó' => '™',
+        'ΓÇÖ' => '’',
+        'ΓÇ£' => '“',
+        'ΓÇ¥' => '”',
+        '┬░'  => '°',
+        'гÇó' => '•',
+        'гÇô' => '–',
+        'гÇö' => '—',
+        'гäó' => '™',
+        'гÇÖ' => '’',
+    ];
+    return str_replace(array_keys($mojibakeMap), array_values($mojibakeMap), $str);
+}
+
 /** Escape output safely for HTML context — use this around every echoed value. */
 function h(?string $value): string {
-    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars(clean_mojibake($value), ENT_QUOTES, 'UTF-8');
 }
 
 /**
@@ -160,6 +192,7 @@ function h(?string $value): string {
  */
 function render_content(?string $value): string {
     if ($value === null || $value === '') return '';
+    $value = clean_mojibake($value);
     
     // Support markdown links [Text](URL)
     $value = preg_replace_callback('/\[([^\]]+)\]\(([^)]+)\)/', function($m) {
@@ -170,6 +203,16 @@ function render_content(?string $value): string {
 
     // If string contains HTML tags, sanitize and ensure text-link class on anchors without classes
     if (strpos($value, '<') !== false) {
+        // strip_tags retains attributes on allowed tags. Remove event-handler
+        // attributes and unsafe link protocols before returning editor content.
+        $value = preg_replace('/\s+on[a-z]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $value);
+        $value = preg_replace_callback('/<a\b[^>]*\bhref\s*=\s*(["\'])(.*?)\1[^>]*>/i', function ($m) {
+            $url = trim(html_entity_decode($m[2], ENT_QUOTES, 'UTF-8'));
+            if (preg_match('/^(?:javascript|data|vbscript):/i', $url)) {
+                return '<a class="text-link">';
+            }
+            return $m[0];
+        }, $value);
         $value = preg_replace('/<a\s+(?!.*?class=)(href="[^"]*")/i', '<a class="text-link" $1', $value);
         return strip_tags($value, '<a><strong><b><em><i><u><span><br><p><code><small><ul><ol><li><h3><h4>');
     }
@@ -334,11 +377,6 @@ function get_site_base_url(): string {
     }
     $proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    $scriptDir = dirname($_SERVER['SCRIPT_NAME'] ?? '');
-    if (strpos($scriptDir, 'public_site') !== false || strpos($scriptDir, 'admin') !== false) {
-        $parent = dirname($scriptDir);
-        return $proto . '://' . $host . rtrim($parent, '/') . '/public_site';
-    }
     return $proto . '://' . $host;
 }
 
@@ -502,5 +540,3 @@ function write_seo_crawler_files(): array {
     }
     return $results;
 }
-
-

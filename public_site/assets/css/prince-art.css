@@ -50,7 +50,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   overflow-x: hidden;
   max-width: 100%;
 }
@@ -2113,6 +2112,30 @@ textarea.form-control {
   margin-bottom: 0.5rem;
 }
 
+
+
+picture {
+  display: block;
+}
+
+picture.cap-infra-img {
+  width: 100%;
+  height: 340px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+picture.cap-infra-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  box-shadow: none;
+  border: none;
+}
+
 .cap-infra-img {
   width: 100%;
   height: 340px;
@@ -2779,7 +2802,31 @@ a.footer-contact-item:hover {
     padding-bottom: 2.5rem;
   }
   .cap-infra-row.reverse { direction: ltr; }
-  .cap-infra-img { height: 200px; }
+  
+
+picture {
+  display: block;
+}
+
+picture.cap-infra-img {
+  width: 100%;
+  height: 340px;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+picture.cap-infra-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  box-shadow: none;
+  border: none;
+}
+
+.cap-infra-img { height: 200px; }
   .cap-big-spec { font-size: 2rem; }
 
   .cap-scale-number { font-size: 2.4rem; }

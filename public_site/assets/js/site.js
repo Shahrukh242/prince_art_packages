@@ -30,24 +30,27 @@ function setupMobileNav() {
   });
 }
 
-// Capabilities page stat reveal animation — purely visual, no navigation involved
+// Capabilities page stat reveal animation — optimized for 60fps scrolling
 function setupCapAnimations() {
   const statNumbers = document.querySelectorAll('.cap-stat-number, .cap-infra-row');
   if (!statNumbers.length) return;
 
-  const observer = new IntersectionObserver((entries) => {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.style.opacity = '1';
         entry.target.style.transform = 'translateY(0)';
+        obs.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
 
   statNumbers.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(15px)';
-    el.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    el.style.transition = 'opacity 0.35s ease-out, transform 0.35s ease-out';
     observer.observe(el);
   });
 }

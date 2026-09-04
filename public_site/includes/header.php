@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../../includes/functions.php';
 header('Content-Type: text/html; charset=UTF-8');
 $meta       = get_page_meta($pageSlug ?? 'home');
+$meta['meta_title'] = $metaTitle ?? $meta['meta_title'];
+$meta['meta_description'] = $metaDesc ?? $meta['meta_description'];
 $navCurrent = $pageSlug ?? 'home';
 $navLinks   = get_nav_links(); // DB-driven nav; falls back to [] if table missing
 ?>
@@ -10,6 +12,8 @@ $navLinks   = get_nav_links(); // DB-driven nav; falls back to [] if table missi
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- All public routes, including /product/{slug} and /blog/{slug}, use root-relative assets. -->
+  <base href="/">
   <title><?= h($meta['meta_title']) ?></title>
   <meta name="description" content="<?= h($meta['meta_description']) ?>">
   <meta name="robots" content="index, follow">
@@ -46,8 +50,8 @@ $navLinks   = get_nav_links(); // DB-driven nav; falls back to [] if table missi
   <meta name="twitter:title" content="<?= htmlspecialchars($ogTitle, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="twitter:description" content="<?= htmlspecialchars($ogDesc, ENT_QUOTES, 'UTF-8') ?>">
   <meta name="twitter:image" content="<?= htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8') ?>">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/remixicon.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/fonts/remixicon.css">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <link rel="icon" type="image/png" href="assets/images/favicon.png">
   <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
@@ -56,11 +60,12 @@ $navLinks   = get_nav_links(); // DB-driven nav; falls back to [] if table missi
   <?php
     $gscTag = get_setting('gsc_verification_tag');
     if (!empty($gscTag)):
-      if (strpos($gscTag, '<meta') !== false) {
-        echo $gscTag . "\n";
-      } else {
-        echo '<meta name="google-site-verification" content="' . h($gscTag) . "\">\n";
+      // Accept either Google's token or a pasted meta tag, but never echo
+      // administrator-entered HTML directly into the public document.
+      if (preg_match('/content\s*=\s*["\']([^"\']+)["\']/i', $gscTag, $matches)) {
+        $gscTag = $matches[1];
       }
+      echo '<meta name="google-site-verification" content="' . h($gscTag) . "\">\n";
     endif;
     $ga4Id = get_setting('ga4_measurement_id');
     if (!empty($ga4Id)):
@@ -71,7 +76,7 @@ $navLinks   = get_nav_links(); // DB-driven nav; falls back to [] if table missi
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', '<?= h($ga4Id) ?>');
+    gtag('config', <?= json_encode($ga4Id, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>);
   </script>
   <?php endif; ?>
 </head>
