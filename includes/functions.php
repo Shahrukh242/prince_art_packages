@@ -248,8 +248,14 @@ function preload_cta_buttons(): void {
              WHERE cb.is_active = 1
              ORDER BY cb.sort_order ASC"
         )->fetchAll();
+        $seenCta = [];
         foreach ($rows as $row) {
             $key = $row['page_slug'] . '|' . $row['placement'];
+            $dedupeKey = $key . '|' . strtolower(trim($row['label']));
+            if (isset($seenCta[$dedupeKey])) {
+                continue;
+            }
+            $seenCta[$dedupeKey] = true;
             if (!isset($_pac_cta_cache[$key])) {
                 $_pac_cta_cache[$key] = [];
             }
@@ -310,9 +316,19 @@ function get_nav_links(): array {
     }
     try {
         $pdo = get_db();
-        $_pac_nav_cache = $pdo->query(
-            "SELECT * FROM nav_links WHERE is_active = 1 ORDER BY sort_order ASC"
+        $raw = $pdo->query(
+            "SELECT * FROM nav_links WHERE is_active = 1 ORDER BY sort_order ASC, id ASC"
         )->fetchAll();
+        $deduped = [];
+        $seen = [];
+        foreach ($raw as $link) {
+            $key = strtolower(trim($link['label']));
+            if (!isset($seen[$key])) {
+                $seen[$key] = true;
+                $deduped[] = $link;
+            }
+        }
+        $_pac_nav_cache = $deduped;
         return $_pac_nav_cache;
     } catch (\Throwable $e) {
         return [];
