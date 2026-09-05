@@ -121,7 +121,7 @@ require __DIR__ . '/includes/header.php';
             <span class="cap-eyebrow cap-eyebrow-dark">PRODUCTION SCALE</span>
             <h2 style="font-size:2.8rem; color:#ffffff; line-height:1.15; margin-bottom:1.5rem;"><?= h(get_content('capabilities', 'scale_title', 'Built to Keep Production Moving.')) ?></h2>
             <p style="color:rgba(255,255,255,0.85); font-size:1.05rem; line-height:1.6; margin-bottom:2rem;"><?= h(get_content('capabilities', 'scale_desc', 'Integrated printing, coating, cutting, converting and finishing capabilities provide the production infrastructure required for high-volume pharmaceutical packaging.')) ?></p>
-            <a href="contact.php" class="btn btn-gold btn-lg" style="padding:0.85rem 2rem;">Discuss Your Requirement &rarr;</a>
+            <?= render_cta_buttons('capabilities', 'cta_mid', '<a href="contact.php" class="btn btn-gold btn-lg" style="padding:0.85rem 2rem;">Discuss Your Requirement &rarr;</a>') ?>
           </div>
           <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); padding:2.5rem; border-radius:var(--radius-md);">
             <div style="margin-bottom:2rem;">

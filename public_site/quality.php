@@ -19,12 +19,7 @@ require __DIR__ . '/includes/header.php';
       <?= h(get_content('quality', 'hero_intro', 'Stringent cGMP protocols, ISO 9001:2015 certification, and FSC Chain of Custody standards ensuring zero-defect packaging for regulated healthcare markets.')) ?>
     </p>
     <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.75rem; flex-wrap: wrap;">
-      <a href="#quality-commitment" class="btn btn-gold btn-lg">
-        <i class="ri-shield-star-line"></i> Explore Quality Standards &rarr;
-      </a>
-      <a href="contact.php?action=audit" class="btn btn-outline-white btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08);">
-        <i class="ri-calendar-check-line"></i> Schedule Facility Audit
-      </a>
+      <?= render_cta_buttons('quality', 'hero', '<a href="#quality-commitment" class="btn btn-gold btn-lg"><i class="ri-shield-star-line"></i> Explore Quality Standards &rarr;</a><a href="contact.php?action=audit" class="btn btn-outline-white btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08);"><i class="ri-calendar-check-line"></i> Schedule Facility Audit</a>') ?>
     </div>
   </div>
 </section>
@@ -473,12 +468,7 @@ require __DIR__ . '/includes/header.php';
       <?= h(get_content('quality', 'cta_desc', 'Speak directly with our Quality Assurance Directorate to arrange an on-site audit, request technical compliance dossiers, or review our laboratory testing capabilities.')) ?>
     </p>
     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; align-items: center;">
-      <a href="contact.php?action=audit" class="btn btn-gold btn-lg" style="box-shadow: 0 4px 14px rgba(212,175,55,0.4);">
-        <i class="ri-calendar-check-line"></i> Schedule an On-Site Audit &rarr;
-      </a>
-      <a href="contact.php?action=quality-dossier" class="btn btn-outline-white btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08);">
-        <i class="ri-file-download-line"></i> Request QA Manual Dossier
-      </a>
+      <?= render_cta_buttons('quality', 'quality_banner', '<a href="contact.php?action=audit" class="btn btn-gold btn-lg" style="box-shadow: 0 4px 14px rgba(212,175,55,0.4);"><i class="ri-calendar-check-line"></i> Schedule an On-Site Audit &rarr;</a><a href="contact.php?action=quality-dossier" class="btn btn-outline-white btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08);"><i class="ri-file-download-line"></i> Request QA Manual Dossier</a>') ?>
     </div>
   </div>
 </section>

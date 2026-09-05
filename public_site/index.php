@@ -1,11 +1,12 @@
 <?php
 $pageSlug = 'home';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/mailer.php';
 
 $quoteSubmitted = false;
 $quoteError = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'quick_quote') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && ($_POST['action'] ?? '') === 'quick_quote') {
     if (!csrf_verify($_POST['csrf_token'] ?? null)) {
         $quoteError = 'Session expired — please refresh the page and try again.';
     } else {
@@ -23,23 +24,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'quick
             $productType = trim($_POST['product_type'] ?? '');
             $quantity = trim($_POST['estimated_quantity'] ?? '');
 
-            // Handle file upload if present
+            // Handle an optional artwork upload. Validate both the content type
+            // and size; never trust the filename supplied by the browser.
             $attachmentPath = '';
             if (!empty($_FILES['artwork']['name']) && $_FILES['artwork']['error'] === UPLOAD_ERR_OK) {
-                $allowedExts = ['pdf', 'doc', 'docx', 'ai', 'psd', 'zip', 'jpg', 'jpeg', 'png'];
-                $ext = strtolower(pathinfo($_FILES['artwork']['name'], PATHINFO_EXTENSION));
-                if (in_array($ext, $allowedExts, true)) {
+                $maxUploadBytes = 10 * 1024 * 1024;
+                $allowedTypes = [
+                    'application/pdf' => 'pdf',
+                    'application/msword' => 'doc',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+                    'application/zip' => 'zip',
+                    'application/x-zip-compressed' => 'zip',
+                    'image/jpeg' => 'jpg',
+                    'image/png' => 'png',
+                    'image/vnd.adobe.photoshop' => 'psd',
+                ];
+                $fileInfo = new finfo(FILEINFO_MIME_TYPE);
+                $mimeType = $fileInfo->file($_FILES['artwork']['tmp_name']);
+                if ($_FILES['artwork']['size'] > $maxUploadBytes) {
+                    $quoteError = 'Artwork files must be 10 MB or smaller.';
+                } elseif (!isset($allowedTypes[$mimeType])) {
+                    $quoteError = 'Unsupported artwork file type.';
+                } else {
                     $uploadDir = __DIR__ . '/assets/uploads/quotes/';
                     if (!is_dir($uploadDir)) {
-                        @mkdir($uploadDir, 0755, true);
+                        mkdir($uploadDir, 0755, true);
                     }
-                    $safeFilename = 'rfq_' . time() . '_' . preg_replace('/[^a-zA-Z0-9_\.-]/', '_', $_FILES['artwork']['name']);
+                    $safeFilename = 'rfq_' . bin2hex(random_bytes(16)) . '.' . $allowedTypes[$mimeType];
                     $destPath = $uploadDir . $safeFilename;
                     if (move_uploaded_file($_FILES['artwork']['tmp_name'], $destPath)) {
                         $attachmentPath = 'assets/uploads/quotes/' . $safeFilename;
+                    } else {
+                        $quoteError = 'Artwork upload could not be saved. Please try again.';
                     }
                 }
             }
+
+            if ($quoteError !== '') {
+                // Do not write a partial lead when its optional upload failed validation.
+            } else {
 
             $specs = "Country: " . $country . "\n"
                    . "Requirement: " . $packagingReq;
@@ -79,13 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'quick
                            . "Message: " . $message . "\n"
                            . ($attachmentPath ? "Attachment: " . $attachmentPath . "\n" : "")
                            . "\nView in Admin: " . (isset($_SERVER['HTTP_HOST']) ? 'http://' . $_SERVER['HTTP_HOST'] . '/admin/leads.php' : 'Admin Panel');
-                $headers = "From: no-reply@" . ($_SERVER['HTTP_HOST'] ?? 'princeartpackages.com') . "\r\n"
-                         . "Reply-To: " . $email . "\r\n"
-                         . "X-Mailer: PHP/" . phpversion();
-                @mail($notifyEmail, $subject, $emailBody, $headers);
+                send_email_notification($notifyEmail, $subject, nl2br(h($emailBody)), $emailBody, $email);
             }
 
             $quoteSubmitted = true;
+            }
         }
     }
 }

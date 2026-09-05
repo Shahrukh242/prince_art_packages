@@ -4,18 +4,19 @@ require_once __DIR__ . '/../includes/cta_buttons_manifest.php';
 $pdo = get_db();
 
 $saved = false;
+$savedBtnId = 0;
 $error = '';
 
 /* -----------------------------------------------------------------------
-   Load Pages for Tabs
+   Load Pages for Tabs (Home first, then Global, then other sections)
 ----------------------------------------------------------------------- */
 $pages = $pdo->query("
     SELECT id, slug, title 
     FROM pages 
-    ORDER BY FIELD(slug, 'global', 'home', 'about', 'products', 'capabilities', 'innovation', 'quality', 'industries', 'case-studies', 'contact', 'blog'), title ASC
+    ORDER BY FIELD(slug, 'home', 'global', 'about', 'products', 'capabilities', 'innovation', 'quality', 'industries', 'case-studies', 'contact', 'blog'), title ASC
 ")->fetchAll();
 
-$selectedSlug = $_GET['page'] ?? ($pages[0]['slug'] ?? 'global');
+$selectedSlug = $_GET['page'] ?? 'home';
 
 // Auto-heal / Ensure standard default CTA buttons exist in database for this page
 ensure_page_default_cta_buttons($pdo, $selectedSlug);
@@ -81,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $stmt->execute([$label, $url, $actionType, $style, $icon ?: null, $placement, $sortOrder, $isActive, $id]);
             $saved = 'CTA Button "' . htmlspecialchars($label) . '" updated successfully.';
+            $savedBtnId = $id;
         }
 
         // 3. Reset a standard CTA button to its default values
@@ -147,7 +149,39 @@ $styles = [
     'btn-gold btn-sm'         => 'Small Gold (Header/Footer Button)',
 ];
 
-$previewUrl = ($selectedSlug === 'home') ? 'index.php' : (($selectedSlug === 'global') ? 'index.php' : h($selectedSlug) . '.php');
+$placementLabels = [
+    'header'                 => 'Top Header Navigation Bar',
+    'footer'                 => 'Website Footer',
+    'hero'                   => 'Page Hero Section (Top Banner)',
+    'values_cta'             => 'Company Values Section',
+    'why_choose_cta'         => 'Why Choose Capabilities Section',
+    'industry_solutions_cta' => 'Industry Solutions Section',
+    'quality_compliance_cta' => 'Quality & Compliance Section',
+    'social_proof_cta'       => 'Case Studies & Social Proof Section',
+    'faq_cta'                => 'FAQ Support Section',
+    'banner'                 => 'Innovation Strip Banner',
+    'bottom_cta'             => 'Page Bottom CTA Section',
+    'about_bottom'           => 'About Us Bottom Section',
+    'journey_cta'            => 'Manufacturing Journey Section',
+    'diff_cta'               => 'Differentiating Capabilities Section',
+    'feat_cartons'           => 'Printed Cartons Card',
+    'feat_leaflets'          => 'Leaflets & Outserts Card',
+    'feat_labels'            => 'Printed Labels Card',
+    'feat_tamper'            => 'Tamper Evident Card',
+    'feat_coldseal'          => 'ColdSeal Blister Card',
+    'feat_anticounterfeit'   => '3D-Engravix Card',
+    'coldseal_cta'           => 'ColdSeal Feature Card',
+    'engravix_cta'           => '3D-Engravix Feature Card',
+    'lab_cta'                => 'OurLAB Laboratory Section',
+    'quality_banner'         => 'Quality Compliance Audit Banner',
+    'industries_banner'      => 'Industries Call-to-Action Banner',
+    'case_studies_bottom'    => 'Case Studies Audit Banner',
+    'blog_bottom'            => 'Blog Article Discussion Banner',
+    'hero_cta'               => 'Contact Page Hero Section',
+    'form_submit'            => 'Quotation Request Form Submit Button',
+];
+
+$previewUrl = ($selectedSlug === 'home' || $selectedSlug === 'global') ? 'index' : h($selectedSlug);
 ?>
 
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
@@ -176,6 +210,14 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : (($selectedSlug === 'gl
   </div>
 <?php endif; ?>
 
+<!-- Tip notice banner -->
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.75rem;font-size:0.88rem;color:#1e40af;">
+  <i class="ri-information-line" style="font-size:1.25rem;flex-shrink:0;"></i>
+  <span>
+    <strong>Editing Tip:</strong> Select a page tab below to manage its buttons. By default, <strong>Home Page</strong> is selected. To edit the Top Navigation Quote button or the Website Footer button, switch to the <strong>Global (Header &amp; Footer)</strong> tab.
+  </span>
+</div>
+
 <!-- ====================================================================
      Page Selector Navigation Tabs
 ===================================================================== -->
@@ -184,11 +226,12 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : (($selectedSlug === 'gl
     <?php
       $isActive = ($p['slug'] === $selectedSlug);
       $bCount = (int)$pdo->query("SELECT COUNT(*) FROM cta_buttons WHERE page_id = {$p['id']}")->fetchColumn();
+      $tabTitle = ($p['slug'] === 'global') ? 'Global (Header & Footer)' : (($p['slug'] === 'home') ? 'Home Page' : $p['title']);
     ?>
     <a href="cta_buttons.php?page=<?= urlencode($p['slug']) ?>" 
        class="tab-link <?= $isActive ? 'active' : '' ?>"
        style="padding:0.5rem 1rem;border-radius:6px;text-decoration:none;font-weight:600;font-size:0.88rem;display:inline-flex;align-items:center;gap:0.4rem;<?= $isActive ? 'background:var(--teal);color:#fff;' : 'background:#fff;color:var(--text);border:1px solid var(--border);' ?>">
-      <?= h($p['title']) ?>
+      <?= h($tabTitle) ?>
       <span style="font-size:0.72rem;background:<?= $isActive ? 'rgba(255,255,255,0.25)' : 'var(--bg)' ?>;padding:1px 6px;border-radius:10px;font-weight:700;">
         <?= $bCount ?>
       </span>
@@ -229,9 +272,10 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : (($selectedSlug === 'gl
 <?php else: ?>
   <?php foreach ($grouped as $placement => $btns): ?>
   <div class="panel" style="margin-bottom:1.5rem;">
-    <h3 style="font-size:1.05rem;display:flex;align-items:center;gap:0.5rem;margin-top:0;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:0.6rem;">
+    <h3 style="font-size:1.05rem;display:flex;align-items:center;gap:0.5rem;margin-top:0;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:0.6rem;flex-wrap:wrap;">
       <i class="ri-layout-grid-line text-teal"></i>
-      Placement Zone: <code style="color:var(--teal);background:rgba(0,168,150,0.1);padding:2px 8px;border-radius:4px;"><?= h($placement) ?></code>
+      <span><?= h($placementLabels[$placement] ?? ucfirst(str_replace('_', ' ', $placement))) ?></span>
+      <code style="color:var(--muted);font-size:0.78rem;background:var(--bg);padding:2px 8px;border-radius:4px;font-weight:normal;"><?= h($placement) ?></code>
       <span style="margin-left:auto;font-size:0.8rem;font-weight:400;color:var(--muted);"><?= count($btns) ?> button<?= count($btns) !== 1 ? 's' : '' ?></span>
     </h3>
 
@@ -256,7 +300,7 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : (($selectedSlug === 'gl
       <input type="hidden" name="sort_order" value="<?= (int)$btn['sort_order'] ?>">
     </form>
 
-    <details style="border:1px solid var(--border);border-radius:8px;margin-bottom:0.75rem;background:#fff;">
+    <details id="btn-<?= (int)$btn['id'] ?>" <?= ($savedBtnId === (int)$btn['id']) ? 'open' : '' ?> style="border:1px solid var(--border);border-radius:8px;margin-bottom:0.75rem;background:#fff;">
       <summary style="padding:0.85rem 1.1rem;cursor:pointer;display:flex;align-items:center;gap:0.75rem;list-style:none;user-select:none;flex-wrap:wrap;">
         <span class="btn <?= h($btn['style']) ?>" style="pointer-events:none;padding:0.35rem 0.85rem;font-size:0.8rem;white-space:nowrap;">
           <?php if ($btn['icon']): ?><i class="<?= h($btn['icon']) ?>"></i><?php endif; ?>
@@ -287,7 +331,7 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : (($selectedSlug === 'gl
       </summary>
 
       <div style="padding:1.25rem 1.25rem 1.5rem;border-top:1px solid var(--border);background:#fafbfc;">
-        <form method="post" class="content-form" style="margin-bottom:0;">
+        <form method="post" action="cta_buttons.php?page=<?= urlencode($selectedSlug) ?>#btn-<?= (int)$btn['id'] ?>" class="content-form" style="margin-bottom:0;">
           <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
           <input type="hidden" name="action"     value="update">
           <input type="hidden" name="btn_id"     value="<?= (int)$btn['id'] ?>">

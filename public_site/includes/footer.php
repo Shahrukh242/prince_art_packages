@@ -89,9 +89,7 @@
               <i class="ri-building-2-line"></i>
               <span><strong>Unit 2:</strong> Plot 239, Opp. Masco, Main Korangi Creek Road</span>
             </div>
-            <button type="button" class="btn btn-gold btn-sm footer-cta-btn open-rfq-modal" data-source-button="Footer CTA — Request a Quote" style="margin-top:0.65rem; cursor:pointer; width:100%; justify-content:center;">
-              <i class="ri-file-list-3-line"></i> Request a Quote
-            </button>
+            <?= render_cta_buttons('global', 'footer', '<button type="button" class="btn btn-gold btn-sm footer-cta-btn open-rfq-modal" data-source-button="Footer CTA — Request a Quote" style="margin-top:0.65rem; cursor:pointer; width:100%; justify-content:center;"><i class="ri-file-list-3-line"></i> Request a Quote</button>') ?>
           </div>
         </div>
       </div>

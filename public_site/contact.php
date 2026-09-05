@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/mailer.php';
 $submitted = false;
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if (!csrf_verify($_POST['csrf_token'] ?? null)) {
         $error = 'Session expired — please refresh the page and try again.';
     } else {
@@ -194,7 +194,7 @@ require __DIR__ . '/includes/header.php';
                 <textarea name="message" class="form-control" style="min-height:75px;" placeholder="Any additional requirements or plant audit timeline..."></textarea>
               </div>
 
-              <button type="submit" class="btn btn-gold" style="width:100%;"><i class="ri-send-plane-fill"></i> Submit Quotation Request</button>
+              <?= render_cta_buttons('contact', 'form_submit', '<button type="submit" class="btn btn-gold" style="width:100%;"><i class="ri-send-plane-fill"></i> Submit Quotation Request</button>') ?>
             </form>
           <?php endif; ?>
         </div>

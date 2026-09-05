@@ -17,6 +17,9 @@ require __DIR__ . '/includes/header.php';
     <p style="font-size: 1.12rem; line-height: 1.7; color: rgba(255,255,255,0.88); margin: 0 auto; max-width: 720px;">
       <?= h(get_content('products', 'hero_intro', 'High-precision Printed Cartons, prescribing leaflets, self-adhesive roll labels, and protective partitions manufactured under ISO 9001:2015 and cGMP guidelines.')) ?>
     </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.75rem; flex-wrap: wrap;">
+      <?= render_cta_buttons('products', 'hero', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-file-list-3-line"></i> Request Quotation &amp; Samples</a><a href="innovation.php" class="btn btn-outline-white btn-lg" style="color:#ffffff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08);"><i class="ri-lightbulb-line"></i> Explore 3D-ENGRAVIX™ Technology</a>') ?>
+    </div>
   </div>
 </section>
 
@@ -352,12 +355,7 @@ require __DIR__ . '/includes/header.php';
           Have specific packaging requirements or need customized dielines?
         </p>
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; align-items: center;">
-          <a href="contact.php" class="btn btn-gold btn-lg">
-            <i class="ri-mail-send-line"></i> Contact Our Packaging Engineers &rarr;
-          </a>
-          <a href="contact.php?action=audit" class="btn btn-outline-navy btn-lg">
-            <i class="ri-calendar-check-line"></i> Schedule a Facility Audit
-          </a>
+          <?= render_cta_buttons('products', 'bottom_cta', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-mail-send-line"></i> Contact Our Packaging Engineers &rarr;</a><a href="contact.php?action=audit" class="btn btn-outline-navy btn-lg"><i class="ri-calendar-check-line"></i> Schedule a Facility Audit</a>') ?>
         </div>
       </div>
 

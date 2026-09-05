@@ -6,6 +6,12 @@ Options -Indexes +FollowSymLinks
 RewriteEngine On
 RewriteBase /
 
+# Enforce HTTPS on real deployments while retaining local development access.
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
 # ------------------------------------------------------------------------------
 # 1. Custom 404 Error Document
 # ------------------------------------------------------------------------------
@@ -133,9 +139,17 @@ RewriteRule ^([^\.]+)$ public_site/$1.php [NC,L]
         Header set Cache-Control "max-age=2592000, public"
     </FilesMatch>
 
+    # Dynamic PHP Pages — Instant freshness on content & CTA updates
+    <FilesMatch "\.(php|html?)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+
     # Security Headers
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
     Header set Permissions-Policy "geolocation=(), camera=(), microphone=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
 </IfModule>

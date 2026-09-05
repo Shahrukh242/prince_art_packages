@@ -9,9 +9,20 @@ function get_all_default_cta_buttons(): array {
                 'placement'   => 'header',
                 'label'       => 'Request a Quote',
                 'url'         => 'contact.php',
+                'action_type' => 'popup',
                 'style'       => 'btn-gold btn-sm',
                 'icon'        => '',
                 'sort_order'  => 10,
+                'is_active'   => 1,
+            ],
+            [
+                'placement'   => 'footer',
+                'label'       => 'Request a Quote',
+                'url'         => 'contact.php',
+                'action_type' => 'popup',
+                'style'       => 'btn-gold btn-sm',
+                'icon'        => 'ri-file-list-3-line',
+                'sort_order'  => 20,
                 'is_active'   => 1,
             ],
         ],
@@ -399,23 +410,27 @@ function ensure_page_default_cta_buttons(PDO $pdo, string $pageSlug): void {
     if (!$page) return;
     $pageId = (int)$page['id'];
 
-    $checkStmt = $pdo->prepare("SELECT id FROM cta_buttons WHERE page_id = ? AND placement = ? AND sort_order = ? LIMIT 1");
-    $insStmt = $pdo->prepare("INSERT INTO cta_buttons (page_id, placement, label, url, style, icon, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    // If buttons already exist for this page, never auto-insert or overwrite user edits
+    $countStmt = $pdo->prepare("SELECT COUNT(*) FROM cta_buttons WHERE page_id = ?");
+    $countStmt->execute([$pageId]);
+    if ((int)$countStmt->fetchColumn() > 0) {
+        return;
+    }
+
+    $insStmt = $pdo->prepare("INSERT INTO cta_buttons (page_id, placement, label, url, action_type, style, icon, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     foreach ($all[$pageSlug] as $btn) {
-        $checkStmt->execute([$pageId, $btn['placement'], $btn['sort_order']]);
-        if (!$checkStmt->fetch()) {
-            $insStmt->execute([
-                $pageId,
-                $btn['placement'],
-                $btn['label'],
-                $btn['url'],
-                $btn['style'],
-                $btn['icon'] ?: null,
-                $btn['sort_order'],
-                $btn['is_active']
-            ]);
-        }
+        $insStmt->execute([
+            $pageId,
+            $btn['placement'],
+            $btn['label'],
+            $btn['url'],
+            $btn['action_type'] ?? 'link',
+            $btn['style'],
+            $btn['icon'] ?: null,
+            $btn['sort_order'],
+            $btn['is_active']
+        ]);
     }
 }
 
@@ -432,7 +447,7 @@ function restore_page_default_cta_buttons(PDO $pdo, string $pageSlug): int {
     // Delete existing buttons for this page
     $pdo->prepare("DELETE FROM cta_buttons WHERE page_id = ?")->execute([$pageId]);
 
-    $insStmt = $pdo->prepare("INSERT INTO cta_buttons (page_id, placement, label, url, style, icon, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $insStmt = $pdo->prepare("INSERT INTO cta_buttons (page_id, placement, label, url, action_type, style, icon, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $count = 0;
     foreach ($all[$pageSlug] as $btn) {
         $insStmt->execute([
@@ -440,6 +455,7 @@ function restore_page_default_cta_buttons(PDO $pdo, string $pageSlug): int {
             $btn['placement'],
             $btn['label'],
             $btn['url'],
+            $btn['action_type'] ?? 'link',
             $btn['style'],
             $btn['icon'] ?: null,
             $btn['sort_order'],

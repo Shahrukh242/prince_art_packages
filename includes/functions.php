@@ -296,10 +296,22 @@ function render_cta_buttons(string $pageSlug, string $placement, string $fallbac
         $actionType = $btn['action_type'] ?? 'link';
         $sourceBtnLabel = h($btn['label']) . ' (' . ucfirst($pageSlug) . ' — ' . ucfirst($placement) . ')';
 
-        if ($actionType === 'popup') {
-            $html .= '<button type="button" class="btn ' . $style . ' open-rfq-modal" data-source-button="' . h($sourceBtnLabel) . '" style="cursor:pointer;">' . $icon . h($btn['label']) . '</button>';
+        $extraClass = '';
+        $extraStyle = '';
+        if ($placement === 'footer') {
+            $extraClass = ' footer-cta-btn';
+            $extraStyle = ' style="margin-top:0.65rem; cursor:pointer; width:100%; justify-content:center;"';
+        } elseif ($placement === 'header') {
+            $extraClass = ' header-cta-btn';
+        }
+
+        if ($actionType === 'submit' || $placement === 'form_submit') {
+            $html .= '<button type="submit" class="btn ' . $style . $extraClass . '" style="width:100%;">' . $icon . h($btn['label']) . '</button>';
+        } elseif ($actionType === 'popup') {
+            $btnStyleAttr = ($placement === 'footer') ? $extraStyle : ' style="cursor:pointer;"';
+            $html .= '<button type="button" class="btn ' . $style . $extraClass . ' open-rfq-modal" data-source-button="' . h($sourceBtnLabel) . '"' . $btnStyleAttr . '>' . $icon . h($btn['label']) . '</button>';
         } else {
-            $html .= '<a href="' . h($btn['url']) . '" class="btn ' . $style . '">' . $icon . h($btn['label']) . '</a>';
+            $html .= '<a href="' . h($btn['url']) . '" class="btn ' . $style . $extraClass . '"' . $extraStyle . '>' . $icon . h($btn['label']) . '</a>';
         }
     }
     return $html;
