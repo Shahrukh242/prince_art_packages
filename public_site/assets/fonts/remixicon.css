@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Remix Icon v4.2.0
 * https://remixicon.com
 * https://github.com/Remix-Design/RemixIcon
@@ -10,12 +10,7 @@
 */
 @font-face {
   font-family: "remixicon";
-  src: ; /* IE9*/
-  src:  format('embedded-opentype'), /* IE6-IE8 */
-  url("remixicon.woff2") format("woff2"),
-  url("remixicon.woff?t=1708865856766") format("woff"),
-   format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('remixicon.svg?t=1708865856766#remixicon') format('svg'); /* iOS 4.1- */
+  src: url("remixicon.woff2") format("woff2");
   font-display: swap;
 }
 

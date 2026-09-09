@@ -71,7 +71,7 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 </IfModule>
 
 # ------------------------------------------------------------------------------
-# 7. Browser Caching & Expiry (mod_expires)
+# 8. Browser Caching & Expiry (mod_expires)
 # ------------------------------------------------------------------------------
 <IfModule mod_expires.c>
     ExpiresActive On
@@ -104,9 +104,14 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 </IfModule>
 
 # ------------------------------------------------------------------------------
-# 8. HTTP Security Headers & Cache-Control (mod_headers)
+# 9. HTTP Security Headers & Cache-Control (mod_headers)
 # ------------------------------------------------------------------------------
 <IfModule mod_headers.c>
+    # Allow CORS for Web Fonts (Ensures <link rel="preload" as="font" crossorigin> works properly)
+    <FilesMatch "\.(woff|woff2|ttf|otf|eot|svg)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+
     # 1-Year Cache for Static Assets
     <FilesMatch "\.(ico|jpe?g|png|gif|webp|svg|woff|woff2|ttf|otf)$">
         Header set Cache-Control "max-age=31536000, public"
