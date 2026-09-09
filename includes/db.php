@@ -1,15 +1,16 @@
 <?php
 // includes/db.php — single database connection point.
 
-// Optional isolated credentials file so ZIP deployments never wipe live settings
 if (file_exists(__DIR__ . '/db_config.php')) {
     require_once __DIR__ . '/db_config.php';
 }
 
-if (!defined('DB_HOST')) define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-if (!defined('DB_NAME')) define('DB_NAME', getenv('DB_NAME') ?: 'prince_art_packages');
-if (!defined('DB_USER')) define('DB_USER', getenv('DB_USER') ?: 'root');
-if (!defined('DB_PASS')) define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
+$isLocal = empty($_SERVER['HTTP_HOST']) || in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']) || strpos($_SERVER['HTTP_HOST'], 'localhost:') === 0;
+
+if (!defined('DB_HOST')) define('DB_HOST', $isLocal ? 'localhost' : 'shareddb-i.hosting.stackcp.net');
+if (!defined('DB_NAME')) define('DB_NAME', $isLocal ? 'prince_art_packages' : 'princeart-37376455');
+if (!defined('DB_USER')) define('DB_USER', $isLocal ? 'root' : 'princeart-37376455');
+if (!defined('DB_PASS')) define('DB_PASS', $isLocal ? '' : '');
 
 function get_db() {
     static $pdo = null;
