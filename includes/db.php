@@ -1,11 +1,15 @@
 <?php
 // includes/db.php — single database connection point.
-// Update these 4 values when you deploy to StackCP (Databases section will give you these).
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'prince_art_packages');
-define('DB_USER', 'root');        // change on live server
-define('DB_PASS', '');            // change on live server
+// Optional isolated credentials file so ZIP deployments never wipe live settings
+if (file_exists(__DIR__ . '/db_config.php')) {
+    require_once __DIR__ . '/db_config.php';
+}
+
+if (!defined('DB_HOST')) define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+if (!defined('DB_NAME')) define('DB_NAME', getenv('DB_NAME') ?: 'prince_art_packages');
+if (!defined('DB_USER')) define('DB_USER', getenv('DB_USER') ?: 'root');
+if (!defined('DB_PASS')) define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
 
 function get_db() {
     static $pdo = null;
@@ -18,6 +22,7 @@ function get_db() {
                 [
                     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES   => false,
                     PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
                 ]
             );
