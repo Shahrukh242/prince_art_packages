@@ -2628,6 +2628,10 @@ a.footer-contact-item:hover {
 }
 
 @media (max-width: 768px) {
+  .main-header {
+    z-index: 1000 !important;
+  }
+
   .mobile-toggle-btn { 
     display: inline-flex !important; 
   }
@@ -2637,21 +2641,19 @@ a.footer-contact-item:hover {
     display: none; /* Hide top CTA button on mobile to save space */
   }
 
-  /* Backdrop Overlay behind mobile nav */
+  /* Backdrop Overlay behind mobile nav - placed behind header so nav-links is never blurred */
   .mobile-nav-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(11, 37, 69, 0.55);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    background: rgba(11, 37, 69, 0.65);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition: opacity 0.25s ease, visibility 0.25s ease;
-    z-index: 998;
+    z-index: 990;
   }
 
   .mobile-nav-backdrop.is-visible {
@@ -2680,7 +2682,8 @@ a.footer-contact-item:hover {
     visibility: hidden;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0.25s ease;
     pointer-events: none;
-    z-index: 999;
+    z-index: 1001;
+    -webkit-font-smoothing: antialiased;
   }
 
   .nav-links.mobile-open {
