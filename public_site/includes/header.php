@@ -132,8 +132,9 @@ foreach ($rawNav as $l) {
       </nav>
       <div class="header-actions">
         <?= render_cta_buttons('global', 'header', '<a href="contact" class="btn btn-gold btn-sm header-cta-btn">Request a Quote</a>') ?>
-        <button id="btn-mobile-nav" class="mobile-toggle-btn" aria-label="Toggle Menu"><i class="ri-menu-3-line"></i></button>
+        <button id="btn-mobile-nav" class="mobile-toggle-btn" aria-label="Toggle Navigation Menu" aria-expanded="false"><i class="ri-menu-3-line"></i></button>
       </div>
     </div>
   </header>
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
   <main class="page-section active">

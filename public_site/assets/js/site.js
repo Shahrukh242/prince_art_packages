@@ -14,20 +14,66 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupMobileNav() {
   const mobileNavBtn = document.getElementById('btn-mobile-nav');
   const navLinks = document.querySelector('.nav-links');
+  const backdrop = document.getElementById('mobileNavBackdrop');
   if (!mobileNavBtn || !navLinks) return;
+
+  function openMenu() {
+    navLinks.classList.add('mobile-open');
+    mobileNavBtn.classList.add('is-active');
+    mobileNavBtn.setAttribute('aria-expanded', 'true');
+    mobileNavBtn.innerHTML = '<i class="ri-close-line"></i>';
+    if (backdrop) backdrop.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    navLinks.classList.remove('mobile-open');
+    mobileNavBtn.classList.remove('is-active');
+    mobileNavBtn.setAttribute('aria-expanded', 'false');
+    mobileNavBtn.innerHTML = '<i class="ri-menu-3-line"></i>';
+    if (backdrop) backdrop.classList.remove('is-visible');
+    document.body.style.overflow = '';
+  }
 
   mobileNavBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const isOpen = navLinks.classList.toggle('mobile-open');
-    mobileNavBtn.innerHTML = isOpen ? '<i class="ri-close-line"></i>' : '<i class="ri-menu-3-line"></i>';
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.main-header')) {
-      navLinks.classList.remove('mobile-open');
-      mobileNavBtn.innerHTML = '<i class="ri-menu-3-line"></i>';
+    if (navLinks.classList.contains('mobile-open')) {
+      closeMenu();
+    } else {
+      openMenu();
     }
   });
+
+  // Close when tapping backdrop
+  if (backdrop) {
+    backdrop.addEventListener('click', closeMenu);
+  }
+
+  // Close when clicking any nav link
+  navLinks.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Close when pressing Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('mobile-open')) {
+      closeMenu();
+    }
+  });
+
+  // Close when clicking outside header or backdrop
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.main-header') && !e.target.closest('.mobile-nav-backdrop')) {
+      closeMenu();
+    }
+  });
+
+  // Close on resize above mobile breakpoint
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768 && navLinks.classList.contains('mobile-open')) {
+      closeMenu();
+    }
+  }, { passive: true });
 }
 
 // Capabilities page stat reveal animation — optimized for 60fps scrolling
