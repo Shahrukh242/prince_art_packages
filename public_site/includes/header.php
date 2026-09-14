@@ -21,8 +21,15 @@ foreach ($rawNav as $l) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- All public routes, including /product/{slug} and /blog/{slug}, use root-relative assets. -->
-  <base href="/">
+  <?php
+  // Compute base href dynamically for root domain (live) and subfolder environments (e.g. localhost/pap-dashboard-OLD5/public_site/)
+  $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+  $baseHref = rtrim($scriptDir, '/') . '/';
+  if ($baseHref === '//' || $baseHref === '') {
+      $baseHref = '/';
+  }
+  ?>
+  <base href="<?= htmlspecialchars($baseHref, ENT_QUOTES, 'UTF-8') ?>">
   <title><?= h($meta['meta_title']) ?></title>
   <meta name="description" content="<?= h($meta['meta_description']) ?>">
   <meta name="robots" content="index, follow">

@@ -21,10 +21,12 @@ ErrorDocument 404 /404.php
 # 3. Canonical URL Redirects: Strip index.php & .php Extensions
 # ------------------------------------------------------------------------------
 # Strip /index.php to /
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
 RewriteCond %{THE_REQUEST} \s/+index\.php[?\s] [NC]
 RewriteRule ^ https://%{HTTP_HOST}/ [R=301,L]
 
 # Strip .php extension from browser address bar (do not redirect POST requests)
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
 RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{THE_REQUEST} \s/+([^.]+)\.php[\s?] [NC]
 RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
