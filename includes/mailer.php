@@ -14,6 +14,11 @@ require_once __DIR__ . '/phpmailer/PHPMailer.php';
 require_once __DIR__ . '/phpmailer/SMTP.php';
 
 function send_email_notification(string $toEmail, string $subject, string $htmlBody, string $plainBody = '', string $replyTo = ''): bool {
+    if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
+        error_log('[PAP Mailer Error] Invalid notification recipient.');
+        return false;
+    }
+    $replyTo = filter_var($replyTo, FILTER_VALIDATE_EMAIL) ? $replyTo : '';
     $smtpHost     = get_setting('smtp_host', '');
     $smtpPort     = (int) get_setting('smtp_port', '587');
     $smtpUser     = get_setting('smtp_username', '');
@@ -56,6 +61,8 @@ function send_email_notification(string $toEmail, string $subject, string $htmlB
 }
 
 function build_lead_email_html(array $d, string $adminUrl): string {
+    $date    = date('F j, Y, g:i A');
+    $refNo   = htmlspecialchars($d['ref_no'] ?? 'Pending');
     $name    = htmlspecialchars($d['name'] ?? '');
     $company = htmlspecialchars($d['company'] ?? '');
     $email   = htmlspecialchars($d['email'] ?? '');

@@ -54,6 +54,16 @@ require __DIR__ . '/includes/header.php';
           </div>
           <div>
             <?= render_image(get_content('innovation', 'coldseal_image', 'assets/images/coldseal.jpg'), 'ColdSeal Blister Packaging', '', ['style' => 'width:100%; border-radius:var(--radius-md);']) ?>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top:0.75rem;">
+              <div style="text-align:center;">
+                <?= render_image('assets/images/prod_coldseal_3in1.jpg', 'ColdSeal 3-in-1 Individual Wallets', '', ['style' => 'width:100%; border-radius:6px; aspect-ratio:16/9; object-fit:cover; border:1px solid rgba(0,0,0,0.08);']) ?>
+                <small style="color:var(--text-muted); font-size:0.75rem; font-weight:600; display:block; margin-top:0.25rem;">3-in-1 Dispenser Wallets</small>
+              </div>
+              <div style="text-align:center;">
+                <?= render_image('assets/images/coldseal_roller.jpg', 'ColdSeal Jiggle Roller Hand Tool', '', ['style' => 'width:100%; border-radius:6px; aspect-ratio:16/9; object-fit:cover; border:1px solid rgba(0,0,0,0.08);']) ?>
+                <small style="color:var(--text-muted); font-size:0.75rem; font-weight:600; display:block; margin-top:0.25rem;">Jiggle Roller Hand Sealer</small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -63,6 +73,10 @@ require __DIR__ . '/includes/header.php';
         <div class="grid-2" style="align-items:center;">
           <div>
             <?= render_image(get_content('innovation', 'engravix_image', 'assets/images/engravix.jpg'), '3D-Engravix Anti-Counterfeit Packaging', '', ['style' => 'width:100%; border-radius:var(--radius-md);']) ?>
+            <div style="margin-top:0.75rem; text-align:center;">
+              <?= render_image('assets/images/prod_eivita.jpg', 'Eivita 2 Blister Wallet with 3D Engravix', '', ['style' => 'width:100%; border-radius:6px; aspect-ratio:16/9; object-fit:cover; border:1px solid rgba(0,0,0,0.08);']) ?>
+              <small style="color:var(--text-muted); font-size:0.75rem; font-weight:600; display:block; margin-top:0.25rem;">Eivita 2 Wallet with 3D-Engravix™ Optical Seal</small>
+            </div>
           </div>
           <div>
             <span class="cert-pill" style="background:rgba(11, 37, 69, 0.15); color:var(--navy-dark);"><?= h(get_content('innovation', 'engravix_badge', 'OPTICAL ANTI-COUNTERFEIT SECURITY')) ?></span>

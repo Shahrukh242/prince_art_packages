@@ -308,6 +308,14 @@ CREATE TABLE `media` (
 
 LOCK TABLES `media` WRITE;
 /*!40000 ALTER TABLE `media` DISABLE KEYS */;
+INSERT INTO `media` VALUES 
+(1, '3D Engravix - Security Carton.jpg', 'assets/uploads/3d-engravix-carton-security-packaging.jpg', '3D-ENGRAVIX™ Micro-Optic Anti-Counterfeit Security Carton with Holographic Lens', '2026-09-14 12:00:00'),
+(2, 'ColdSeal Blister Wallet (30 Tabs) with Box.jpg', 'assets/uploads/coldseal-blister-wallet-30-tabs-with-box.jpg', 'ColdSeal Blister Wallet 30 Tablets with Matching Secondary Outer Carton Box', '2026-09-14 12:00:00'),
+(3, 'Cold Seal Injection Wallet with Box (SafeClosure PFS).jpg', 'assets/uploads/safeclosure-pfs-injection-wallet-with-box.jpg', 'SafeClosure PFS Injection Wallet with Box for Pre-Filled Syringes', '2026-09-14 12:00:00'),
+(4, 'Eivita 2 Blister Wallet with 3D Engravix.jpg', 'assets/uploads/eivita-2-blister-wallet-with-3d-engravix.jpg', 'Eivita 2 Blister Wallet featuring 3D-Engravix™ Optical Authentication Emblem', '2026-09-14 12:00:00'),
+(5, 'ColdSeal 3 Individual Wallets of 10s Tab with Calendar Dispenser Box.jpg', 'assets/uploads/coldseal-3-individual-blister-wallets.jpg', 'ColdSeal 3 Individual Blister Wallets of 10s with Calendar Dispenser Box', '2026-09-14 12:00:00'),
+(6, 'ColdSeal Jiggle Roller Hand Tool.jpg', 'assets/uploads/coldseal-jiggle-sealing-roller-tool.jpg', 'ColdSeal Jiggle Roller Hand Sealing Tool for Heat-Free Pressure Sealing', '2026-09-14 12:00:00'),
+(7, 'ColdSeal Blister Packaging Standard.jpg', 'assets/uploads/prod-cold-seal-blister-packaging.jpg', 'ColdSeal Heat-Free Eco-Friendly Pharmaceutical Blister Packaging', '2026-09-14 12:00:00');
 /*!40000 ALTER TABLE `media` ENABLE KEYS */;
 UNLOCK TABLES;
 

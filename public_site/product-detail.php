@@ -108,27 +108,27 @@ $productSpecsCatalog = [
         ]
     ],
     'pill-folders' => [
-        'name' => 'Pill-Folders',
-        'category' => 'DOSE ADHERENCE',
-        'tagline' => 'Multi-Panel Paperboard Blister Folders & Dose Adherence Packaging Wallets',
+        'name' => 'Pill-Folders & Injection Wallets',
+        'category' => 'DOSE ADHERENCE & PRE-FILLED SYRINGES',
+        'tagline' => 'Multi-Panel Paperboard Blister Folders & SafeClosure PFS Injection Packaging Wallets',
         'image' => 'assets/images/prod_pill_folders.jpg',
-        'what_it_is' => 'Multi-panel paperboard packaging wallets with integrated die-cut blister retention cavities, tear-off dosage strips, and child-resistant locking closures.',
-        'what_used_for' => 'Encapsulating solid oral dose blister strips within an organized calendar structure to guide patient medication compliance and protect blister foils.',
-        'who_uses_it' => 'Chronic therapy pharmaceutical manufacturers (cardiovascular, diabetes, CNS), clinical trial research organizations, oral contraceptive brands, and wellness companies.',
-        'main_applications' => 'Calendarized unit-dose pill packs, weekly/monthly titration regimens, pediatric treatment courses, clinical trial blinded patient kits, and premium OTC vitamins.',
-        'customization' => 'Available in 7-day, 14-day, 28-day, or bespoke calendar layouts; bi-fold, tri-fold, and book-fold geometries; push-button child-resistant safety latches; and foil-embossed branding.',
-        'key_benefits' => 'Dramatically improves patient therapy compliance through intuitive visual scheduling while offering expansive printable surface area for multilingual dosing guidelines.',
-        'overview' => 'Our paperboard pill-folders and dose adherence wallets provide a patient-centric secondary packaging solution for complex therapeutic regimens. By combining secure blister encapsulation with clear visual calendar tracking, they enhance medication adherence while offering abundant surface area for regulatory text, patient instructions, and brand presentation.',
+        'what_it_is' => 'Multi-panel paperboard packaging wallets and SafeClosure PFS pre-filled syringe (PFS) wallets with integrated protective cavities, dose-adherence layout, and matching outer carton boxes.',
+        'what_used_for' => 'Encapsulating solid oral doses and fragile pre-filled glass syringes (PFS) within secure paperboard retention trays to protect needles, guide dosing compliance, and prevent transit breakage.',
+        'who_uses_it' => 'Chronic therapy pharmaceutical manufacturers, injectable biologic developers, clinical trial research organizations, and hospital pharmacy suppliers.',
+        'main_applications' => 'SafeClosure PFS injection wallets with outer carton boxes, calendarized unit-dose pill packs, weekly/monthly titration regimens, biologic subcutaneous therapies, and clinical trial sample kits.',
+        'customization' => 'Available in SafeClosure PFS syringe layouts, 7-day, 14-day, 28-day, or bespoke calendar layouts; bi-fold, tri-fold, and book-fold geometries; push-button child-resistant safety latches; and protective outer carton boxes.',
+        'key_benefits' => 'Combines fragile needle/syringe protection with intuitive visual dosing calendars, while eliminating the need for bulky plastic clamshells.',
+        'overview' => 'Our paperboard pill-folders and SafeClosure PFS injection wallets provide a patient-centric secondary packaging solution for complex oral solid and parenteral therapeutic regimens. Engineered with precision die-cut syringe retention trays and matching outer cartons, they protect fragile glass barrels and needles while offering expansive printable surfaces for clinical instructions.',
         'specs' => [
-            'Structural Geometries' => 'Bi-fold, Tri-fold, 4-panel gatefold, Book-format wallet with spine, Slide-out sleeve drawer',
+            'Structural Geometries' => 'SafeClosure PFS syringe wallet with box, Bi-fold, Tri-fold, 4-panel gatefold, Book-format wallet with spine, Slide-out sleeve drawer',
             'Substrate Materials' => 'High-caliper Virgin FBB (300 to 450 GSM), Solid Bleached Sulfate (SBS) with high tear resistance',
-            'Blister Retention' => 'Integrated die-cut aperture windows, internal adhesive bonding, thermoformed cavity pockets',
+            'Syringe & Blister Retention' => 'Integrated die-cut aperture windows, contoured syringe barrel cradle, internal adhesive bonding',
             'Dose Tracking Calendars' => 'Numbered daily grids (Day 1 to Day 28), Morning/Afternoon/Evening divided dosage matrices',
             'Child-Resistance Features' => 'Engineered safety release tabs and locking mechanisms compliant with ISO 8317 / US 16 CFR § 1700.20',
             'Senior-Friendly Access' => 'Easy-to-open push-through apertures requiring minimal hand strength for elderly patients',
             'Printing & Finishing' => 'Multi-color offset printing, high-contrast calendar numbering, spot gloss/matte UV coatings',
             'Closure Options' => 'Cohesive cold-seal adhesive, clear fugitive glue spots, magnetic closures, mechanical interlocking tabs',
-            'Target Therapies' => 'Cardiovascular regimens, oral contraceptives, antibiotic titration packs, clinical trial test kits'
+            'Target Therapies' => 'Pre-filled syringe biologics, cardiovascular regimens, oral contraceptives, antibiotic titration packs, clinical trial test kits'
         ]
     ],
     'temper-evident-cartons' => [
@@ -162,7 +162,7 @@ $productSpecsCatalog = [
         'what_it_is' => 'Proprietary micro-structured optical security feature embedded directly into pharmaceutical paperboard printed cartons during inline printing and converting.',
         'what_used_for' => 'Delivering immediate, overt visual authentication under ambient light to protect lifesaving medicines from counterfeiting without requiring scanning devices or apps.',
         'who_uses_it' => 'Multinational pharmaceutical manufacturers, high-value drug innovators, anti-counterfeit brand protection officers, and regulatory compliance agencies.',
-        'main_applications' => 'High-value branded prescription cartons, antiviral medications, oncology therapies, life-critical antibiotics, and export formulation boxes.',
+        'main_applications' => 'High-value branded prescription cartons, Eivita 2 anti-counterfeit blister wallets, antiviral medications, oncology therapies, life-critical antibiotics, and export formulation boxes.',
         'customization' => 'Custom 3D optical depth illusions, multi-axis kinetic motion blade effects, corporate logo flip transformations, angle-dependent color shift seals, and hidden covert micro-text.',
         'key_benefits' => '100% visual authentication under ambient light enables instant verification by pharmacists, doctors, and patients; impossible to duplicate with conventional color copiers or commercial printing.',
         'overview' => '3D-ENGRAVIX™ is our proprietary overt anti-counterfeit optical technology engineered directly into pharmaceutical printed cartons. Featuring dynamic 3D depth, animated kinetic motion, and color-shifting security seals, it enables doctors, pharmacists, customs inspectors, and patients to authenticate genuine medicine in seconds under normal room lighting without any reader device.',
@@ -186,8 +186,8 @@ $productSpecsCatalog = [
         'what_it_is' => 'Sustainable paperboard blister packaging system that bonds two coated board layers using cohesive pressure rollers without applying thermal heat.',
         'what_used_for' => 'Encapsulating temperature-sensitive pharmaceuticals, probiotic capsules, and sterile medical devices without exposing active ingredients to thermal heat degradation.',
         'who_uses_it' => 'Probiotic formulation producers, biological and peptide drug manufacturers, medical device packaging engineers, and eco-conscious pharmaceutical brands.',
-        'main_applications' => 'Heat-labile capsules, probiotic blister cards, effervescent tablets, pre-filled syringes, diagnostic devices, and clinical trial sample wallets.',
-        'customization' => 'Available in wallet format, box format, or single hang-card format; pre-formed plastic/paper-pulp blister pockets; child-resistant slide latches; and calendarized dosing layout.',
+        'main_applications' => 'ColdSeal Blister Wallet 30 Tabs with matching outer box, ColdSeal 3 individual wallets of 10s tab with calendar dispenser box, probiotic blister cards, effervescent tablets, pre-filled syringes, and manual sealing using the ColdSeal Jiggle Roller.',
+        'customization' => 'Available in 30-tabs wallet format with box, 3-in-1 individual wallets of 10s, single hang-card format; pre-formed plastic/paper-pulp blister pockets; child-resistant slide latches; calendarized dosing layout; and jiggle roller manual sealing tool.',
         'key_benefits' => '100% heat-free sealing protects drug potency and saves factory energy; reduces plastic usage by up to 50% compared to traditional rigid plastic clamshells.',
         'overview' => 'ColdSeal Blister Wallets represent the future of sustainable, heat-free pharmaceutical secondary packaging. By replacing thermal heat-sealing with instant cohesive pressure bonding, ColdSeal protects active pharmaceutical ingredients from thermal degradation while cutting plastic packaging volume by up to 50%. Certified FSC paperboard construction provides a recyclable, eco-friendly solution with tamper-evident security.',
         'specs' => [
@@ -198,6 +198,7 @@ $productSpecsCatalog = [
             'Cavity Compatibility' => 'Formed PVC, PVDC, Aclar, Alu-Alu cold-form blisters, and molded paper-pulp cavities',
             'Child-Resistance & Compliance' => 'Engineered child-resistant locking tabs compliant with ISO 8317 standards',
             'Tamper Evidence' => 'Immediate, irreversible paperboard fiber tear upon opening attempt',
+            'Sealing Tools & Machinery' => 'Compatible with high-speed automated pinch-roller cartoning lines or ColdSeal Jiggle Roller hand tools',
             'Energy Efficiency' => 'Pinch-roller sealing requires zero pre-heating energy, lowering plant carbon emissions',
             'Target Applications' => 'Probiotic supplements, temperature-sensitive oral solids, pre-filled syringes, diagnostic devices'
         ]
@@ -338,6 +339,36 @@ require __DIR__ . '/includes/header.php';
             <i class="ri-checkbox-circle-fill text-teal"></i> Pharmaceutical Secondary Packaging Standard
           </div>
         </div>
+
+        <?php if ($currentSlug === 'coldseal-blister-wallet'): ?>
+        <!-- ColdSeal Real Production Formats & Tools Showcase -->
+        <div class="card" style="background:#ffffff; border:1px solid var(--border-color); border-radius:8px; padding:1.25rem; margin-bottom:1.5rem; box-shadow:var(--shadow-sm);">
+          <h4 style="font-size:0.95rem; font-weight:700; color:var(--navy-dark); margin:0 0 0.75rem 0; display:flex; align-items:center; gap:0.4rem;">
+            <i class="ri-gallery-line text-teal"></i> Formats &amp; Sealing Tools
+          </h4>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+            <div style="text-align:center;">
+              <?= render_image('assets/images/prod_coldseal_3in1.jpg', 'ColdSeal 3 Individual Wallets of 10s', '', ['style' => 'width:100%; border-radius:6px; aspect-ratio:16/9; object-fit:cover; border:1px solid #e2e8f0;']) ?>
+              <span style="font-size:0.75rem; color:var(--text-body); font-weight:600; display:block; margin-top:0.35rem;">3 Individual Wallets of 10s</span>
+            </div>
+            <div style="text-align:center;">
+              <?= render_image('assets/images/coldseal_roller.jpg', 'ColdSeal Jiggle Roller Sealing Tool', '', ['style' => 'width:100%; border-radius:6px; aspect-ratio:16/9; object-fit:cover; border:1px solid #e2e8f0;']) ?>
+              <span style="font-size:0.75rem; color:var(--text-body); font-weight:600; display:block; margin-top:0.35rem;">Jiggle Roller Hand Sealer</span>
+            </div>
+          </div>
+        </div>
+        <?php elseif ($currentSlug === '3d-engravix'): ?>
+        <!-- 3D-Engravix Applied Sample Showcase -->
+        <div class="card" style="background:#ffffff; border:1px solid var(--border-color); border-radius:8px; padding:1.25rem; margin-bottom:1.5rem; box-shadow:var(--shadow-sm);">
+          <h4 style="font-size:0.95rem; font-weight:700; color:var(--navy-dark); margin:0 0 0.75rem 0; display:flex; align-items:center; gap:0.4rem;">
+            <i class="ri-gallery-line text-teal"></i> Applied Production Examples
+          </h4>
+          <div style="text-align:center;">
+            <?= render_image('assets/images/prod_eivita.jpg', 'Eivita 2 Blister Wallet with 3D Engravix', '', ['style' => 'width:100%; border-radius:6px; aspect-ratio:16/9; object-fit:cover; border:1px solid #e2e8f0;']) ?>
+            <span style="font-size:0.78rem; color:var(--text-body); font-weight:600; display:block; margin-top:0.35rem;">Eivita 2 Blister Wallet with 3D-Engravix™ Optical Seal</span>
+          </div>
+        </div>
+        <?php endif; ?>
 
         <!-- Primary RFQ CTA Action Card -->
         <div class="card product-rfq-card">

@@ -1,13 +1,8 @@
 <?php
+require_once __DIR__ . '/../includes/auth.php';
+require_admin();
 require __DIR__ . '/includes/layout_top.php';
 $pdo = get_db();
-
-// Ensure email column exists in admin_users
-try {
-    $pdo->exec("ALTER TABLE admin_users ADD COLUMN email VARCHAR(150) NULL AFTER username");
-} catch (\Throwable $e) {
-    // Column may already exist
-}
 
 $currentUserId = (int)($_SESSION['admin_id'] ?? 0);
 $currentUserRole = $_SESSION['admin_role'] ?? 'admin';

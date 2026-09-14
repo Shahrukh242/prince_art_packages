@@ -141,10 +141,12 @@ try {
     header('Location: thank-you.php');
     exit;
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
+    error_log('[PAP RFQ Error] ' . $e->getMessage());
     if ($isAjax) {
+        http_response_code(500);
         header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'error' => 'We could not submit your request right now. Please try again shortly.']);
         exit;
     }
     header('Location: contact.php?error=dberror');

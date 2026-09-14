@@ -17,25 +17,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image']) && csrf_ver
 
     if ($file['error'] !== UPLOAD_ERR_OK) {
         $error = 'Upload failed — please try again.';
-    } elseif (!isset($allowedTypes[$file['type']])) {
-        $error = 'Only JPG, PNG, WEBP, and GIF images are allowed.';
     } elseif ($file['size'] > 5 * 1024 * 1024) {
         $error = 'Image must be under 5MB.';
+    } elseif (!class_exists('finfo')) {
+        $error = 'Server file validation is unavailable. Contact the administrator.';
     } else {
-        $ext = $allowedTypes[$file['type']];
-        $safeName = bin2hex(random_bytes(8)) . '.' . $ext;
-        $destination = $uploadDir . $safeName;
-
-        if (move_uploaded_file($file['tmp_name'], $destination)) {
-            $stmt = $pdo->prepare("INSERT INTO media (filename, filepath, alt_text) VALUES (?, ?, ?)");
-            $stmt->execute([
-                $file['name'],
-                'assets/uploads/' . $safeName,
-                trim($_POST['alt_text'] ?? ''),
-            ]);
-            $message = 'Image uploaded successfully.';
+        $detectedType = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
+        if (!isset($allowedTypes[$detectedType]) || @getimagesize($file['tmp_name']) === false) {
+            $error = 'Only valid JPG, PNG, WEBP, and GIF images are allowed.';
         } else {
-            $error = 'Could not save the uploaded file — check folder permissions.';
+            $ext = $allowedTypes[$detectedType];
+            $safeName = bin2hex(random_bytes(16)) . '.' . $ext;
+            $destination = $uploadDir . $safeName;
+
+            if (move_uploaded_file($file['tmp_name'], $destination)) {
+                $stmt = $pdo->prepare("INSERT INTO media (filename, filepath, alt_text) VALUES (?, ?, ?)");
+                $stmt->execute([
+                    basename($file['name']),
+                    'assets/uploads/' . $safeName,
+                    trim($_POST['alt_text'] ?? ''),
+                ]);
+                $message = 'Image uploaded successfully.';
+            } else {
+                $error = 'Could not save the uploaded file — check folder permissions.';
+            }
         }
     }
 }
@@ -60,6 +65,56 @@ if (isset($_GET['delete']) && csrf_verify($_GET['csrf'] ?? null)) {
         $stmt->execute([$id]);
         $message = 'Image deleted. Any pages using it now show their default image instead.';
     }
+}
+
+// Auto-sync initial product media into media library if not yet registered in database
+try {
+    $existingPaths = $pdo->query("SELECT filepath FROM media")->fetchAll(PDO::FETCH_COLUMN);
+    $initialClientMedia = [
+        [
+            'filename' => '3D Engravix - Security Carton.jpg',
+            'filepath' => 'assets/uploads/3d-engravix-carton-security-packaging.jpg',
+            'alt_text' => '3D-ENGRAVIX™ Micro-Optic Anti-Counterfeit Security Carton with Holographic Lens'
+        ],
+        [
+            'filename' => 'ColdSeal Blister Wallet (30 Tabs) with Box.jpg',
+            'filepath' => 'assets/uploads/coldseal-blister-wallet-30-tabs-with-box.jpg',
+            'alt_text' => 'ColdSeal Blister Wallet 30 Tablets with Matching Secondary Outer Carton Box'
+        ],
+        [
+            'filename' => 'Cold Seal Injection Wallet with Box (SafeClosure PFS).jpg',
+            'filepath' => 'assets/uploads/safeclosure-pfs-injection-wallet-with-box.jpg',
+            'alt_text' => 'SafeClosure PFS Injection Wallet with Box for Pre-Filled Syringes'
+        ],
+        [
+            'filename' => 'Eivita 2 Blister Wallet with 3D Engravix.jpg',
+            'filepath' => 'assets/uploads/eivita-2-blister-wallet-with-3d-engravix.jpg',
+            'alt_text' => 'Eivita 2 Blister Wallet featuring 3D-Engravix™ Optical Authentication Emblem'
+        ],
+        [
+            'filename' => 'ColdSeal 3 Individual Wallets of 10s Tab with Calendar Dispenser Box.jpg',
+            'filepath' => 'assets/uploads/coldseal-3-individual-blister-wallets.jpg',
+            'alt_text' => 'ColdSeal 3 Individual Blister Wallets of 10s with Calendar Dispenser Box'
+        ],
+        [
+            'filename' => 'ColdSeal Jiggle Roller Hand Tool.jpg',
+            'filepath' => 'assets/uploads/coldseal-jiggle-sealing-roller-tool.jpg',
+            'alt_text' => 'ColdSeal Jiggle Roller Hand Sealing Tool for Heat-Free Pressure Sealing'
+        ],
+        [
+            'filename' => 'ColdSeal Blister Packaging Standard.jpg',
+            'filepath' => 'assets/uploads/prod-cold-seal-blister-packaging.jpg',
+            'alt_text' => 'ColdSeal Heat-Free Eco-Friendly Pharmaceutical Blister Packaging'
+        ]
+    ];
+    $insStmt = $pdo->prepare("INSERT INTO media (filename, filepath, alt_text) VALUES (?, ?, ?)");
+    foreach ($initialClientMedia as $im) {
+        if (!in_array($im['filepath'], $existingPaths, true) && file_exists(__DIR__ . '/../public_site/' . $im['filepath'])) {
+            $insStmt->execute([$im['filename'], $im['filepath'], $im['alt_text']]);
+        }
+    }
+} catch (Exception $e) {
+    // Fail gracefully if table not yet created
 }
 
 $mediaItems = get_all_media();

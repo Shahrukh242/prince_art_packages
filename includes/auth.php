@@ -21,6 +21,15 @@ function require_login(): void {
     }
 }
 
+/** Restrict account and system configuration changes to administrators. */
+function require_admin(): void {
+    require_login();
+    if (($_SESSION['admin_role'] ?? '') !== 'admin') {
+        http_response_code(403);
+        exit('You do not have permission to access this page.');
+    }
+}
+
 /** Attempt login; returns true on success, false on failure. Rate-limit this in production. */
 function attempt_login(string $username, string $password): bool {
     $pdo = get_db();

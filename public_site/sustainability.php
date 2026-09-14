@@ -20,7 +20,7 @@ require __DIR__ . '/includes/header.php';
           </ul>
         </div>
         <div>
-          <img src="assets/images/leaflets.jpg" style="width:100%; border-radius:var(--radius-md);" alt="Eco Friendly Packaging">
+          <?= render_image('assets/images/prod_cold_seal.jpg', 'Eco-Friendly ColdSeal Packaging', '', ['style' => 'width:100%; border-radius:var(--radius-md);']) ?>
         </div>
       </div>
     </div>

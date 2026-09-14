@@ -142,13 +142,13 @@ require __DIR__ . '/includes/header.php';
           </a>
           <div class="card-body">
             <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p5_tag', 'DOSE ADHERENCE')) ?></span>
+              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p5_tag', 'DOSE ADHERENCE & INJECTION WALLETS')) ?></span>
               <h3 class="card-title">
                 <a href="product-detail.php?slug=pill-folders" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p5_title', 'Pill-folders')) ?>
+                  <?= h(get_content('products', 'p5_title', 'Pill-Folders & SafeClosure PFS Wallets')) ?>
                 </a>
               </h3>
-              <p><?= h(get_content('products', 'p5_desc', 'Paperboard medicine packaging wallets with integrated dose-tracking calendar compartments engineered to support patient medication adherence.')) ?></p>
+              <p><?= h(get_content('products', 'p5_desc', 'Paperboard dose-adherence folders and SafeClosure PFS injection wallets with integrated blister cavities and protective outer cartons.')) ?></p>
             </div>
             <div class="btn-quote-wrapper">
               <a href="product-detail.php?slug=pill-folders" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
@@ -191,7 +191,7 @@ require __DIR__ . '/includes/header.php';
               <span class="cert-pill" style="background:rgba(11, 37, 69, 0.15); color:var(--navy-dark); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p7_tag', 'OPTICAL ANTI-COUNTERFEIT')) ?></span>
               <h3 class="card-title">
                 <a href="product-detail.php?slug=3d-engravix" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p7_title', '3D-ENGRAVIXâ„¢')) ?>
+                  <?= h(get_content('products', 'p7_title', '3D-ENGRAVIX™')) ?>
                 </a>
               </h3>
               <p><?= h(get_content('products', 'p7_desc', 'Proprietary micro-structured optical security feature integrated directly onto Printed Cartons for instant visual authentication under ambient light.')) ?></p>

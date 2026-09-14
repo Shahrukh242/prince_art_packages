@@ -2,7 +2,7 @@
 // setup.php — Initial Admin Account Setup Script
 // Delete this file after creating your admin account!
 
-require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/functions.php';
 
 $message = '';
 $error = '';
@@ -13,13 +13,24 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) as c FROM admin_users");
     $userCount = (int)$stmt->fetch()['c'];
 } catch (Exception $e) {
-    $error = "Database Error: " . $e->getMessage() . ". Did you import database/schema.sql into MySQL first?";
+    error_log('[PAP Setup Error] ' . $e->getMessage());
+    $error = 'Database connection failed. Import the schema and check the database configuration.';
+}
+
+// This installer is deliberately a one-time bootstrap tool. Once an account
+// exists it must not remain usable as a public account-creation endpoint.
+if ($userCount > 0) {
+    http_response_code(403);
+    exit('Setup is disabled because an administrator account already exists. Remove setup.php from the server.');
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
+    if (!csrf_verify($_POST['csrf_token'] ?? null)) {
+        $error = 'Security token mismatch. Please refresh and try again.';
+    } else {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
-    $role = $_POST['role'] ?? 'admin';
+    $role = 'admin';
 
     if (strlen($username) < 3) {
         $error = "Username must be at least 3 characters long.";
@@ -30,15 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("INSERT INTO admin_users (username, password_hash, role) VALUES (?, ?, ?)");
             $stmt->execute([$username, $hash, $role]);
-            $message = "Admin user '{$username}' created successfully! You can now <a href='admin/login.php'>log in here</a>.<br><strong>Important:</strong> Delete this setup.php file from your server now for security.";
+            $message = "Admin user '" . h($username) . "' created successfully! You can now <a href='admin/login.php'>log in here</a>.<br><strong>Important:</strong> Delete this setup.php file from your server now for security.";
             $userCount++;
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
-                $error = "Username '{$username}' already exists.";
+                $error = 'That username already exists.';
             } else {
-                $error = "Error creating admin user: " . $e->getMessage();
+                error_log('[PAP Setup Error] ' . $e->getMessage());
+                $error = 'Could not create the administrator account. Please try again.';
             }
         }
+    }
     }
 }
 ?>
@@ -82,17 +95,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
         <?php endif; ?>
 
         <form method="post">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
             <label>Username
                 <input type="text" name="username" placeholder="e.g. admin" required>
             </label>
             <label>Password
                 <input type="password" name="password" placeholder="••••••••" required>
-            </label>
-            <label>Role
-                <select name="role">
-                    <option value="admin">Administrator</option>
-                    <option value="editor">Editor</option>
-                </select>
             </label>
             <button type="submit">Create Admin Account</button>
         </form>
