@@ -11,7 +11,7 @@ if ($productCount === 0) {
     $seedProducts = [
         ['Printed Cartons', 'folding-cartons', 'Secondary Packaging', 'Reverse tuck, crash lock, tamper-evident, and child-resistant cartons printed on food & pharma-grade virgin board.', 'assets/images/prod_cartons.jpg', 1],
         ['Leaf-Inserts', 'leaf-inserts', 'Patient Information', 'Ultra-thin 27gsm to 60gsm prescribing information inserts, cross-folded or miniature outserts for automated packaging lines.', 'assets/images/prod_leaflets.jpg', 1],
-        ['Printed Labels', 'printed-labels', 'Container Labeling', 'Self-adhesive roll labels for vials, bottles, ampoules, and destructible tamper-evident security seals with 2D barcode serialization.', 'assets/images/prod_labels.jpg', 1],
+        ['Printed Labels', 'printed-labels', 'Container Labeling', 'Precision bottle & container labels for vials, bottles, ampoules, and destructible tamper-evident security seals with 2D barcode serialization.', 'assets/images/prod_labels.jpg', 1],
         ['Honeycomb Separators', 'honeycomb-separators', 'Protective Partitions', 'Protective cardboard honeycomb dividers and grid partitions designed to safeguard glass ampoules and liquid vials.', 'assets/images/prod_honeycomb.jpg', 1],
         ['Pill-Folders', 'pill-folders', 'Dose Adherence', 'Paperboard medicine packaging wallets with integrated dose-tracking calendar compartments engineered to support patient adherence.', 'assets/images/prod_pill_folders.jpg', 1],
         ['Tamper Evident Cartons & Labels', 'tamper-evident', 'Security Seals', 'Destructible security seals and tamper-evident carton structures that provide immediate, irreversible visual evidence.', 'assets/images/prod_tamper_labels.jpg', 1],

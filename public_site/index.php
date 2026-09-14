@@ -250,7 +250,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
           <div class="section-header" style="margin-bottom: 0; text-align: left; max-width: 700px;">
             <span class="section-subtitle"><?= h(get_content('home', 'capability_subtitle', 'PHARMACEUTICAL PACKAGING SOLUTIONS')) ?></span>
             <h2><?= h(get_content('home', 'capability_title', 'Comprehensive Pharmaceutical Packaging Solutions')) ?></h2>
-            <p><?= h(get_content('home', 'capability_intro', 'Purpose-engineered paperboard packaging, precision inserts, self-adhesive roll labels, and proprietary security features.')) ?></p>
+            <p><?= h(get_content('home', 'capability_intro', 'Purpose-engineered paperboard packaging, precision inserts, printed bottle labels, and proprietary security features.')) ?></p>
           </div>
 
           <!-- Slider Prev / Next Controls -->
@@ -302,7 +302,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
               <div class="card-body">
                 <div class="card-text-content">
                   <h3 class="card-title"><?= h(get_content('home', 'feat_3_title', 'Printed Labels & Tamper-Evident')) ?></h3>
-                  <p><?= h(get_content('home', 'feat_3_text', 'Self-adhesive roll labels for vials, bottles, ampoules, and destructible tamper-evident security seals with 2D barcode serialization.')) ?></p>
+                  <p><?= h(get_content('home', 'feat_3_text', 'Precision bottle and container labels for vials, bottles, ampoules, and destructible tamper-evident security seals with 2D barcode serialization.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
                   <?= render_cta_buttons('home', 'feat_labels', '<a href="products.php#product-printed-labels" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
@@ -885,7 +885,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                 <span class="faq-icon"><i class="ri-add-line"></i></span>
               </summary>
               <div class="faq-answer">
-                <p><?= h(get_content('home', 'faq_1_a', 'We manufacture specialized secondary packaging including paperboard printed cartons (reverse tuck, crash lock), ultra-thin 27gsm–60gsm patient prescribing information leaflets, miniature multi-folded outserts, self-adhesive roll labels, tamper-evident packaging, and ColdSeal blister wallets.')) ?></p>
+                <p><?= h(get_content('home', 'faq_1_a', 'We manufacture specialized secondary packaging including paperboard printed cartons (reverse tuck, crash lock), ultra-thin 27gsm–60gsm patient prescribing information leaflets, miniature multi-folded outserts, printed bottle labels, tamper-evident packaging, and ColdSeal blister wallets.')) ?></p>
               </div>
             </details>
 
@@ -940,7 +940,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                 <span class="faq-icon"><i class="ri-add-line"></i></span>
               </summary>
               <div class="faq-answer">
-                <p><?= h(get_content('home', 'faq_6_a', 'Yes. We produce high-density self-adhesive roll labels for ampoules, vials, and bottles, printed on pharma-grade substrates with durable adhesives, 2D DataMatrix serialization, and scratch-resistant varnishes.')) ?></p>
+                <p><?= h(get_content('home', 'faq_6_a', 'Yes. We produce high-density printed bottle and container labels for ampoules, vials, and bottles, printed on pharma-grade substrates with durable adhesives, 2D DataMatrix serialization, and scratch-resistant varnishes.')) ?></p>
               </div>
             </details>
           </div>
@@ -1022,7 +1022,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
           "name": "What pharmaceutical packaging products does Prince Art Packages manufacture?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "We manufacture specialized secondary packaging including paperboard printed cartons (reverse tuck, crash lock), ultra-thin 27gsm–60gsm patient prescribing information leaflets, miniature multi-folded outserts, self-adhesive roll labels, tamper-evident packaging, and ColdSeal blister wallets."
+            "text": "We manufacture specialized secondary packaging including paperboard printed cartons (reverse tuck, crash lock), ultra-thin 27gsm–60gsm patient prescribing information leaflets, miniature multi-folded outserts, printed bottle labels, tamper-evident packaging, and ColdSeal blister wallets."
           }
         },
         {
@@ -1062,7 +1062,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
           "name": "Do you manufacture printed pharmaceutical labels?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. We produce high-density self-adhesive roll labels for ampoules, vials, and bottles, printed on pharma-grade substrates with durable adhesives, 2D DataMatrix serialization, and scratch-resistant varnishes."
+            "text": "Yes. We produce high-density printed bottle and container labels for ampoules, vials, and bottles, printed on pharma-grade substrates with durable adhesives, 2D DataMatrix serialization, and scratch-resistant varnishes."
           }
         },
         {

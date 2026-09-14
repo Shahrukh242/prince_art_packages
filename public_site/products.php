@@ -15,7 +15,7 @@ require __DIR__ . '/includes/header.php';
       <?= h(get_content('products', 'hero_title', 'Engineered Secondary Packaging Solutions for Regulated Pharma')) ?>
     </h1>
     <p style="font-size: 1.12rem; line-height: 1.7; color: rgba(255,255,255,0.88); margin: 0 auto; max-width: 720px;">
-      <?= h(get_content('products', 'hero_intro', 'High-precision Printed Cartons, prescribing leaflets, self-adhesive roll labels, and protective partitions manufactured under ISO 9001:2015 and cGMP guidelines.')) ?>
+      <?= h(get_content('products', 'hero_intro', 'High-precision Printed Cartons, prescribing leaflets, printed bottle labels, and protective partitions manufactured under ISO 9001:2015 and cGMP guidelines.')) ?>
     </p>
     <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.75rem; flex-wrap: wrap;">
       <?= render_cta_buttons('products', 'hero', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-file-list-3-line"></i> Request Quotation &amp; Samples</a><a href="innovation.php" class="btn btn-outline-white btn-lg" style="color:#ffffff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08);"><i class="ri-lightbulb-line"></i> Explore 3D-ENGRAVIX™ Technology</a>') ?>
@@ -102,7 +102,7 @@ require __DIR__ . '/includes/header.php';
                   <?= h(get_content('products', 'p3_title', 'Printed Labels')) ?>
                 </a>
               </h3>
-              <p><?= h(get_content('products', 'p3_desc', 'High-precision self-adhesive roll labels for pharmaceutical bottles, vials, ampoules, and IV containers with serialization barcode compatibility.')) ?></p>
+              <p><?= h(get_content('products', 'p3_desc', 'High-precision printed bottle and container labels for pharmaceutical bottles, vials, ampoules, and IV containers with serialization barcode compatibility.')) ?></p>
             </div>
             <div class="btn-quote-wrapper">
               <a href="product-detail.php?slug=printed-labels" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">

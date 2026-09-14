@@ -90,7 +90,7 @@ require __DIR__ . '/includes/header.php';
           <span class="intro-pillar-tag" style="color: var(--teal-primary); background: var(--teal-bg);">MAIN PRODUCTS</span>
         </div>
         <h3><?= h(get_content('about', 'pillar_4_title', 'Comprehensive Product Portfolio')) ?></h3>
-        <p><?= h(get_content('about', 'pillar_4_desc', 'Manufacturing printed cartons (reverse tuck, crash-lock), 27–60gsm prescribing inserts/outserts, printed self-adhesive roll labels, ColdSeal blister wallets, tamper-evident seals, and 3D-Engravix™ security packaging.')) ?></p>
+        <p><?= h(get_content('about', 'pillar_4_desc', 'Manufacturing printed cartons (reverse tuck, crash-lock), 27–60gsm prescribing inserts/outserts, printed bottle and container labels, ColdSeal blister wallets, tamper-evident seals, and 3D-Engravix™ security packaging.')) ?></p>
       </div>
 
       <!-- 05: Markets Served -->
@@ -152,7 +152,7 @@ require __DIR__ . '/includes/header.php';
         <?= h(get_content('about', 'journey_title', 'Built on Decades of Packaging Experience')) ?>
       </h2>
       <p style="font-size: 1.08rem; line-height: 1.75; color: var(--text-body); margin: 0 auto;">
-        <?= get_content('about', 'journey_paragraph', 'With more than three decades of specialized manufacturing heritage, Prince Art Packages has developed deep engineering mastery across printed cartons, prescribing leaflets, roll labels, and anti-counterfeit packaging. Our journey from foundational offset printing to advanced dual-plant <a href="capabilities.php" class="text-link">pharmaceutical packaging manufacturing capabilities</a> reflects an enduring commitment to regulatory precision, continuous technical reinvestment, and zero-defect packaging integrity for healthcare leaders across the region.') ?>
+        <?= get_content('about', 'journey_paragraph', 'With more than three decades of specialized manufacturing heritage, Prince Art Packages has developed deep engineering mastery across printed cartons, prescribing leaflets, bottle labels, and anti-counterfeit packaging. Our journey from foundational offset printing to advanced dual-plant <a href="capabilities.php" class="text-link">pharmaceutical packaging manufacturing capabilities</a> reflects an enduring commitment to regulatory precision, continuous technical reinvestment, and zero-defect packaging integrity for healthcare leaders across the region.') ?>
       </p>
     </div>
 
@@ -457,7 +457,7 @@ require __DIR__ . '/includes/header.php';
             <span class="faq-icon"><i class="ri-add-line"></i></span>
           </summary>
           <div class="faq-answer">
-            <p><?= h(get_content('about', 'faq_1_a', 'Prince Art Packages specializes exclusively in pharmaceutical secondary packaging. We manufacture precision-printed folding paperboard cartons, prescribing information leaflets (PIL), multi-folded outserts, self-adhesive roll labels, ColdSeal blister wallets, honeycomb partitions, and proprietary 3D-Engravix™ optical anti-counterfeit security packaging.')) ?></p>
+            <p><?= h(get_content('about', 'faq_1_a', 'Prince Art Packages specializes exclusively in pharmaceutical secondary packaging. We manufacture precision-printed folding paperboard cartons, prescribing information leaflets (PIL), multi-folded outserts, printed bottle labels, ColdSeal blister wallets, honeycomb partitions, and proprietary 3D-Engravix™ optical anti-counterfeit security packaging.')) ?></p>
           </div>
         </details>
 
@@ -586,7 +586,7 @@ $faqSchema = [
             "name" => get_content('about', 'faq_1_q', 'What does Prince Art Packages manufacture?'),
             "acceptedAnswer" => [
                 "@type" => "Answer",
-                "text" => get_content('about', 'faq_1_a', 'Prince Art Packages specializes exclusively in pharmaceutical secondary packaging. We manufacture precision-printed folding paperboard cartons, prescribing information leaflets (PIL), multi-folded outserts, self-adhesive roll labels, ColdSeal blister wallets, honeycomb partitions, and proprietary 3D-Engravix™ optical anti-counterfeit security packaging.')
+                "text" => get_content('about', 'faq_1_a', 'Prince Art Packages specializes exclusively in pharmaceutical secondary packaging. We manufacture precision-printed folding paperboard cartons, prescribing information leaflets (PIL), multi-folded outserts, printed bottle labels, ColdSeal blister wallets, honeycomb partitions, and proprietary 3D-Engravix™ optical anti-counterfeit security packaging.')
             ]
         ],
         [
