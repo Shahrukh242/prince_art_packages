@@ -98,7 +98,14 @@ function get_page_meta(string $pageSlug): array {
         $stmt = $pdo->prepare("SELECT title, meta_title, meta_description FROM pages WHERE slug = ? LIMIT 1");
         $stmt->execute([$pageSlug]);
         $row = $stmt->fetch();
-        $metaCache[$pageSlug] = $row ?: ['title' => 'Prince Art Packages', 'meta_title' => 'Prince Art Packages', 'meta_description' => ''];
+        if ($row) {
+            $row['title'] = clean_mojibake($row['title']);
+            $row['meta_title'] = str_replace(' ? ', ' — ', clean_mojibake($row['meta_title']));
+            $row['meta_description'] = clean_mojibake($row['meta_description']);
+            $metaCache[$pageSlug] = $row;
+        } else {
+            $metaCache[$pageSlug] = ['title' => 'Prince Art Packages', 'meta_title' => 'Prince Art Packages', 'meta_description' => ''];
+        }
         return $metaCache[$pageSlug];
     } catch (\Throwable $e) {
         return ['title' => 'Prince Art Packages', 'meta_title' => 'Prince Art Packages', 'meta_description' => ''];

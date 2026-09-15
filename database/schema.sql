@@ -56,7 +56,7 @@ CREATE TABLE `pages` (
 
 -- Dumping data for table `pages`
 INSERT INTO `pages` VALUES
-('1', 'home', 'Home', 'Prince Art Packages ? Pharmaceutical Secondary Packaging Manufacturer', 'ISO 9001:2015 & FSC certified pharmaceutical secondary packaging manufacturer in Karachi, Pakistan. High-speed printed cartons, prescribing leaflets, and roll labels.', '2026-09-03 20:44:01'),
+('1', 'home', 'Home', 'Prince Art Packages — Pharmaceutical Secondary Packaging Manufacturer', 'ISO 9001:2015 & FSC certified pharmaceutical secondary packaging manufacturer in Karachi, Pakistan. High-speed printed cartons, prescribing leaflets, and roll labels.', '2026-09-03 20:44:01'),
 ('2', 'about', 'About Us', 'About Prince Art Packages | Pharmaceutical Packaging Manufacturer', 'Learn about Prince Art Packages, a pharmaceutical secondary packaging manufacturer providing cartons, leaflets, labels and specialized packaging solutions for regulated markets.', '2026-09-02 16:50:18'),
 ('4', 'innovation', 'Innovation & Technology', 'Innovation | Prince Art Packages', 'ColdSeal Blister Wallet and 3D-Engravix anti-counterfeit technology.', '2026-08-23 17:46:44'),
 ('5', 'contact', 'Contact / Request a Quote', 'Contact Prince Art Packages | Pharmaceutical Packaging', 'Contact Prince Art Packages for pharmaceutical packaging enquiries, product information, custom packaging requirements and manufacturing questions.', '2026-09-02 17:05:29'),
