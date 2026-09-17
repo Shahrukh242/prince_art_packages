@@ -152,7 +152,7 @@ CREATE TABLE `cta_buttons` (
   `label` varchar(150) NOT NULL,
   `url` varchar(500) NOT NULL,
   `action_type` varchar(20) NOT NULL DEFAULT 'link',
-  `style` enum('btn-gold','btn-teal','btn-navy','btn-outline-navy') NOT NULL DEFAULT 'btn-gold',
+  `style` varchar(50) NOT NULL DEFAULT 'btn-gold',
   `icon` varchar(100) DEFAULT NULL,
   `placement` varchar(100) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT 0,
@@ -161,7 +161,7 @@ CREATE TABLE `cta_buttons` (
   KEY `idx_cta_page_placement` (`page_id`,`placement`),
   KEY `idx_cta_active_sort` (`is_active`,`sort_order`),
   CONSTRAINT `cta_buttons_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +200,7 @@ INSERT INTO `cta_buttons` VALUES
 (34,2,'View Manufacturing Capabilities','capabilities','link','btn-navy','ri-settings-4-line','journey_cta',10,1),
 (35,2,'Speak with Our Specialists','contact','link','btn-gold','ri-phone-line','journey_cta',20,1),
 (36,2,'Schedule a Facility Audit','contact','link','btn-gold','ri-calendar-check-line','quality_compliance_cta',10,1),
-(37,2,'View Quality Accreditations','quality','link','btn-outline-navy','ri-external-link-line','quality_compliance_cta',20,1),
+(37,2,'View Quality Accreditations','quality','link','btn-outline-white','ri-external-link-line','quality_compliance_cta',20,1),
 (38,2,'Discuss Your Requirements','contact','link','','ri-chat-smile-3-line','diff_cta',10,1),
 (39,2,'Have Additional Questions? Contact Our Technical Team','contact','link','','ri-question-answer-line','faq_cta',10,1),
 (40,5,'Send an Enquiry','#enquiry-form','link','','ri-mail-send-line','hero_cta',5,1),

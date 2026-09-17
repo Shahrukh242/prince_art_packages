@@ -145,6 +145,7 @@ $styles = [
     'btn-navy'                => 'Navy (Dark)',
     'btn-outline-navy'        => 'Outline Navy (Ghost/Bordered)',
     'btn-outline-teal'        => 'Outline Teal (Ghost/Bordered)',
+    'btn-outline-white'       => 'Outline White (For Dark Banners)',
     'btn-outline-navy btn-sm' => 'Small Outline Navy (Card Button)',
     'btn-gold btn-sm'         => 'Small Gold (Header/Footer Button)',
 ];

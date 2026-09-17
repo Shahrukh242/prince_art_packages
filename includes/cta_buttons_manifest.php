@@ -231,7 +231,7 @@ function get_all_default_cta_buttons(): array {
                 'placement'   => 'quality_compliance_cta',
                 'label'       => 'View Quality Accreditations',
                 'url'         => 'quality.php',
-                'style'       => 'btn-outline-navy',
+                'style'       => 'btn-outline-white',
                 'icon'        => 'ri-external-link-line',
                 'sort_order'  => 20,
                 'is_active'   => 1,

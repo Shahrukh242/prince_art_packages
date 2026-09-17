@@ -694,7 +694,7 @@ CREATE TABLE `cta_buttons` (
   `label` varchar(150) NOT NULL,
   `url` varchar(500) NOT NULL,
   `action_type` varchar(20) NOT NULL DEFAULT 'link',
-  `style` enum('btn-gold','btn-teal','btn-navy','btn-outline-navy') NOT NULL DEFAULT 'btn-gold',
+  `style` varchar(50) NOT NULL DEFAULT 'btn-gold',
   `icon` varchar(100) DEFAULT NULL,
   `placement` varchar(100) NOT NULL,
   `sort_order` int(11) NOT NULL DEFAULT 0,
@@ -702,7 +702,7 @@ CREATE TABLE `cta_buttons` (
   PRIMARY KEY (`id`),
   KEY `idx_cta_page_placement` (`page_id`,`placement`),
   CONSTRAINT `cta_buttons_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table `cta_buttons`
 INSERT INTO `cta_buttons` VALUES
@@ -713,14 +713,14 @@ INSERT INTO `cta_buttons` VALUES
 (7,1,'Specifications →','products.php#product-leaf-inserts','link','',NULL,'feat_leaflets',10,1),
 (8,1,'Specifications →','products.php#product-printed-labels','link','',NULL,'feat_labels',10,1),
 (9,1,'Learn About Innovation & Technology','innovation.php','link','btn-gold','ri-lightbulb-line','banner',10,1),
-(10,2,'Schedule a Facility Audit','contact','link','btn-gold','ri-calendar-check-line','about_bottom',10,1),
-(11,2,'Contact Technical Sales','contact','link','btn-outline-navy','ri-phone-line','about_bottom',20,1),
+(10,2,'Schedule a Facility Audit','contact.php?action=audit','link','btn-gold','ri-calendar-check-line','about_bottom',10,1),
+(11,2,'Contact Technical Sales','contact.php','link','btn-outline-navy','ri-phone-line','about_bottom',20,1),
 (12,6,'Request Quotation & Samples','contact','link','btn-gold','ri-file-list-3-line','hero',10,1),
-(13,6,'Explore 3D-ENGRAVIX™ Technology','innovation.php','link','btn-outline-navy','ri-lightbulb-line','hero',20,1),
-(14,7,'Request a Quote','contact','link','btn-gold','ri-arrow-right-line','hero',10,1),
-(16,7,'Request a Facility Audit','contact','link','btn-gold','ri-calendar-check-line','bottom_cta',10,1),
+(13,6,'Explore 3D-ENGRAVIX™ Technology','innovation','link','btn-outline-navy','ri-shield-star-line','hero',20,1),
+(14,7,'Request a Quote','contact','link','btn-gold','ri-file-list-3-line','hero',10,1),
+(16,7,'Request a Facility Audit','contact.php?action=audit','link','btn-gold','ri-calendar-check-line','bottom_cta',10,1),
 (17,7,'Request a Quote','contact','link','btn-outline-navy','ri-file-list-3-line','bottom_cta',20,1),
-(18,4,'Request Optical Security Samples','contact','link','btn-gold','ri-shield-check-line','hero',10,1),
+(18,4,'Request Optical Security Samples','contact','link','btn-gold','ri-shield-flash-line','hero',10,1),
 (19,4,'Request a Quote','contact','link','btn-outline-navy','ri-file-list-3-line','hero',20,1),
 (20,8,'Request a Formal Quote','contact','link','btn-gold','ri-file-list-3-line','quality_banner',10,1),
 (21,9,'Request a Formal Quote','contact','link','btn-gold','ri-file-list-3-line','industries_banner',10,1),
@@ -735,7 +735,7 @@ INSERT INTO `cta_buttons` VALUES
 (34,2,'View Manufacturing Capabilities','capabilities','link','btn-navy','ri-settings-4-line','journey_cta',10,1),
 (35,2,'Speak with Our Specialists','contact','link','btn-gold','ri-phone-line','journey_cta',20,1),
 (36,2,'Schedule a Facility Audit','contact','link','btn-gold','ri-calendar-check-line','quality_compliance_cta',10,1),
-(37,2,'View Quality Accreditations','quality','link','btn-outline-navy','ri-external-link-line','quality_compliance_cta',20,1),
+(37,2,'View Quality Accreditations','quality','link','btn-outline-white','ri-external-link-line','quality_compliance_cta',20,1),
 (38,2,'Discuss Your Requirements','contact','link','','ri-chat-smile-3-line','diff_cta',10,1),
 (39,2,'Have Additional Questions? Contact Our Technical Team','contact','link','','ri-question-answer-line','faq_cta',10,1),
 (40,5,'Send an Enquiry','#enquiry-form','link','','ri-mail-send-line','hero_cta',5,1),
