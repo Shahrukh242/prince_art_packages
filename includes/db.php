@@ -10,7 +10,7 @@ $isLocal = empty($_SERVER['HTTP_HOST']) || in_array($_SERVER['HTTP_HOST'], ['loc
 if (!defined('DB_HOST')) define('DB_HOST', $isLocal ? 'localhost' : 'shareddb-i.hosting.stackcp.net');
 if (!defined('DB_NAME')) define('DB_NAME', $isLocal ? 'prince_art_packages' : 'princeart-37376455');
 if (!defined('DB_USER')) define('DB_USER', $isLocal ? 'root' : 'princeart-37376455');
-if (!defined('DB_PASS')) define('DB_PASS', $isLocal ? '' : '');
+if (!defined('DB_PASS')) define('DB_PASS', $isLocal ? '' : 'princeart-');
 
 function get_db() {
     static $pdo = null;

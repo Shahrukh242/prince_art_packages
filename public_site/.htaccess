@@ -2,7 +2,7 @@
 # Prince Art Packages — public_site High-Performance .htaccess
 # ==============================================================================
 
-Options -Indexes +FollowSymLinks
+Options -Indexes
 RewriteEngine On
 
 # ------------------------------------------------------------------------------
