@@ -6,7 +6,7 @@
       <div class="footer-grid">
         <!-- Brand & SEO Overview Column -->
         <div class="footer-col-brand">
-          <a href="index" class="footer-logo-wrap">
+          <a href="<?= $homeUrl ?? '/' ?>" class="footer-logo-wrap">
             <img src="assets/images/logo.png" alt="Prince Art Packages (Private) Limited" class="footer-logo">
           </a>
           <p class="footer-tagline">

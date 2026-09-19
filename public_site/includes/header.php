@@ -22,11 +22,20 @@ foreach ($rawNav as $l) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php
-  // Compute base href dynamically for root domain (live) and subfolder environments (e.g. localhost/pap-dashboard-OLD5/public_site/)
-  $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-  $baseHref = rtrim($scriptDir, '/') . '/';
-  if ($baseHref === '//' || $baseHref === '') {
+  // Check if running in local environment or live production
+  $isLocal = empty($_SERVER['HTTP_HOST']) || in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']) || strpos($_SERVER['HTTP_HOST'], 'localhost:') === 0;
+  if (!$isLocal) {
+      // Live production: root-level canonical base
       $baseHref = '/';
+      $homeUrl = '/';
+  } else {
+      // Local development subfolder environment (e.g. /pap-dashboard-OLD5/public_site/)
+      $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+      $baseHref = rtrim($scriptDir, '/') . '/';
+      if ($baseHref === '//' || $baseHref === '') {
+          $baseHref = '/';
+      }
+      $homeUrl = $baseHref;
   }
   ?>
   <base href="<?= htmlspecialchars($baseHref, ENT_QUOTES, 'UTF-8') ?>">
@@ -101,7 +110,7 @@ foreach ($rawNav as $l) {
 
   <header class="main-header">
     <div class="container header-inner">
-      <a href="index" class="brand-logo"><img src="assets/images/logo.png" alt="Prince Art Packages (Private) Limited" class="brand-logo-img"></a>
+      <a href="<?= $homeUrl ?>" class="brand-logo"><img src="assets/images/logo.png" alt="Prince Art Packages (Private) Limited" class="brand-logo-img"></a>
       <nav>
         <ul class="nav-links">
           <?php if (!empty($navLinks)): ?>
@@ -109,14 +118,14 @@ foreach ($rawNav as $l) {
               <?php
                 // Clean extensionless URL
                 $cleanUrl = preg_replace('/\.php$/i', '', $link['url']);
-                $cleanUrl = ($cleanUrl === 'index') ? 'index' : $cleanUrl;
                 // Derive a slug from the URL for active-state matching
                 $linkSlug = basename($cleanUrl);
-                $linkSlug = ($linkSlug === 'index' || $linkSlug === '') ? 'home' : $linkSlug;
+                $linkSlug = ($linkSlug === 'index' || $linkSlug === '' || $linkSlug === '/') ? 'home' : $linkSlug;
+                $targetUrl = ($cleanUrl === 'index' || $cleanUrl === '/' || $cleanUrl === '') ? $homeUrl : $cleanUrl;
                 $isActive = ($navCurrent === $linkSlug);
               ?>
               <li>
-                <a href="<?= h($cleanUrl) ?>"
+                <a href="<?= h($targetUrl) ?>"
                    class="<?= $isActive ? 'active' : '' ?>"
                    <?= $link['open_new_tab'] ? 'target="_blank" rel="noopener"' : '' ?>>
                   <?= h($link['label']) ?>
@@ -125,7 +134,7 @@ foreach ($rawNav as $l) {
             <?php endforeach; ?>
           <?php else: ?>
             <!-- Fallback hardcoded clean nav -->
-            <li><a href="index"        class="<?= $navCurrent === 'home'         ? 'active' : '' ?>">Home</a></li>
+            <li><a href="<?= $homeUrl ?>" class="<?= $navCurrent === 'home'         ? 'active' : '' ?>">Home</a></li>
             <li><a href="about"        class="<?= $navCurrent === 'about'        ? 'active' : '' ?>">About</a></li>
             <li><a href="products"     class="<?= $navCurrent === 'products'     ? 'active' : '' ?>">Products</a></li>
             <li><a href="capabilities" class="<?= $navCurrent === 'capabilities' ? 'active' : '' ?>">Capabilities</a></li>

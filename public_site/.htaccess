@@ -18,17 +18,23 @@ ErrorDocument 404 /404.php
 </FilesMatch>
 
 # ------------------------------------------------------------------------------
-# 3. Canonical URL Redirects: Strip index.php & .php Extensions
+# 3. Canonical URL Redirects: Strip public_site, index, & .php Extensions
 # ------------------------------------------------------------------------------
-# Strip /index.php to /
+# Redirect /public_site/index or /public_site/ or /index.php or /index to root /
 RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
-RewriteCond %{THE_REQUEST} \s/+index\.php[?\s] [NC]
+RewriteCond %{THE_REQUEST} \s/+(?:public_site/)?index(?:\.php)?[\s?] [NC,OR]
+RewriteCond %{THE_REQUEST} \s/+public_site/[\s?] [NC]
 RewriteRule ^ https://%{HTTP_HOST}/ [R=301,L]
+
+# Redirect /public_site/page to clean /page
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
+RewriteCond %{THE_REQUEST} \s/+public_site/([^.\s?]+)(?:\.php)?[\s?] [NC]
+RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
 # Strip .php extension from browser address bar (do not redirect POST requests)
 RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
 RewriteCond %{REQUEST_METHOD} !POST
-RewriteCond %{THE_REQUEST} \s/+([^.]+)\.php[\s?] [NC]
+RewriteCond %{THE_REQUEST} \s/+([^.\s?]+)\.php[\s?] [NC]
 RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
 # ------------------------------------------------------------------------------
