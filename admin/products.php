@@ -87,7 +87,7 @@ $allMedia = get_all_media();
     <h1><i class="ri-box-3-line"></i> Product Catalog</h1>
     <p class="page-subtitle">Manage individual pharmaceutical products, categories, descriptions, and packaging images.</p>
   </div>
-  <a href="../public_site/products.php" target="_blank"
+  <a href="<?= public_url('products') ?>" target="_blank"
      style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 1.1rem;background:var(--navy);border-radius:8px;font-size:0.85rem;font-weight:600;color:#fff;text-decoration:none;">
     <i class="ri-external-link-line"></i> View Products Page
   </a>
@@ -154,7 +154,7 @@ $allMedia = get_all_media();
 
           <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
             <button type="submit" style="background:var(--teal);"><i class="ri-save-line"></i> Save Changes</button>
-            <a href="../public_site/product-detail.php?slug=<?= urlencode($p['slug']) ?>" target="_blank" style="padding:0.45rem 0.85rem; border:1px solid var(--teal); color:var(--teal); border-radius:6px; font-size:0.85rem; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:0.35rem; background:#fff;">
+            <a href="<?= public_url('product/' . urlencode($p['slug'])) ?>" target="_blank" style="padding:0.45rem 0.85rem; border:1px solid var(--teal); color:var(--teal); border-radius:6px; font-size:0.85rem; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:0.35rem; background:#fff;">
               <i class="ri-external-link-line"></i> View Specification Page
             </a>
             <button type="button"

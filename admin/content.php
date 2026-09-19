@@ -7,12 +7,28 @@ $pdo = get_db();
    Helpers & Page Tabs (ordered logically)
 ----------------------------------------------------------------------- */
 $pages = $pdo->query("
-    SELECT id, slug, title 
+    SELECT id, slug, title, meta_title 
     FROM pages 
-    ORDER BY FIELD(slug, 'home', 'about', 'products', 'capabilities', 'innovation', 'quality', 'industries', 'case-studies', 'contact', 'blog', 'privacy', 'terms'), title ASC
+    WHERE slug != 'global'
+    ORDER BY CASE 
+        WHEN slug = 'home' THEN 1 
+        WHEN slug = 'about' THEN 2 
+        WHEN slug = 'products' THEN 3 
+        WHEN slug = 'capabilities' THEN 4 
+        WHEN slug = 'innovation' THEN 5 
+        WHEN slug = 'quality' THEN 6 
+        WHEN slug = 'industries' THEN 7 
+        WHEN slug = 'case-studies' THEN 8 
+        WHEN slug = 'sustainability' THEN 9 
+        WHEN slug = 'contact' THEN 10 
+        WHEN slug = 'blog' THEN 11 
+        WHEN slug = 'privacy' THEN 12 
+        WHEN slug = 'terms' THEN 13 
+        ELSE 50 
+    END, id ASC
 ")->fetchAll();
 
-$selectedSlug = $_GET['page'] ?? ($pages[0]['slug'] ?? 'home');
+$selectedSlug = $_GET['page'] ?? 'home';
 
 // Auto-heal / Ensure standard default blocks exist in database for this page
 ensure_page_default_blocks($pdo, $selectedSlug);
@@ -128,7 +144,8 @@ if ($page) {
 }
 
 $allMedia = get_all_media();
-$previewUrl = ($selectedSlug === 'home') ? 'index.php' : h($selectedSlug) . '.php';
+$previewUrl = ($selectedSlug === 'home') ? public_url('') : public_url($selectedSlug);
+$currentPageTitle = ($selectedSlug === 'home') ? 'Home' : ($page['title'] ?? ucfirst($selectedSlug));
 ?>
 
 <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
@@ -138,7 +155,7 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : h($selectedSlug) . '.ph
   </div>
   <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
     <!-- Restore Defaults Button -->
-    <form method="post" onsubmit="return confirm('Reset all content blocks on the <?= addslashes(h($page['title'] ?? $selectedSlug)) ?> page back to original defaults? Any custom edits on this page will be restored.');" style="display:inline;">
+    <form method="post" onsubmit="return confirm('Reset all content blocks on the <?= addslashes(h($currentPageTitle)) ?> page back to original defaults? Any custom edits on this page will be restored.');" style="display:inline;">
       <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
       <input type="hidden" name="action"     value="restore_page_defaults">
       <input type="hidden" name="page_id"    value="<?= (int)($page['id'] ?? 0) ?>">
@@ -148,9 +165,9 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : h($selectedSlug) . '.ph
     </form>
 
     <!-- Preview Page Button -->
-    <a href="../public_site/<?= $previewUrl ?>" target="_blank"
+    <a href="<?= h($previewUrl) ?>" target="_blank"
        style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 1.1rem;background:var(--navy);border-radius:8px;font-size:0.85rem;font-weight:600;color:#fff;text-decoration:none;">
-      <i class="ri-external-link-line"></i> Preview "<?= h($page['title'] ?? $selectedSlug) ?>" Page
+      <i class="ri-external-link-line"></i> Preview "<?= h($currentPageTitle) ?>" Page
     </a>
   </div>
 </div>
@@ -161,9 +178,10 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : h($selectedSlug) . '.ph
     <?php
       $isActive = ($p['slug'] === $selectedSlug);
       $bCount = (int)$pdo->query("SELECT COUNT(*) FROM content_blocks WHERE page_id = {$p['id']}")->fetchColumn();
+      $tabTitle = ($p['slug'] === 'home') ? 'Home' : $p['title'];
     ?>
     <a href="content.php?page=<?= urlencode($p['slug']) ?>" class="tab-link <?= $isActive ? 'active' : '' ?>">
-      <?= h($p['title']) ?>
+      <?= h($tabTitle) ?>
       <span class="badge" style="background:<?= $isActive ? 'rgba(255,255,255,0.25)' : 'var(--bg)' ?>; color:<?= $isActive ? '#fff' : 'var(--text-muted)' ?>;"><?= $bCount ?></span>
     </a>
   <?php endforeach; ?>
@@ -187,7 +205,7 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : h($selectedSlug) . '.ph
 <div class="panel" style="margin-bottom:2rem;">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.5rem;">
     <h2 style="font-size:1.2rem;margin:0;">
-      Content Blocks on "<?= h($page['title'] ?? ucfirst($selectedSlug)) ?>" 
+      Content Blocks on "<?= h($currentPageTitle) ?>" 
       <span style="font-size:0.85rem;font-weight:400;color:var(--muted);">(<?= count($blocks) ?> blocks)</span>
     </h2>
     <span style="font-size:0.82rem;color:var(--muted);">Click any block to expand and edit. Use <strong>"Link Text to Page"</strong> to insert hyperlinks.</span>

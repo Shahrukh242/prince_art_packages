@@ -276,7 +276,7 @@ $llmsTxt     = generate_llms_txt();
         <span style="font-size:0.82rem; color:var(--muted);">Automatically indexes all 13 Core Pages, 8 Products, and 6 Technical Blog Articles</span>
       </div>
       <div style="display:flex; gap:0.5rem;">
-        <a href="../public_site/sitemap.php" target="_blank" class="btn" style="background:#0b2545; color:#fff; font-size:0.82rem; padding:0.4rem 0.8rem; text-decoration:none; border-radius:5px; display:inline-flex; align-items:center; gap:0.35rem;">
+        <a href="<?= public_url('sitemap.xml') ?>" target="_blank" class="btn" style="background:#0b2545; color:#fff; font-size:0.82rem; padding:0.4rem 0.8rem; text-decoration:none; border-radius:5px; display:inline-flex; align-items:center; gap:0.35rem;">
           <i class="ri-external-link-line"></i> View Live Sitemap.xml
         </a>
       </div>
@@ -302,7 +302,7 @@ $llmsTxt     = generate_llms_txt();
         <span style="font-size:0.82rem; color:var(--muted);">Instructs Googlebot, Bingbot, and web crawlers which areas to index</span>
       </div>
       <div>
-        <a href="../public_site/robots.php" target="_blank" class="btn" style="background:#0b2545; color:#fff; font-size:0.82rem; padding:0.4rem 0.8rem; text-decoration:none; border-radius:5px; display:inline-flex; align-items:center; gap:0.35rem;">
+        <a href="<?= public_url('robots.txt') ?>" target="_blank" class="btn" style="background:#0b2545; color:#fff; font-size:0.82rem; padding:0.4rem 0.8rem; text-decoration:none; border-radius:5px; display:inline-flex; align-items:center; gap:0.35rem;">
           <i class="ri-external-link-line"></i> View Live Robots.txt
         </a>
       </div>
@@ -324,7 +324,7 @@ $llmsTxt     = generate_llms_txt();
         <span style="font-size:0.82rem; color:var(--muted);">Emerging web standard used by ChatGPT Search, Perplexity, Gemini &amp; Claude AI agents</span>
       </div>
       <div>
-        <a href="../public_site/llms.php" target="_blank" class="btn" style="background:#8b5cf6; color:#fff; font-size:0.82rem; padding:0.4rem 0.8rem; text-decoration:none; border-radius:5px; display:inline-flex; align-items:center; gap:0.35rem;">
+        <a href="<?= public_url('llms.txt') ?>" target="_blank" class="btn" style="background:#8b5cf6; color:#fff; font-size:0.82rem; padding:0.4rem 0.8rem; text-decoration:none; border-radius:5px; display:inline-flex; align-items:center; gap:0.35rem;">
           <i class="ri-external-link-line"></i> View Live LLMs.txt
         </a>
       </div>

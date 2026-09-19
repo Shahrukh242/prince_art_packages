@@ -163,7 +163,7 @@ $editingId = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
     </form>
 
     <!-- Preview Site Button -->
-    <a href="../public_site/index.php" target="_blank"
+    <a href="<?= public_url('') ?>" target="_blank"
        style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 1.1rem;background:var(--navy);border-radius:8px;font-size:0.85rem;font-weight:600;color:#fff;text-decoration:none;">
       <i class="ri-external-link-line"></i> View Live Header
     </a>
@@ -212,7 +212,7 @@ $editingId = isset($_GET['edit']) ? (int)$_GET['edit'] : 0;
           </form>
 
           <span style="font-weight:700;font-size:0.9rem;min-width:110px;"><?= h($link['label']) ?></span>
-          <a href="../public_site/<?= h($link['url']) ?>" target="_blank"
+          <a href="<?= public_url($link['url']) ?>" target="_blank"
              style="font-size:0.8rem;color:var(--muted);text-decoration:none;margin-right:auto;">
             <i class="ri-link"></i> <?= h($link['url']) ?>
           </a>

@@ -120,7 +120,7 @@ $posts = $pdo->query("SELECT * FROM blog_posts ORDER BY published_at DESC")->fet
         <?= $action === 'create' ? '<i class="ri-edit-line"></i> Write New Article' : '<i class="ri-edit-2-line"></i> Edit Article: ' . h($post['title']) ?>
       </h2>
       <?php if ($post && !empty($post['slug'])): ?>
-        <a href="../public_site/blog-post.php?slug=<?= urlencode($post['slug']) ?>" target="_blank" style="font-size:0.85rem; color:var(--teal); font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem;">
+        <a href="<?= public_url('blog/' . urlencode($post['slug'])) ?>" target="_blank" style="font-size:0.85rem; color:var(--teal); font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem;">
           <i class="ri-external-link-line"></i> View on Live Site
         </a>
       <?php endif; ?>
@@ -239,7 +239,7 @@ $posts = $pdo->query("SELECT * FROM blog_posts ORDER BY published_at DESC")->fet
             <?php endif; ?>
           </td>
           <td style="text-align:right; white-space:nowrap;">
-            <a href="../public_site/blog-post.php?slug=<?= urlencode($p['slug']) ?>" target="_blank" class="btn" style="background:#f3f4f6; color:var(--navy); font-size:0.8rem; padding:0.35rem 0.65rem; border-radius:4px; text-decoration:none; margin-right:0.35rem;">
+            <a href="<?= public_url('blog/' . urlencode($p['slug'])) ?>" target="_blank" class="btn" style="background:#f3f4f6; color:var(--navy); font-size:0.8rem; padding:0.35rem 0.65rem; border-radius:4px; text-decoration:none; margin-right:0.35rem;">
               <i class="ri-eye-line"></i>
             </a>
             <a href="blog.php?action=edit&id=<?= (int)$p['id'] ?>" class="btn" style="background:var(--navy); color:#fff; font-size:0.8rem; padding:0.35rem 0.75rem; border-radius:4px; text-decoration:none; margin-right:0.35rem;">

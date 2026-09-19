@@ -13,7 +13,23 @@ $error = '';
 $pages = $pdo->query("
     SELECT id, slug, title 
     FROM pages 
-    ORDER BY FIELD(slug, 'home', 'global', 'about', 'products', 'capabilities', 'innovation', 'quality', 'industries', 'case-studies', 'contact', 'blog'), title ASC
+    ORDER BY CASE 
+        WHEN slug = 'home' THEN 1 
+        WHEN slug = 'global' THEN 2 
+        WHEN slug = 'about' THEN 3 
+        WHEN slug = 'products' THEN 4 
+        WHEN slug = 'capabilities' THEN 5 
+        WHEN slug = 'innovation' THEN 6 
+        WHEN slug = 'quality' THEN 7 
+        WHEN slug = 'industries' THEN 8 
+        WHEN slug = 'case-studies' THEN 9 
+        WHEN slug = 'sustainability' THEN 10 
+        WHEN slug = 'contact' THEN 11 
+        WHEN slug = 'blog' THEN 12 
+        WHEN slug = 'privacy' THEN 13 
+        WHEN slug = 'terms' THEN 14 
+        ELSE 50 
+    END, id ASC
 ")->fetchAll();
 
 $selectedSlug = $_GET['page'] ?? 'home';
@@ -182,7 +198,7 @@ $placementLabels = [
     'form_submit'            => 'Quotation Request Form Submit Button',
 ];
 
-$previewUrl = ($selectedSlug === 'home' || $selectedSlug === 'global') ? 'index' : h($selectedSlug);
+$previewUrl = ($selectedSlug === 'home' || $selectedSlug === 'global') ? public_url('') : public_url($selectedSlug);
 ?>
 
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
@@ -193,7 +209,7 @@ $previewUrl = ($selectedSlug === 'home' || $selectedSlug === 'global') ? 'index'
     </p>
   </div>
   <div style="display:flex;gap:0.75rem;align-items:center;">
-    <a href="../public_site/<?= $previewUrl ?>" target="_blank" class="btn" style="background:#0b2545;color:#fff;font-size:0.85rem;padding:0.45rem 0.9rem;">
+    <a href="<?= h($previewUrl) ?>" target="_blank" class="btn" style="background:#0b2545;color:#fff;font-size:0.85rem;padding:0.45rem 0.9rem;">
       <i class="ri-external-link-line"></i> View Page Live
     </a>
   </div>

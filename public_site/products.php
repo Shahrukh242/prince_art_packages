@@ -3,7 +3,7 @@ $pageSlug = 'products';
 require __DIR__ . '/includes/header.php';
 ?>
 <!-- ================================================================ -->
-<!-- SECTION 01 â€” PAGE HERO                                           -->
+<!-- SECTION 01 — PAGE HERO                                           -->
 <!-- ================================================================ -->
 <section class="page-hero-section" style="background: linear-gradient(135deg, var(--navy-dark) 0%, #173b6c 100%); color: #ffffff; padding: 4.5rem 0 3.5rem 0; position: relative; overflow: hidden; text-align: center;">
   <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.05; background-image: radial-gradient(var(--teal-primary) 1px, transparent 1px); background-size: 24px 24px;"></div>
@@ -24,7 +24,7 @@ require __DIR__ . '/includes/header.php';
 </section>
 
 <!-- ================================================================ -->
-<!-- SECTION 02 â€” PRODUCT CATALOG (H2 & SUPPORTING CONTENT)           -->
+<!-- SECTION 02 — PRODUCT CATALOG (H2 & SUPPORTING CONTENT)           -->
 <!-- ================================================================ -->
 <section class="section" style="padding: 4.5rem 0;">
   <div class="container">
@@ -36,7 +36,7 @@ require __DIR__ . '/includes/header.php';
         <?= h(get_content('products', 'sec_h2_title', 'Comprehensive Pharmaceutical Secondary Packaging Portfolio')) ?>
       </h2>
       <p style="font-size: 1.05rem; line-height: 1.75; color: var(--text-body); margin: 0 auto;">
-        <?= h(get_content('products', 'sec_h2_intro', 'Prince Art Packages manufactures a specialized range of secondary packaging tailored for pharmaceutical formulation plants, OTC healthcare brands, and medical device manufacturers. Every packaging format is precision-engineered for seamless operation on high-speed automated cartoning lines, blister sealers, and serialization barcode vision systems â€” ensuring zero defect rates, batch traceability, and full regulatory compliance.')) ?>
+        <?= h(get_content('products', 'sec_h2_intro', 'Prince Art Packages manufactures a specialized range of secondary packaging tailored for pharmaceutical formulation plants, OTC healthcare brands, and medical device manufacturers. Every packaging format is precision-engineered for seamless operation on high-speed automated cartoning lines, blister sealers, and serialization barcode vision systems — ensuring zero defect rates, batch traceability, and full regulatory compliance.')) ?>
       </p>
     </div>
 

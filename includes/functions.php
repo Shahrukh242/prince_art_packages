@@ -575,3 +575,20 @@ function write_seo_crawler_files(): array {
     }
     return $results;
 }
+
+/**
+ * Generate a clean public website URL for both live production and local subfolder environments.
+ */
+function public_url(string $path = ''): string {
+    $path = ltrim($path, '/');
+    $isLocal = empty($_SERVER['HTTP_HOST']) || in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']) || strpos($_SERVER['HTTP_HOST'], 'localhost:') === 0;
+    if (!$isLocal) {
+        return '/' . $path;
+    }
+    $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+    if (str_ends_with($scriptDir, '/admin')) {
+        $parent = substr($scriptDir, 0, -6);
+        return $parent . '/public_site/' . ($path === '' ? 'index.php' : $path);
+    }
+    return '/' . $path;
+}
