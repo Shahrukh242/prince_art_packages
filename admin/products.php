@@ -17,6 +17,7 @@ if ($productCount === 0) {
         ['Tamper Evident Cartons & Labels', 'tamper-evident', 'Security Seals', 'Destructible security seals and tamper-evident carton structures that provide immediate, irreversible visual evidence.', 'assets/images/prod_tamper_labels.jpg', 1],
         ['3D-ENGRAVIX™', '3d-engravix', 'Optical Anti-Counterfeit', 'Proprietary micro-structured optical security feature integrated directly onto printed cartons for instant visual authentication.', 'assets/images/engravix.jpg', 1],
         ['ColdSeal Blister Wallet', 'coldseal-blister-wallet', 'Pressure-Sealed Eco Packaging', 'Pressure-sealed (non-heat-sealed) paperboard blister packaging wallet encapsulating blister cards without heat.', 'assets/images/coldseal.jpg', 1],
+        ['Slider Pack', 'slider-pack', 'Sliding Drawer Carton', 'Two-piece sliding drawer carton with an outer sleeve and inner pull-out tray for ergonomic patient access and GS1 serialization.', 'assets/images/prod_slider_pack.jpg', 1],
     ];
 
     $insStmt = $pdo->prepare("INSERT INTO products (name, slug, category, short_description, description, image_path, is_published) VALUES (?, ?, ?, ?, ?, ?, ?)");

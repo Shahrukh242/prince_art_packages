@@ -40,217 +40,62 @@ require __DIR__ . '/includes/header.php';
       </p>
     </div>
 
-      <!-- Uniform 8 Product Cards Grid (3 Columns per Row) -->
+      <!-- Uniform Dynamic Product Cards Grid (3 Columns per Row) -->
       <div class="grid-3-products">
-        
-        <!-- Product 1: Printed Cartons -->
-        <div class="product-card" id="product-printed-cartons">
-          <span id="product-folding-cartons" style="position:relative; top:-85px; display:block; visibility:hidden;"></span>
-          <a href="product-detail.php?slug=printed-cartons" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p1_image', 'assets/images/prod_cartons.jpg'), get_content('products', 'p1_title', 'Printed Cartons'), 'card-img-top') ?>
+        <?php
+        $pdo = get_db();
+        $dbProducts = $pdo->query("SELECT * FROM products WHERE is_published = 1 ORDER BY id ASC")->fetchAll(PDO::FETCH_ASSOC);
+
+        // Tags map for clean badges
+        $tagMap = [
+            'printed-cartons'         => 'SECONDARY PACKAGING',
+            'folding-cartons'         => 'SECONDARY PACKAGING',
+            'leaf-inserts'            => 'PATIENT INFORMATION',
+            'printed-labels'          => 'CONTAINER LABELING',
+            'honeycomb-separators'    => 'PROTECTIVE PARTITIONS',
+            'pill-folders'            => 'DOSE ADHERENCE & INJECTION WALLETS',
+            'tamper-evident'          => 'SECURITY SEALS',
+            'temper-evident-cartons'  => 'SECURITY SEALS',
+            '3d-engravix'             => 'OPTICAL ANTI-COUNTERFEIT',
+            'coldseal-blister-wallet' => 'PRESSURE-SEALED ECO PACKAGING',
+            'slider-pack'             => 'SLIDING DRAWER CARTON',
+        ];
+
+        foreach ($dbProducts as $idx => $prod):
+            $pNum = $idx + 1;
+            $slug = $prod['slug'];
+            $tag = $prod['category'] ?: ($tagMap[$slug] ?? 'PHARMACEUTICAL PACKAGING');
+            $title = $prod['name'];
+            $desc = $prod['short_description'] ?: $prod['description'];
+            $image = $prod['image_path'] ?: 'assets/images/prod_cartons.jpg';
+            $anchorId = 'product-' . $slug;
+        ?>
+        <!-- Product <?= $pNum ?>: <?= h($title) ?> -->
+        <div class="product-card" id="<?= h($anchorId) ?>">
+          <?php if ($slug === 'printed-cartons' || $slug === 'folding-cartons'): ?>
+            <span id="product-folding-cartons" style="position:relative; top:-85px; display:block; visibility:hidden;"></span>
+          <?php endif; ?>
+          <a href="product-detail.php?slug=<?= urlencode($slug) ?>" style="text-decoration: none; color: inherit;">
+            <?= render_image($image, $title, 'card-img-top') ?>
           </a>
           <div class="card-body">
             <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p1_tag', 'SECONDARY PACKAGING')) ?></span>
+              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h($tag) ?></span>
               <h3 class="card-title">
-                <a href="product-detail.php?slug=printed-cartons" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p1_title', 'Printed Cartons')) ?>
+                <a href="product-detail.php?slug=<?= urlencode($slug) ?>" style="text-decoration: none; color: var(--navy-dark);">
+                  <?= h($title) ?>
                 </a>
               </h3>
-              <p><?= h(get_content('products', 'p1_desc', 'Precision-printed paperboard Printed Cartons engineered for automated high-speed packaging lines. Available in reverse tuck, crash lock, and custom dividers.')) ?></p>
+              <p><?= h(strip_tags($desc)) ?></p>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=printed-cartons" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
+              <a href="product-detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
                 <i class="ri-file-list-3-line"></i> View Specifications &rarr;
               </a>
             </div>
           </div>
         </div>
-
-        <!-- Product 2: Leaf-inserts -->
-        <div class="product-card" id="product-leaf-inserts">
-          <a href="product-detail.php?slug=leaf-inserts" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p2_image', 'assets/images/prod_leaflets.jpg'), get_content('products', 'p2_title', 'Leaf-inserts'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p2_tag', 'PATIENT INFORMATION')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=leaf-inserts" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p2_title', 'Leaf-inserts')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p2_desc', 'Prescribing information leaflets (PIL) and patient instruction inserts folded to precise dimensions for automated cartoning line insertion.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=leaf-inserts" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 3: Printed Labels -->
-        <div class="product-card" id="product-printed-labels">
-          <a href="product-detail.php?slug=printed-labels" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p3_image', 'assets/images/prod_labels.jpg'), get_content('products', 'p3_title', 'Printed Labels'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p3_tag', 'CONTAINER LABELING')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=printed-labels" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p3_title', 'Printed Labels')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p3_desc', 'High-precision printed bottle and container labels for pharmaceutical bottles, vials, ampoules, and IV containers with serialization barcode compatibility.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=printed-labels" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 4: Honeycomb Separators -->
-        <div class="product-card" id="product-honeycomb-separators">
-          <a href="product-detail.php?slug=honeycomb-separators" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p4_image', 'assets/images/prod_honeycomb.jpg'), get_content('products', 'p4_title', 'Honeycomb Separators'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p4_tag', 'PROTECTIVE PARTITIONS')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=honeycomb-separators" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p4_title', 'Honeycomb Separators')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p4_desc', 'Protective cardboard honeycomb dividers and grid partitions designed to safeguard glass ampoules and liquid vials against transit breakage.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=honeycomb-separators" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 5: Pill-folders -->
-        <div class="product-card" id="product-pill-folders">
-          <a href="product-detail.php?slug=pill-folders" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p5_image', 'assets/images/prod_pill_folders.jpg'), get_content('products', 'p5_title', 'Pill-folders'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p5_tag', 'DOSE ADHERENCE & INJECTION WALLETS')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=pill-folders" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p5_title', 'Pill-Folders & SafeClosure PFS Wallets')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p5_desc', 'Paperboard dose-adherence folders and SafeClosure PFS injection wallets with integrated blister cavities and protective outer cartons.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=pill-folders" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 6: Temper Evident Cartons & Labels -->
-        <div class="product-card" id="product-temper-evident">
-          <a href="product-detail.php?slug=tamper-evident" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p6_image', 'assets/images/prod_tamper_labels.jpg'), get_content('products', 'p6_title', 'Temper Evident Cartons & Labels'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p6_tag', 'SECURITY SEALS')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=tamper-evident" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p6_title', 'Temper Evident Cartons & Labels')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p6_desc', 'Destructible security seals and tamper-evident carton structures that provide immediate, irreversible visual evidence if packaging has been breached.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=tamper-evident" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 7: 3D-ENGRAVIX -->
-        <div class="product-card" id="product-3d-engravix">
-          <a href="product-detail.php?slug=3d-engravix" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p7_image', 'assets/images/engravix.jpg'), get_content('products', 'p7_title', '3D-ENGRAVIX'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:rgba(11, 37, 69, 0.15); color:var(--navy-dark); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p7_tag', 'OPTICAL ANTI-COUNTERFEIT')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=3d-engravix" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p7_title', '3D-ENGRAVIX™')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p7_desc', 'Proprietary micro-structured optical security feature integrated directly onto Printed Cartons for instant visual authentication under ambient light.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=3d-engravix" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 8: Cold-seal Wallet -->
-        <div class="product-card" id="product-cold-seal-wallet">
-          <a href="product-detail.php?slug=coldseal-blister-wallet" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p8_image', 'assets/images/coldseal.jpg'), get_content('products', 'p8_title', 'Cold-seal Wallet'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p8_tag', 'PRESSURE-SEALED ECO PACKAGING')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=coldseal-blister-wallet" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p8_title', 'Cold-seal Wallet')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p8_desc', 'Pressure-sealed (non-heat-sealed) paperboard blister packaging wallet encapsulating blister cards without applying heat to temperature-sensitive medicine.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=coldseal-blister-wallet" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Product 9: Slider Pack -->
-        <div class="product-card" id="product-slider-pack">
-          <a href="product-detail.php?slug=slider-pack" style="text-decoration: none; color: inherit;">
-            <?= render_image(get_content('products', 'p9_image', 'assets/images/prod_slider_pack.jpg'), get_content('products', 'p9_title', 'Slider Pack'), 'card-img-top') ?>
-          </a>
-          <div class="card-body">
-            <div class="card-text-content">
-              <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h(get_content('products', 'p9_tag', 'SLIDING DRAWER CARTON')) ?></span>
-              <h3 class="card-title">
-                <a href="product-detail.php?slug=slider-pack" style="text-decoration: none; color: var(--navy-dark);">
-                  <?= h(get_content('products', 'p9_title', 'Slider Pack')) ?>
-                </a>
-              </h3>
-              <p><?= h(get_content('products', 'p9_desc', 'Two-piece sliding drawer carton with a printed outer sleeve and an inner pull-out tray. Ergonomic finger-pull tab, full-panel printable surfaces, tamper-evidence compatible and GS1 serialization ready.')) ?></p>
-            </div>
-            <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=slider-pack" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
-                <i class="ri-file-list-3-line"></i> View Specifications &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-
+        <?php endforeach; ?>
       </div>
     </div>
   </section>

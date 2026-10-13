@@ -202,6 +202,30 @@ $productSpecsCatalog = [
             'Energy Efficiency' => 'Pinch-roller sealing requires zero pre-heating energy, lowering plant carbon emissions',
             'Target Applications' => 'Probiotic supplements, temperature-sensitive oral solids, pre-filled syringes, diagnostic devices'
         ]
+    ],
+    'slider-pack' => [
+        'name' => 'Slider Pack',
+        'category' => 'SLIDING DRAWER CARTON',
+        'tagline' => 'Two-Piece Sliding Drawer Pharmaceutical Carton with Outer Sleeve & Inner Pull Tray',
+        'image' => 'assets/images/prod_slider_pack.jpg',
+        'what_it_is' => 'A two-piece paperboard sliding drawer carton engineered with a precision-toleranced outer sleeve and an inner gliding tray featuring an integrated finger-pull tab.',
+        'what_used_for' => 'Ergonomic packaging for solid oral dosages, premium blister strips, pre-filled syringes, and diagnostic test cassettes ensuring effortless patient access.',
+        'who_uses_it' => 'Multinational healthcare formulations, OTC lifestyle pharmaceutical brands, arthritis and senior-care drug developers, and premium clinical trial sponsors.',
+        'main_applications' => 'Prescription oral tablets, blister packs, diagnostic kit cartridges, ampoule trays, luxury OTC supplements, and patient compliance packaging.',
+        'customization' => 'Available in custom sleeve dimensions, die-cut finger-pull tabs, ribbon pulls, glued base trays, internal board dividers, tamper-evident tear strips, and spot UV / hot foil branding.',
+        'key_benefits' => 'Effortless sliding action engineered for high-speed automated cartoning lines; 100% recyclable FSC board; child-resistant latching compatible; and full-panel serialization surface area.',
+        'overview' => 'The Slider Pack is an advanced two-piece sliding drawer carton consisting of a printed outer sleeve and an inner sliding tray. Engineered for high-speed cartoning machines (Uhlmann, Marchesini, IMA), it offers an elegant, patient-friendly opening experience while providing dedicated on-pack space for GS1 serialization barcodes, batch coding, and tamper-evident security closures.',
+        'specs' => [
+            'Structural Design' => 'Two-piece telescoping sliding drawer (outer sleeve + inner tray with finger pull tab)',
+            'Substrate Options' => 'SBS (Solid Bleached Sulfate 350–450 GSM), Coated Duplex, FSC-certified virgin boxboard',
+            'Printing Technology' => 'High-definition 4+4 offset printing with closed-loop inline spectrophotometry',
+            'Finishing Options' => 'Matte / Gloss / Soft-Touch Lamination, Spot UV, Hot Foil Stamping, Aqueous Barrier Varnish',
+            'Tamper Evidence' => 'Compatible with adhesive security labels, destructible fiber-tear tabs, or shrink sleeves',
+            'Serialization' => 'Dedicated high-contrast zones for 2D DataMatrix, GS1-128 linear barcodes, and QR codes',
+            'Machine Compatibility' => 'Engineered for smooth feeding on standard linear and rotary cartoners (Bosch, Uhlmann, IMA, Marchesini)',
+            'Compliance Standards' => 'ISO 9001:2015, FSC Chain of Custody, cGMP Line Clearance, EN 16679 Tamper Evident',
+            'Target Applications' => 'Solid oral tablets & capsules, blister cards, diagnostic devices, pre-filled syringes, OTC medicines'
+        ]
     ]
 ];
 
@@ -286,9 +310,23 @@ if (!$dbProduct) {
     $dbProduct = $dbProd->fetch(PDO::FETCH_ASSOC);
 }
 
-// Override primary image if updated in Admin panel
-if ($dbProduct && !empty($dbProduct['image_path'])) {
-    $currentProduct['image'] = $dbProduct['image_path'];
+// Override fields if updated in Admin panel
+if ($dbProduct) {
+    if (!empty($dbProduct['name'])) {
+        $currentProduct['name'] = $dbProduct['name'];
+    }
+    if (!empty($dbProduct['category'])) {
+        $currentProduct['category'] = $dbProduct['category'];
+    }
+    if (!empty($dbProduct['short_description'])) {
+        $currentProduct['tagline'] = $dbProduct['short_description'];
+    }
+    if (!empty($dbProduct['description'])) {
+        $currentProduct['overview'] = strip_tags($dbProduct['description']);
+    }
+    if (!empty($dbProduct['image_path'])) {
+        $currentProduct['image'] = $dbProduct['image_path'];
+    }
 }
 
 // Fetch Media Library (Images & YouTube Videos)
