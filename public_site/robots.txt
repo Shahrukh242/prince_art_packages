@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /scratch/
+Disallow: /database/
+
+Sitemap: https://princeartpackages.com/sitemap

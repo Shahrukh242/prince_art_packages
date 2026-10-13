@@ -16,8 +16,17 @@ if (session_status() === PHP_SESSION_NONE) {
 /** Call at the top of every admin page (except login.php) to enforce login. */
 function require_login(): void {
     if (empty($_SESSION['admin_id'])) {
-        header('Location: /admin/login.php');
+        header('Location: login.php');
         exit;
+    }
+}
+
+/** Restrict account and system configuration changes to administrators. */
+function require_admin(): void {
+    require_login();
+    if (($_SESSION['admin_role'] ?? '') !== 'admin') {
+        http_response_code(403);
+        exit('You do not have permission to access this page.');
     }
 }
 
