@@ -4,7 +4,7 @@
 
 Options -Indexes
 RewriteEngine On
-# RewriteBase /
+RewriteBase /
 
 # Enforce HTTPS on real deployments while retaining local development access.
 RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
@@ -39,24 +39,22 @@ RewriteCond %{THE_REQUEST} \s/+public_site/([^.\s?]+)(?:\.php)?[\s?] [NC]
 RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
 # Strip .php extension from URL in browser address bar (301 Redirect, skip POST)
-# Works for public site as well as /admin/ URLs
+# Only redirect on production domains, not localhost
 RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
 RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{THE_REQUEST} \s/+([^.\s?]+)\.php[\s?] [NC]
+RewriteCond %{REQUEST_URI} !^/admin/
 RewriteRule ^ https://%{HTTP_HOST}/%1 [R=301,L]
 
 # ------------------------------------------------------------------------------
 # 4. Route Root Requests to public_site Subdirectory (if applicable)
 # ------------------------------------------------------------------------------
-# Check if target exists inside public_site/
-# On localhost: REQUEST_URI has subfolder, or check %{DOCUMENT_ROOT}/%{REQUEST_URI}
-# Or check relative: In Apache 2.4, relative test in .htaccess checks relative to .htaccess dir
-RewriteCond %{REQUEST_URI} !public_site/ [NC]
-RewriteCond %{REQUEST_URI} !(^|/)admin(/|$) [NC]
-RewriteCond %{REQUEST_URI} !(^|/)includes(/|$) [NC]
-RewriteCond %{REQUEST_URI} !(^|/)assets(/|$) [NC]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public_site/$1 -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/public_site/$1.php -f [OR]
+RewriteCond %{DOCUMENT_ROOT}/public_site/$1 -d
+RewriteCond %{REQUEST_URI} !^/public_site/
+RewriteCond %{REQUEST_URI} !^/admin/
+RewriteCond %{REQUEST_URI} !^/includes/
 RewriteRule ^(.*)$ public_site/$1 [L]
 
 # ------------------------------------------------------------------------------
