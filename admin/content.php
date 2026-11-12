@@ -182,6 +182,105 @@ $previewUrl = ($selectedSlug === 'home') ? 'index.php' : h($selectedSlug) . '.ph
 <?php endif; ?>
 
 <!-- ====================================================================
+     Section: SEO Meta Title & Meta Description for this Page
+===================================================================== -->
+<div class="panel" style="margin-bottom:1.75rem; border-left:4px solid var(--teal); background:#ffffff; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+    <div>
+      <h3 style="margin:0; font-size:1.1rem; color:var(--navy); display:flex; align-items:center; gap:0.5rem;">
+        <i class="ri-search-eye-line text-teal" style="font-size:1.3rem;"></i> SEO Meta Title &amp; Description for "<?= h($page['title'] ?? ucfirst($selectedSlug)) ?>"
+      </h3>
+      <span style="font-size:0.82rem; color:var(--muted);">Controls the exact browser tab title, Google/Bing search snippet, and social media share previews for this page.</span>
+    </div>
+  </div>
+
+  <form method="post" class="content-form" style="margin:0;">
+    <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+    <input type="hidden" name="action"     value="save_seo">
+    <input type="hidden" name="page_id"    value="<?= (int)($page['id'] ?? 0) ?>">
+
+    <div style="margin-bottom:1rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+        <label for="seo_meta_title" style="margin:0; font-weight:700; font-size:0.88rem; color:var(--navy);">
+          SEO Meta Title <span style="font-weight:400; color:var(--muted);">(HTML &lt;title&gt; tag)</span>
+        </label>
+        <span id="title-char-count" style="font-size:0.75rem; color:var(--muted); font-weight:600;"></span>
+      </div>
+      <input type="text" name="meta_title" id="seo_meta_title" value="<?= h($page['meta_title'] ?? '') ?>" placeholder="e.g. Prince Art Packages — Pharmaceutical Secondary Packaging Manufacturer" maxlength="160" style="width:100%; font-size:0.95rem; padding:0.65rem 0.8rem; border:1.5px solid var(--border); border-radius:6px;" oninput="updateSeoPreview()">
+      <span class="field-hint">Recommended length: 50–60 characters. This is the main blue headline shown in Google search results.</span>
+    </div>
+
+    <div style="margin-bottom:1.25rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+        <label for="seo_meta_description" style="margin:0; font-weight:700; font-size:0.88rem; color:var(--navy);">
+          SEO Meta Description <span style="font-weight:400; color:var(--muted);">(HTML &lt;meta name="description"&gt; tag)</span>
+        </label>
+        <span id="desc-char-count" style="font-size:0.75rem; color:var(--muted); font-weight:600;"></span>
+      </div>
+      <textarea name="meta_description" id="seo_meta_description" rows="3" placeholder="e.g. ISO 9001:2015 &amp; FSC certified pharmaceutical secondary packaging manufacturer in Karachi, Pakistan..." maxlength="300" style="width:100%; font-size:0.9rem; padding:0.65rem 0.8rem; border:1.5px solid var(--border); border-radius:6px; line-height:1.5;" oninput="updateSeoPreview()"><?= h($page['meta_description'] ?? '') ?></textarea>
+      <span class="field-hint">Recommended length: 140–160 characters. A concise, persuasive summary displayed under the title in search results.</span>
+    </div>
+
+    <!-- Google SERP Snippet Preview -->
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--muted); letter-spacing:0.05em; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.35rem;">
+        <i class="ri-google-fill" style="color:#4285F4;"></i> Google Search Snippet Live Preview
+      </div>
+      <div style="max-width:620px; font-family:arial,sans-serif;">
+        <div style="font-size:0.8rem; color:#202124; margin-bottom:3px; display:flex; align-items:center; gap:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+          <span style="color:#202124; font-weight:500;">https://princeartpackages.com</span>
+          <span style="color:#5f6368;">› <?= h($selectedSlug === 'home' ? '' : $selectedSlug) ?></span>
+        </div>
+        <div id="preview-google-title" style="font-size:1.18rem; color:#1a0dab; line-height:1.3; font-weight:400; margin-bottom:4px; word-wrap:break-word;">
+          <?= h($page['meta_title'] ?: ($page['title'] ?: 'Prince Art Packages')) ?>
+        </div>
+        <div id="preview-google-desc" style="font-size:0.84rem; color:#4d5156; line-height:1.45; word-wrap:break-word;">
+          <?= h($page['meta_description'] ?: 'ISO 9001:2015 & FSC certified pharmaceutical secondary packaging manufacturer in Karachi, Pakistan.') ?>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" style="background:var(--teal); color:#fff; font-size:0.92rem; font-weight:700; padding:0.65rem 1.6rem; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; box-shadow:0 2px 6px rgba(0,168,150,0.25);">
+      <i class="ri-save-line"></i> Save SEO Meta for "<?= h($page['title'] ?? ucfirst($selectedSlug)) ?>"
+    </button>
+  </form>
+</div>
+
+<script>
+function updateSeoPreview() {
+  var titleIn = document.getElementById('seo_meta_title');
+  var descIn = document.getElementById('seo_meta_description');
+  var titlePreview = document.getElementById('preview-google-title');
+  var descPreview = document.getElementById('preview-google-desc');
+  var titleCount = document.getElementById('title-char-count');
+  var descCount = document.getElementById('desc-char-count');
+
+  var tVal = titleIn ? titleIn.value.trim() : '';
+  var dVal = descIn ? descIn.value.trim() : '';
+
+  if (titleCount && titleIn) {
+    var tLen = titleIn.value.length;
+    titleCount.textContent = tLen + ' / 60 chars ' + (tLen > 60 ? '(may truncate on Google)' : '');
+    titleCount.style.color = (tLen > 60) ? '#d97706' : 'var(--muted)';
+  }
+
+  if (descCount && descIn) {
+    var dLen = descIn.value.length;
+    descCount.textContent = dLen + ' / 160 chars ' + (dLen > 160 ? '(may truncate on Google)' : '');
+    descCount.style.color = (dLen > 160) ? '#d97706' : 'var(--muted)';
+  }
+
+  if (titlePreview) {
+    titlePreview.textContent = tVal || "<?= addslashes(h($page['title'] ?? 'Prince Art Packages')) ?>";
+  }
+  if (descPreview) {
+    descPreview.textContent = dVal || "ISO 9001:2015 & FSC certified pharmaceutical secondary packaging manufacturer in Karachi, Pakistan.";
+  }
+}
+document.addEventListener('DOMContentLoaded', updateSeoPreview);
+</script>
+
+<!-- ====================================================================
      Section: Existing Blocks for this Page
 ===================================================================== -->
 <div class="panel" style="margin-bottom:2rem;">

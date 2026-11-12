@@ -43,9 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $image    = trim($_POST['image_path'] ?? '');
             $slug     = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
 
+            $metaTitle = trim($_POST['meta_title'] ?? '');
+            $metaDesc  = trim($_POST['meta_description'] ?? '');
+
             if ($name !== '') {
-                $stmt = $pdo->prepare("INSERT INTO products (name, slug, category, short_description, description, image_path, is_published) VALUES (?, ?, ?, ?, ?, ?, 1)");
-                $stmt->execute([$name, $slug, $category, $desc, $desc, $image]);
+                $stmt = $pdo->prepare("INSERT INTO products (name, slug, category, short_description, description, image_path, meta_title, meta_description, is_published) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)");
+                $stmt->execute([$name, $slug, $category, $desc, $desc, $image, $metaTitle ?: null, $metaDesc ?: null]);
                 $saved = 'Product "' . htmlspecialchars($name) . '" added successfully.';
             } else {
                 $error = 'Product Name is required.';
@@ -61,9 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $image    = trim($_POST['image_path'] ?? '');
             $isPub    = isset($_POST['is_published']) ? 1 : 0;
 
+            $metaTitle = trim($_POST['meta_title'] ?? '');
+            $metaDesc  = trim($_POST['meta_description'] ?? '');
+
             if ($name !== '') {
-                $stmt = $pdo->prepare("UPDATE products SET name = ?, category = ?, short_description = ?, description = ?, image_path = ?, is_published = ? WHERE id = ?");
-                $stmt->execute([$name, $category, $desc, $desc, $image, $isPub, $id]);
+                $stmt = $pdo->prepare("UPDATE products SET name = ?, category = ?, short_description = ?, description = ?, image_path = ?, meta_title = ?, meta_description = ?, is_published = ? WHERE id = ?");
+                $stmt->execute([$name, $category, $desc, $desc, $image, $metaTitle ?: null, $metaDesc ?: null, $isPub, $id]);
                 $saved = 'Product updated successfully.';
             } else {
                 $error = 'Product Name cannot be empty.';
@@ -190,6 +196,23 @@ $allMedia = get_all_media();
                 <input type="text" name="image_path" value="<?= h($p['image_path']) ?>" placeholder="assets/images/prod_cartons.jpg" style="width:100%; font-size:0.85rem;">
                 <span style="font-size:0.75rem; color:var(--muted); display:block; margin-top:3px;">Path to primary image displayed in catalog and specification cards.</span>
               </div>
+            </div>
+          </div>
+
+          <!-- Product SEO Meta Tags -->
+          <div style="margin-bottom:1.25rem; padding:0.85rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; border-left:3px solid var(--teal);">
+            <div style="font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:0.5rem; display:flex; align-items:center; gap:0.35rem;">
+              <i class="ri-search-eye-line text-teal"></i> Product SEO Meta Tags (Optional)
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.25rem;">
+              <label style="font-size:0.8rem; font-weight:600; color:var(--navy); margin:0;">SEO Meta Title
+                <input type="text" name="meta_title" value="<?= h($p['meta_title'] ?? '') ?>" placeholder="<?= h($p['name']) ?> Specifications | Prince Art Packages" maxlength="160" style="margin-top:2px; font-size:0.85rem; padding:0.45rem 0.6rem; width:100%;">
+                <span style="font-size:0.72rem; color:var(--muted); display:block; margin-top:2px;">Defaults to "<?= h($p['name']) ?> Specifications | Prince Art Packages"</span>
+              </label>
+              <label style="font-size:0.8rem; font-weight:600; color:var(--navy); margin:0;">SEO Meta Description
+                <textarea name="meta_description" rows="2" placeholder="Technical specifications, customizations, and standards for <?= h($p['name']) ?>..." maxlength="300" style="margin-top:2px; font-size:0.85rem; padding:0.45rem 0.6rem; width:100%;"><?= h($p['meta_description'] ?? '') ?></textarea>
+                <span style="font-size:0.72rem; color:var(--muted); display:block; margin-top:2px;">Defaults to standard technical description.</span>
+              </label>
             </div>
           </div>
 
@@ -336,6 +359,20 @@ $allMedia = get_all_media();
     <label style="margin-bottom:1rem;">Image Path
       <input type="text" name="image_path" placeholder="assets/images/filename.jpg">
     </label>
+
+    <div style="margin-bottom:1rem; padding:0.85rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; border-left:3px solid var(--teal);">
+      <div style="font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:0.5rem; display:flex; align-items:center; gap:0.35rem;">
+        <i class="ri-search-eye-line text-teal"></i> SEO Meta Tags (Optional)
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+        <label style="font-size:0.8rem; font-weight:600; color:var(--navy); margin:0;">SEO Meta Title
+          <input type="text" name="meta_title" placeholder="e.g. Product Name | Prince Art Packages" maxlength="160" style="margin-top:2px; font-size:0.85rem; width:100%;">
+        </label>
+        <label style="font-size:0.8rem; font-weight:600; color:var(--navy); margin:0;">SEO Meta Description
+          <textarea name="meta_description" rows="2" placeholder="Brief search snippet summary..." maxlength="300" style="margin-top:2px; font-size:0.85rem; width:100%;"></textarea>
+        </label>
+      </div>
+    </div>
 
     <button type="submit"><i class="ri-add-line"></i> Add Product</button>
   </form>

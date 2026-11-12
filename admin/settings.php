@@ -211,6 +211,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $saved = 'Rebuilt and wrote sitemap.xml, robots.txt, and llms.txt successfully to ' . count($written) . ' directory locations.';
         }
 
+        // 9b. SAVE QUICK PAGE SEO META
+        elseif ($action === 'save_page_seo_quick') {
+            $pageId   = (int)($_POST['page_id'] ?? 0);
+            $metaTitle = trim($_POST['meta_title'] ?? '');
+            $metaDesc  = trim($_POST['meta_description'] ?? '');
+            if ($pageId > 0) {
+                $stmt = $pdo->prepare("UPDATE pages SET meta_title = ?, meta_description = ? WHERE id = ?");
+                $stmt->execute([$metaTitle, $metaDesc, $pageId]);
+                $saved = 'SEO metadata updated successfully.';
+            }
+        }
         // 9. SAVE SECURITY & CAPTCHA SETTINGS
         elseif ($action === 'save_security_captcha') {
             $secKeys = [
@@ -247,6 +258,7 @@ foreach ($settingsRows as $row) {
     $settings[$row['setting_key']] = $row['setting_value'];
 }
 
+$allPagesSeo = $pdo->query("SELECT id, slug, title, meta_title, meta_description FROM pages ORDER BY FIELD(slug, 'home', 'about', 'products', 'capabilities', 'innovation', 'quality', 'industries', 'case-studies', 'contact', 'blog', 'privacy', 'terms'), title ASC")->fetchAll();
 $siteBaseUrl = get_site_base_url();
 $robotsTxt   = generate_robots_txt();
 $llmsTxt     = generate_llms_txt();
@@ -276,6 +288,82 @@ $llmsTxt     = generate_llms_txt();
      TAB 1: SEO, SITEMAPS & AI CRAWLERS (ROBOTS.TXT, SITEMAP.XML, LLMS.TXT)
 ===================================================================== -->
 <?php if ($tab === 'seo'): ?>
+
+<!-- CARD 0: PAGE-BY-PAGE SEO META TITLES & DESCRIPTIONS -->
+<div class="panel" style="margin-bottom:1.75rem; border-left:4px solid var(--teal); background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:0.75rem;">
+    <div>
+      <h3 style="display:flex; align-items:center; gap:0.5rem; margin:0; font-size:1.15rem; color:var(--navy);">
+        <i class="ri-pages-line text-teal" style="font-size:1.3rem;"></i> Page-by-Page SEO Meta Titles &amp; Meta Descriptions
+      </h3>
+      <span style="font-size:0.83rem; color:var(--muted);">View and edit the exact HTML &lt;title&gt; and &lt;meta name="description"&gt; tags for all <?= count($allPagesSeo) ?> core website pages.</span>
+    </div>
+    <div>
+      <a href="content.php" class="btn" style="background:#0b2545; color:#fff; font-size:0.82rem; padding:0.4rem 0.85rem; border-radius:5px; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
+        <i class="ri-file-text-line"></i> Open Full Page Content Editor
+      </a>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:0.65rem;">
+    <?php foreach ($allPagesSeo as $pSeo): ?>
+      <details style="border:1px solid var(--border); border-radius:8px; background:#fafbfc; overflow:hidden;">
+        <summary style="padding:0.75rem 1rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; user-select:none;">
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <strong style="color:var(--navy); font-size:0.92rem;"><?= h($pSeo['title']) ?></strong>
+            <code style="font-size:0.78rem; background:#e2e8f0; color:#334155; padding:2px 6px; border-radius:4px;">/<?= h($pSeo['slug'] === 'home' ? '' : $pSeo['slug']) ?></code>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <?php if (empty($pSeo['meta_title'])): ?>
+              <span style="font-size:0.72rem; background:#fee2e2; color:#991b1b; padding:2px 6px; border-radius:4px; font-weight:600;">Missing Title</span>
+            <?php else: ?>
+              <span style="font-size:0.72rem; background:#d1fae5; color:#065f46; padding:2px 6px; border-radius:4px; font-weight:600;">Title: <?= mb_strlen($pSeo['meta_title']) ?> chars</span>
+            <?php endif; ?>
+            <span style="font-size:0.82rem; color:var(--teal); font-weight:600; display:inline-flex; align-items:center; gap:2px;"><i class="ri-edit-line"></i> Edit SEO</span>
+            <i class="ri-arrow-down-s-line" style="color:var(--muted);"></i>
+          </div>
+        </summary>
+
+        <div style="padding:1rem 1.25rem; background:#fff; border-top:1px solid var(--border);">
+          <form method="post" style="margin:0;">
+            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+            <input type="hidden" name="action"     value="save_page_seo_quick">
+            <input type="hidden" name="page_id"    value="<?= (int)$pSeo['id'] ?>">
+
+            <div style="margin-bottom:0.85rem;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+                <label style="font-size:0.84rem; font-weight:700; color:var(--navy); margin:0;">
+                  SEO Meta Title <span style="font-weight:400; color:var(--muted);">(Title Tag in browser &amp; Google)</span>
+                </label>
+                <span style="font-size:0.75rem; color:var(--muted);"><?= mb_strlen($pSeo['meta_title'] ?? '') ?> / 60 recommended</span>
+              </div>
+              <input type="text" name="meta_title" value="<?= h($pSeo['meta_title']) ?>" placeholder="e.g. <?= h($pSeo['title']) ?> | Prince Art Packages" maxlength="160" style="width:100%; font-size:0.9rem; padding:0.55rem 0.75rem; border:1px solid var(--border); border-radius:5px;">
+            </div>
+
+            <div style="margin-bottom:0.85rem;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+                <label style="font-size:0.84rem; font-weight:700; color:var(--navy); margin:0;">
+                  SEO Meta Description <span style="font-weight:400; color:var(--muted);">(Search snippet, 140–160 chars)</span>
+                </label>
+                <span style="font-size:0.75rem; color:var(--muted);"><?= mb_strlen($pSeo['meta_description'] ?? '') ?> / 160 recommended</span>
+              </div>
+              <textarea name="meta_description" rows="2" placeholder="Brief summary describing <?= h($pSeo['title']) ?>..." maxlength="300" style="width:100%; font-size:0.88rem; padding:0.55rem 0.75rem; border:1px solid var(--border); border-radius:5px; line-height:1.5;"><?= h($pSeo['meta_description']) ?></textarea>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+              <button type="submit" style="background:var(--teal); color:#fff; font-size:0.85rem; font-weight:700; padding:0.45rem 1.1rem; border-radius:5px; cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;">
+                <i class="ri-save-line"></i> Save SEO for <?= h($pSeo['title']) ?>
+              </button>
+              <a href="content.php?page=<?= urlencode($pSeo['slug']) ?>" style="font-size:0.82rem; color:var(--navy); text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem;">
+                Edit Full Content Blocks for this Page &rarr;
+              </a>
+            </div>
+          </form>
+        </div>
+      </details>
+    <?php endforeach; ?>
+  </div>
+</div>
 
 <form method="post" class="content-form">
   <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">

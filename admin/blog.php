@@ -29,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $excerpt     = trim($_POST['excerpt'] ?? '');
             $content     = $_POST['content'] ?? '';
             $imagePath   = trim($_POST['image_path'] ?? 'assets/images/engravix.jpg');
+            $metaTitle   = trim($_POST['meta_title'] ?? '');
+            $metaDesc    = trim($_POST['meta_description'] ?? '');
             $isPublished = isset($_POST['is_published']) ? 1 : 0;
             $pubDate     = !empty($_POST['published_at']) ? $_POST['published_at'] : date('Y-m-d H:i:s');
 
@@ -41,18 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 if ($id > 0) {
                     $stmt = $pdo->prepare(
-                        "UPDATE blog_posts SET title=?, slug=?, excerpt=?, content=?, image_path=?, is_published=?, published_at=? WHERE id=?"
+                        "UPDATE blog_posts SET title=?, slug=?, excerpt=?, content=?, image_path=?, meta_title=?, meta_description=?, is_published=?, published_at=? WHERE id=?"
                     );
-                    $stmt->execute([$title, $slug, $excerpt, $content, $imagePath, $isPublished, $pubDate, $id]);
+                    $stmt->execute([$title, $slug, $excerpt, $content, $imagePath, $metaTitle ?: null, $metaDesc ?: null, $isPublished, $pubDate, $id]);
                     $saved = 'Article "' . htmlspecialchars($title) . '" updated successfully.';
                     $postId = $id;
                     $action = 'edit';
                 } else {
                     $stmt = $pdo->prepare(
-                        "INSERT INTO blog_posts (title, slug, excerpt, content, image_path, is_published, published_at)
-                         VALUES (?, ?, ?, ?, ?, ?, ?)"
+                        "INSERT INTO blog_posts (title, slug, excerpt, content, image_path, meta_title, meta_description, is_published, published_at)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     );
-                    $stmt->execute([$title, $slug, $excerpt, $content, $imagePath, $isPublished, $pubDate]);
+                    $stmt->execute([$title, $slug, $excerpt, $content, $imagePath, $metaTitle ?: null, $metaDesc ?: null, $isPublished, $pubDate]);
                     $saved = 'Article "' . htmlspecialchars($title) . '" created successfully.';
                     $postId = (int)$pdo->lastInsertId();
                     $action = 'edit';
@@ -162,6 +164,23 @@ $posts = $pdo->query("SELECT * FROM blog_posts ORDER BY published_at DESC")->fet
         <label>Lead Excerpt / Summary <span style="color:var(--muted); font-weight:400;">(Shown on blog catalog cards &amp; article lead box)</span>
           <textarea name="excerpt" rows="3" placeholder="Brief technical summary of the article..."><?= h($post['excerpt'] ?? '') ?></textarea>
         </label>
+      </div>
+
+      <!-- SEO Meta Tags for Article -->
+      <div style="margin-bottom:1.25rem; padding:1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; border-left:3px solid var(--teal);">
+        <div style="font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+          <i class="ri-search-eye-line text-teal"></i> Article SEO Meta Tags (Optional)
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+          <label style="margin:0; font-size:0.82rem; font-weight:600; color:var(--navy);">SEO Meta Title
+            <input type="text" name="meta_title" value="<?= h($post['meta_title'] ?? '') ?>" placeholder="<?= h($post['title'] ?? '') ?> | Prince Art Packages" maxlength="160" style="margin-top:3px; font-size:0.88rem; width:100%;">
+            <span class="field-hint">Leave blank to default to "{Title} | Prince Art Packages"</span>
+          </label>
+          <label style="margin:0; font-size:0.82rem; font-weight:600; color:var(--navy);">SEO Meta Description
+            <textarea name="meta_description" rows="2" placeholder="Brief search snippet summary..." maxlength="300" style="margin-top:3px; font-size:0.88rem; width:100%;"><?= h($post['meta_description'] ?? '') ?></textarea>
+            <span class="field-hint">Leave blank to default to the Lead Excerpt above.</span>
+          </label>
+        </div>
       </div>
 
       <!-- Content Area with Link Inserter Toolbar -->

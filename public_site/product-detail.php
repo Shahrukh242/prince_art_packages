@@ -327,6 +327,12 @@ if ($dbProduct) {
     if (!empty($dbProduct['image_path'])) {
         $currentProduct['image'] = $dbProduct['image_path'];
     }
+    if (!empty($dbProduct['meta_title'])) {
+        $currentProduct['meta_title'] = $dbProduct['meta_title'];
+    }
+    if (!empty($dbProduct['meta_description'])) {
+        $currentProduct['meta_description'] = $dbProduct['meta_description'];
+    }
 }
 
 // Fetch Media Library (Images & YouTube Videos)
@@ -345,8 +351,13 @@ foreach ($productMediaList as $mItem) {
 }
 
 // SEO Meta setup
-$metaTitle = $currentProduct['name'] . " Specifications | Prince Art Packages";
-$metaDesc = "Technical specifications, applications, customizations, and manufacturing standards for " . $currentProduct['name'] . " by Prince Art Packages.";
+$metaTitle = !empty($currentProduct['meta_title']) 
+    ? $currentProduct['meta_title'] 
+    : (!empty($dbProduct['meta_title']) ? $dbProduct['meta_title'] : $currentProduct['name'] . " Specifications | Prince Art Packages");
+
+$metaDesc = !empty($currentProduct['meta_description']) 
+    ? $currentProduct['meta_description'] 
+    : (!empty($dbProduct['meta_description']) ? $dbProduct['meta_description'] : "Technical specifications, applications, customizations, and manufacturing standards for " . $currentProduct['name'] . " by Prince Art Packages.");
 
 require __DIR__ . '/includes/header.php';
 ?>

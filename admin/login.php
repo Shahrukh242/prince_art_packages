@@ -30,9 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $captchaValid = true;
         } elseif ($captchaType === 'turnstile') {
             $cfToken  = trim($_POST['cf-turnstile-response'] ?? '');
-            $fallback = trim($_POST['built_in_robot_check'] ?? '');
 
-            if (!empty($cfToken)) {
+            if (empty($cfToken)) {
+                $captchaErrorMsg = 'Please complete the Cloudflare security verification before logging in.';
+            } else {
                 $ch = curl_init('https://challenges.cloudflare.com/turnstile/v0/siteverify');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_POST, true);
@@ -43,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]));
                 curl_setopt($ch, CURLOPT_TIMEOUT, 6);
                 $resp = curl_exec($ch);
-                $curlErr = curl_error($ch);
                 curl_close($ch);
 
                 if ($resp) {
@@ -51,24 +51,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!empty($json['success'])) {
                         $captchaValid = true;
                     } else {
-                        $captchaErrorMsg = 'Security verification failed. Please try checking the verification box again.';
+                        $captchaErrorMsg = 'Security verification failed or expired. Please check the verification box again.';
                     }
-                } elseif ($curlErr && strlen($cfToken) > 10) {
-                    // Outbound connection error (offline dev), client submitted turnstile token
-                    $captchaValid = true;
                 } else {
-                    $captchaErrorMsg = 'Unable to verify security challenge. Please try again.';
+                    $captchaErrorMsg = 'Unable to verify Cloudflare security challenge. Please check your internet connection and try again.';
                 }
-            } elseif (!empty($fallback) && hash_equals($challengeToken, $fallback)) {
-                $captchaValid = true;
-            } else {
-                $captchaErrorMsg = 'Please check the verification box before logging in.';
             }
         } elseif ($captchaType === 'recaptcha') {
-            $gToken   = trim($_POST['g-recaptcha-response'] ?? '');
-            $fallback = trim($_POST['built_in_robot_check'] ?? '');
+            $gToken = trim($_POST['g-recaptcha-response'] ?? '');
 
-            if (!empty($gToken)) {
+            if (empty($gToken)) {
+                $captchaErrorMsg = 'Please check "I\'m not a robot" before clicking Log In.';
+            } else {
                 $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_POST, true);
@@ -86,20 +80,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!empty($json['success'])) {
                         $captchaValid = true;
                     } else {
-                        $captchaErrorMsg = 'Google reCAPTCHA verification failed. Please check the box again.';
+                        $captchaErrorMsg = 'Google reCAPTCHA verification failed. Please try again.';
                     }
+                } else {
+                    $captchaErrorMsg = 'Unable to verify reCAPTCHA response. Please try again.';
                 }
-            } elseif (!empty($fallback) && hash_equals($challengeToken, $fallback)) {
-                $captchaValid = true;
-            } else {
-                $captchaErrorMsg = 'Please check "I\'m not a robot" before logging in.';
             }
         } elseif ($captchaType === 'built_in') {
             $fallback = trim($_POST['built_in_robot_check'] ?? '');
             if (!empty($fallback) && hash_equals($challengeToken, $fallback)) {
                 $captchaValid = true;
             } else {
-                $captchaErrorMsg = 'Please check "I\'m not a robot" to verify security.';
+                $captchaErrorMsg = 'Please click and check "I\'m not a robot" before logging in.';
             }
         }
 
@@ -107,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = $captchaErrorMsg ?: 'Please complete the security check.';
         } elseif (attempt_login($_POST['username'] ?? '', $_POST['password'] ?? '')) {
             unset($_SESSION['robot_challenge_token']);
-            header('Location: index.php');
+            header('Location: index');
             exit;
         } else {
             $error = 'Invalid username or password.';
@@ -151,64 +143,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div id="turnstile-box" style="margin: 1.25rem 0 1rem; display: flex; justify-content: center; min-height: 65px;">
                 <div class="cf-turnstile" data-sitekey="<?= h($turnstileSiteKey) ?>" data-theme="light"></div>
             </div>
-            
-            <!-- Fallback interactive widget if Cloudflare script is blocked or delayed -->
-            <div id="fallback-robot-box" style="display: none;">
-                <div class="cf-captcha-box" onclick="toggleRobotCheck(this)" style="cursor: pointer;">
-                    <div class="cf-captcha-left">
-                        <div class="cf-captcha-check" id="robotCheckSquare">
-                            <svg id="robotCheckSvg" style="display:none; width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                        <span class="cf-captcha-label">I'm not a robot</span>
-                    </div>
-                    <div class="cf-captcha-brand">
-                        <svg class="cf-captcha-logo" viewBox="0 0 48 48" fill="none">
-                            <path d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4z" fill="#0284c7" fill-opacity="0.1"/>
-                            <path d="M34 24c0 5.52-4.48 10-10 10s-10-4.48-10-10 4.48-10 10-10v4l6-6-6-6v4c-7.73 0-14 6.27-14 14s6.27 14 14 14 14-6.27 14-14h-4z" fill="#0284c7"/>
-                        </svg>
-                        <span class="cf-captcha-title">Cloudflare</span>
-                        <span class="cf-captcha-legal">Privacy - Terms</span>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" name="built_in_robot_check" id="builtInRobotCheck" value="">
-
-            <script>
-            // If Cloudflare widget doesn't render within 2.5 seconds (e.g. offline/blocked), reveal interactive fallback
-            setTimeout(function() {
-                var cfIframe = document.querySelector('#turnstile-box iframe');
-                if (!cfIframe) {
-                    var fb = document.getElementById('fallback-robot-box');
-                    if (fb) fb.style.display = 'block';
-                }
-            }, 2500);
-
-            function toggleRobotCheck(box) {
-                var check = document.getElementById('robotCheckSquare');
-                var svg = document.getElementById('robotCheckSvg');
-                var input = document.getElementById('builtInRobotCheck');
-                if (check.classList.contains('checked') || check.classList.contains('loading')) return;
-                
-                check.classList.add('loading');
-                setTimeout(function() {
-                    check.classList.remove('loading');
-                    check.classList.add('checked');
-                    svg.style.display = 'block';
-                    input.value = "<?= h($challengeToken) ?>";
-                }, 600);
-            }
-            </script>
 
         <?php elseif ($captchaType === 'recaptcha' && !empty($recaptchaSiteKey)): ?>
             <!-- Google reCAPTCHA Container -->
-            <div style="margin: 1.25rem 0 1rem; display: flex; justify-content: center;">
+            <div style="margin: 1.25rem 0 1rem; display: flex; justify-content: center; min-height: 78px;">
                 <div class="g-recaptcha" data-sitekey="<?= h($recaptchaSiteKey) ?>"></div>
             </div>
-            <input type="hidden" name="built_in_robot_check" id="builtInRobotCheck" value="">
 
         <?php elseif ($captchaType === 'built_in' || ($captchaType === 'recaptcha' && empty($recaptchaSiteKey))): ?>
-            <!-- Standalone Interactive "I'm not a robot" Checkbox (Matching User Screenshot) -->
-            <div class="cf-captcha-box" onclick="toggleRobotCheck(this)" style="cursor: pointer;">
+            <!-- Standalone Interactive "I'm not a robot" Checkbox -->
+            <div class="cf-captcha-box" onclick="toggleRobotCheck(this)" style="cursor: pointer;" id="interactiveCaptchaBox">
                 <div class="cf-captcha-left">
                     <div class="cf-captcha-check" id="robotCheckSquare">
                         <svg id="robotCheckSvg" style="display:none; width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -243,9 +187,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </script>
         <?php endif; ?>
 
-        <button type="submit" style="width: 100%; justify-content: center; margin-top: 0.5rem; padding: 0.85rem; font-size: 1rem;">
+        <div id="clientCaptchaWarning" style="display:none; color:#dc2626; background:#fef2f2; border:1px solid #fecaca; border-radius:6px; padding:0.6rem 0.85rem; font-size:0.85rem; margin-top:0.75rem; text-align:center;">
+            <i class="ri-alert-line"></i> Please check the security verification box before logging in.
+        </div>
+
+        <button type="submit" style="width: 100%; justify-content: center; margin-top: 0.75rem; padding: 0.85rem; font-size: 1rem;">
             <i class="ri-lock-line"></i> Log In
         </button>
     </form>
+
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        var captchaType = "<?= $captchaType ?>";
+        var warn = document.getElementById('clientCaptchaWarning');
+        if (warn) warn.style.display = 'none';
+
+        if (captchaType === 'turnstile') {
+            var cfResp = document.querySelector('[name="cf-turnstile-response"]');
+            if (!cfResp || !cfResp.value) {
+                e.preventDefault();
+                if (warn) {
+                    warn.textContent = 'Please complete the Cloudflare "I\'m not a robot" check before logging in.';
+                    warn.style.display = 'block';
+                }
+                return false;
+            }
+        } else if (captchaType === 'recaptcha') {
+            var gResp = document.querySelector('[name="g-recaptcha-response"]');
+            if (!gResp || !gResp.value) {
+                e.preventDefault();
+                if (warn) {
+                    warn.textContent = 'Please check "I\'m not a robot" before logging in.';
+                    warn.style.display = 'block';
+                }
+                return false;
+            }
+        } else if (captchaType === 'built_in') {
+            var bi = document.getElementById('builtInRobotCheck');
+            if (!bi || !bi.value) {
+                e.preventDefault();
+                if (warn) {
+                    warn.textContent = 'Please click and check "I\'m not a robot" before logging in.';
+                    warn.style.display = 'block';
+                }
+                var box = document.getElementById('interactiveCaptchaBox');
+                if (box) {
+                    box.style.border = '2px solid #ef4444';
+                    setTimeout(function(){ box.style.border = ''; }, 2000);
+                }
+                return false;
+            }
+        }
+    });
+    </script>
 </body>
 </html>

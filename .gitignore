@@ -2,7 +2,10 @@ node_modules/
 .env
 .env.remote
 *.log
+*.zip
 .DS_Store
 public/uploads/*
 !public/uploads/.gitkeep
+public_site/assets/uploads/quotes/*
+!public_site/assets/uploads/quotes/.gitkeep
 tools/dump-website_cms.sql

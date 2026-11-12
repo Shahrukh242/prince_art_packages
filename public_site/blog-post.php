@@ -29,8 +29,8 @@ if ($post) {
 }
 
 // Meta tags setup
-$metaTitle = ($post['meta_title'] ?? $post['title']) . " | Prince Art Packages";
-$metaDesc = $post['meta_description'] ?? $post['excerpt'];
+$metaTitle = !empty($post['meta_title']) ? $post['meta_title'] : (($post['title'] ?? 'Technical Article') . " | Prince Art Packages");
+$metaDesc = !empty($post['meta_description']) ? $post['meta_description'] : ($post['excerpt'] ?? '');
 
 require __DIR__ . '/includes/header.php';
 ?>
