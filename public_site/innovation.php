@@ -18,7 +18,7 @@ require __DIR__ . '/includes/header.php';
       <?= h(get_content('innovation', 'hero_intro', 'Pioneering eco-friendly ColdSeal blister wallets, sliding pack geometries, electronic QA verification, and proprietary 3D-ENGRAVIX™ optical security structures for pharmaceutical patient safety and brand authentication.')) ?>
     </p>
     <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.75rem; flex-wrap: wrap;">
-      <?= render_cta_buttons('innovation', 'hero', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-shield-check-line"></i> Request Optical Security Samples</a><a href="contact.php" class="btn btn-outline-white btn-lg" style="color:#ffffff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08);"><i class="ri-file-list-3-line"></i> Request a Quote</a>') ?>
+      <?= render_cta_buttons('innovation', 'hero', '<a href="contact" class="btn btn-gold btn-lg"><i class="ri-shield-check-line"></i> Request Optical Security Samples</a><a href="contact" class="btn btn-outline-white btn-lg" style="color:#ffffff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08);"><i class="ri-file-list-3-line"></i> Request a Quote</a>') ?>
     </div>
   </div>
 </section>
@@ -50,7 +50,7 @@ require __DIR__ . '/includes/header.php';
               <?= get_content('innovation', 'coldseal_desc', '<p>ColdSeal Blister Wallet is a pressure-sealed (non-heat-sealed) blister packaging system encapsulated between paperboard layers.</p><ul style="padding-left:1.25rem; color:var(--text-body); margin: 1rem 0;"><li><strong>50% Material Reduction:</strong> Reduces plastic and aluminum foil usage by up to 50% compared to traditional rigid blisters.</li><li><strong>Child-Resistant & Senior-Friendly:</strong> Engineered latch mechanisms compliant with safety standards.</li><li><strong>Dose Compliance Tracking:</strong> Integrated calendar layout for patient compliance adherence.</li><li><strong>Available Formats:</strong> Wallet format, Box format, and Card format.</li><li><strong>Applications:</strong> Tablets/capsules, pre-filled syringes/pens, ampoules/vials, droppers.</li></ul>') ?>
             </div>
 
-            <?= render_cta_buttons('innovation', 'coldseal_cta', '<a href="contact.php" class="btn btn-gold btn-sm" data-product="ColdSeal Blister Wallet">Request ColdSeal Samples &rarr;</a>') ?>
+            <?= render_cta_buttons('innovation', 'coldseal_cta', '<a href="contact" class="btn btn-gold btn-sm" data-product="ColdSeal Blister Wallet">Request ColdSeal Samples &rarr;</a>') ?>
           </div>
           <div>
             <?= render_image(get_content('innovation', 'coldseal_image', 'assets/images/coldseal.jpg'), 'ColdSeal Blister Packaging', '', ['style' => 'width:100%; border-radius:var(--radius-md);']) ?>
@@ -85,7 +85,7 @@ require __DIR__ . '/includes/header.php';
               <?= get_content('innovation', 'engravix_desc', '<p>3D-Engravix™ is an advanced optical security feature integrated directly onto pharmaceutical printed cartons during manufacturing.</p><p><strong>Zero Equipment Needed:</strong> Authentication is 100% visual under ambient light. Pharmacists, distributors, healthcare professionals, and patients require NO scanner, smartphone app, or reader device.</p><h4 style="margin-top:1rem;">Authentication Principles:</h4><ol style="padding-left:1.25rem; color:var(--text-body); font-size:0.9rem;"><li><strong>Micro-Optic Motion:</strong> Spinning blade, flowing motion, and travelling light effects when tilted.</li><li><strong>Flip Effect:</strong> Seamless visual transformation between objects when package is tilted vertically.</li><li><strong>Seal-Base Color Shift:</strong> Angle-dependent color shift (e.g. violet-purple to emerald-green shift).</li></ol>') ?>
             </div>
 
-            <?= render_cta_buttons('innovation', 'engravix_cta', '<a href="contact.php" class="btn btn-teal btn-sm" style="margin-top:1rem;" data-product="3D-Engravix Cartons">Request 3D-Engravix™ Demonstration &rarr;</a>') ?>
+            <?= render_cta_buttons('innovation', 'engravix_cta', '<a href="contact" class="btn btn-teal btn-sm" style="margin-top:1rem;" data-product="3D-Engravix Cartons">Request 3D-Engravix™ Demonstration &rarr;</a>') ?>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@ require __DIR__ . '/includes/header.php';
               <?= get_content('innovation', 'sliding_desc', '<p>The <strong>Sliding Pack</strong> is an engineered secondary packaging system combining a rigid outer paperboard sleeve with an integrated smooth-glide inner slide drawer or tray. Developed for patient convenience, dose adherence, and brand distinction, it offers a sustainable paperboard alternative to rigid plastic clamshells.</p><ul style="padding-left:1.25rem; color:var(--text-body); margin: 1rem 0;"><li><strong>Child-Resistant &amp; Senior-Friendly:</strong> Engineered mechanical locking tabs and tactile friction stops prevent accidental slide-out while ensuring easy senior access.</li><li><strong>Unit-Dose &amp; Device Protection:</strong> Custom die-cut retention cavities securely hold solid oral blister cards, pre-filled syringes (PFS), diagnostic kits, and vials.</li><li><strong>Integrated Dose Compliance:</strong> Expansive multi-panel printable surfaces accommodate daily or weekly calendarized dosing matrices and clinical instructions.</li><li><strong>Tamper-Evident Security:</strong> Frangible fiber-tear tabs provide unmistakable visual evidence upon first opening.</li><li><strong>Eco-Friendly Paperboard:</strong> 100% recyclable virgin folding boxboard (FBB / SBS) reducing plastic packaging footprint by up to 60%.</li></ul>') ?>
             </div>
 
-            <?= render_cta_buttons('innovation', 'sliding_cta', '<a href="contact.php?product=Sliding%20Pack#enquiry-form" class="btn btn-gold btn-sm" data-product="Sliding Pack"><i class="ri-mail-send-line"></i> Request Sliding Pack Samples &rarr;</a>') ?>
+            <?= render_cta_buttons('innovation', 'sliding_cta', '<a href="contact?product=Sliding%20Pack#enquiry-form" class="btn btn-gold btn-sm" data-product="Sliding Pack"><i class="ri-mail-send-line"></i> Request Sliding Pack Samples &rarr;</a>') ?>
           </div>
           <div>
             <?= render_image(get_content('innovation', 'sliding_image', 'assets/images/prod_pill_folders.jpg'), 'Sliding Pack Secondary Packaging', '', ['style' => 'width:100%; border-radius:var(--radius-md); box-shadow:var(--shadow-sm);']) ?>
@@ -127,7 +127,7 @@ require __DIR__ . '/includes/header.php';
               <button type="button" onclick="openVideoPopup('https://www.youtube-nocookie.com/embed/4S9d2kz_DNY', 'GlobalVision | Print Inspection Software Overview')" class="btn btn-gold btn-sm" style="display:inline-flex; align-items:center; gap:0.4rem; font-weight:700; cursor:pointer; box-shadow:0 2px 8px rgba(212,175,55,0.3);">
                 <i class="ri-play-circle-fill" style="color:var(--navy-dark); font-size:1.15rem;"></i> Watch Inspection Demonstration Video
               </button>
-              <a href="contact.php?action=audit#enquiry-form" class="btn btn-teal btn-sm" style="display:inline-flex; align-items:center; gap:0.35rem;">
+              <a href="contact?action=audit#enquiry-form" class="btn btn-teal btn-sm" style="display:inline-flex; align-items:center; gap:0.35rem;">
                 <i class="ri-shield-check-line"></i> Inquire About QA Protocols &rarr;
               </a>
             </div>

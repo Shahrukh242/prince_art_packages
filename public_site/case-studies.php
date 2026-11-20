@@ -58,7 +58,7 @@ require __DIR__ . '/includes/header.php';
     <div class="innovation-banner" style="margin-top: 3rem; text-align: center;">
       <h2 class="innovation-banner-heading">Deliver Zero-Defect Packaging for Your Next Audit</h2>
       <p class="innovation-banner-desc">Request physical sample packs, technical score cards, and audit certificates for your QA team.</p>
-      <?= render_cta_buttons('case-studies', 'case_studies_bottom', '<a href="contact.php" class="btn btn-gold innovation-banner-btn"><i class="ri-shield-check-line"></i> Request an Audit &amp; Verification Samples</a>') ?>
+      <?= render_cta_buttons('case-studies', 'case_studies_bottom', '<a href="contact" class="btn btn-gold innovation-banner-btn"><i class="ri-shield-check-line"></i> Request an Audit &amp; Verification Samples</a>') ?>
     </div>
   </div>
 </section>

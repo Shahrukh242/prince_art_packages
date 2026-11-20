@@ -50,10 +50,10 @@ require __DIR__ . '/includes/header.php';
 
     <!-- Quick Action CTA -->
     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-      <a href="products.php" class="btn btn-gold btn-md">
+      <a href="products" class="btn btn-gold btn-md">
         <i class="ri-box-3-line"></i> Explore Product Range &rarr;
       </a>
-      <a href="index.php" class="btn btn-outline-navy btn-md" style="color: #ffffff; border-color: rgba(255,255,255,0.4);">
+      <a href="<?= $homeUrl ?? '/' ?>" class="btn btn-outline-navy btn-md" style="color: #ffffff; border-color: rgba(255,255,255,0.4);">
         <i class="ri-home-line"></i> Return to Homepage
       </a>
     </div>

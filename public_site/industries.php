@@ -198,7 +198,7 @@ require __DIR__ . '/includes/header.php';
     <div class="innovation-banner" style="margin-top: 3.5rem; text-align: center; background: linear-gradient(135deg, #0d2240 0%, #153b68 100%); border-radius: 16px; padding: 3rem 2rem; color: #ffffff;">
       <h2 class="innovation-banner-heading" style="color: #ffffff; font-size: 2rem; font-weight: 800; margin-bottom: 0.75rem;"><?= h(get_content('industries', 'banner_title', "Don't See Your Industry Listed?")) ?></h2>
       <p class="innovation-banner-desc" style="color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 680px; margin: 0 auto 1.75rem auto;"><?= h(get_content('industries', 'banner_desc', 'We work with a wide range of regulated manufacturers — talk to our technical packaging consultants about your specific sector specifications.')) ?></p>
-      <?= render_cta_buttons('industries', 'industries_banner', '<a href="contact.php" class="btn btn-gold innovation-banner-btn"><i class="ri-question-answer-line"></i> How to Contact us</a>') ?>
+      <?= render_cta_buttons('industries', 'industries_banner', '<a href="contact" class="btn btn-gold innovation-banner-btn"><i class="ri-question-answer-line"></i> How to Contact us</a>') ?>
     </div>
   </div>
 </section>

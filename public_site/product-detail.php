@@ -371,9 +371,9 @@ require __DIR__ . '/includes/header.php';
     
     <!-- Breadcrumb navigation -->
     <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: 1.25rem;">
-      <a href="index.php" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;"><i class="ri-home-line"></i> Home</a>
+      <a href="<?= $homeUrl ?? '/' ?>" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;"><i class="ri-home-line"></i> Home</a>
       <span style="color: rgba(255,255,255,0.4); margin: 0 0.5rem;">/</span>
-      <a href="products.php" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;">Products</a>
+      <a href="products" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;">Products</a>
       <span style="color: rgba(255,255,255,0.4); margin: 0 0.5rem;">/</span>
       <span style="color: var(--teal-brand); font-size: 0.88rem; font-weight: 600;"><?= h($currentProduct['name']) ?></span>
     </nav>
@@ -391,13 +391,13 @@ require __DIR__ . '/includes/header.php';
 
       <!-- HERO ACTION CTAS -->
       <div class="product-hero-ctas" style="display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap;">
-        <a href="contact.php?product=<?= urlencode($currentProduct['name']) ?>#enquiry-form" class="btn btn-gold btn-lg" style="box-shadow: 0 4px 14px rgba(212,175,55,0.35);">
+        <a href="contact?product=<?= urlencode($currentProduct['name']) ?>#enquiry-form" class="btn btn-gold btn-lg" style="box-shadow: 0 4px 14px rgba(212,175,55,0.35);">
           <i class="ri-mail-send-line"></i> Request a Formal Quote
         </a>
         <button type="button" class="btn btn-outline-teal btn-lg open-specs-modal" style="border-color: var(--teal-brand); color: #ffffff; background: rgba(0,168,150,0.18); cursor: pointer;">
           <i class="ri-file-settings-line"></i> See Technical Specs
         </button>
-        <a href="contact.php?product=<?= urlencode($currentProduct['name']) ?>&action=audit#enquiry-form" class="btn btn-outline-white btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.08);">
+        <a href="contact?product=<?= urlencode($currentProduct['name']) ?>&action=audit#enquiry-form" class="btn btn-outline-white btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.08);">
           <i class="ri-calendar-check-line"></i> Schedule Facility Audit
         </a>
       </div>
@@ -506,7 +506,7 @@ require __DIR__ . '/includes/header.php';
           <p>
             Request custom dielines, physical samples, or a formal technical quotation for <strong><?= h($currentProduct['name']) ?></strong>.
           </p>
-          <a href="contact.php?product=<?= urlencode($currentProduct['name']) ?>#enquiry-form" class="btn btn-gold btn-lg" style="width:100%; text-align:center; justify-content:center; margin-bottom:0.75rem;">
+          <a href="contact?product=<?= urlencode($currentProduct['name']) ?>#enquiry-form" class="btn btn-gold btn-lg" style="width:100%; text-align:center; justify-content:center; margin-bottom:0.75rem;">
             <i class="ri-mail-send-line"></i> Request a Quote &rarr;
           </a>
           <button type="button" class="btn btn-outline-navy btn-sm open-specs-modal" style="width:100%; text-align:center; justify-content:center; margin-bottom:0.75rem; cursor:pointer;">
@@ -714,7 +714,7 @@ require __DIR__ . '/includes/header.php';
         <button type="button" class="btn btn-outline-navy btn-sm" onclick="window.print()" style="cursor: pointer;">
           <i class="ri-printer-line"></i> Print Specs
         </button>
-        <a href="contact.php?product=<?= urlencode($currentProduct['name']) ?>#enquiry-form" class="btn btn-gold btn-sm">
+        <a href="contact?product=<?= urlencode($currentProduct['name']) ?>#enquiry-form" class="btn btn-gold btn-sm">
           <i class="ri-mail-send-line"></i> Request Quote for these Specs &rarr;
         </a>
         <button type="button" id="closeSpecsModalBtn" class="btn btn-navy btn-sm" style="cursor: pointer;">
@@ -924,7 +924,7 @@ document.addEventListener('DOMContentLoaded', function() {
           $counter++;
       ?>
         <div class="product-card">
-          <a href="product-detail.php?slug=<?= urlencode($relSlug) ?>" style="text-decoration: none; color: inherit;">
+          <a href="product/<?= urlencode($relSlug) ?>" style="text-decoration: none; color: inherit;">
             <?= render_image($relProd['image'], $relProd['name'], 'card-img-top') ?>
           </a>
           <div class="card-body">
@@ -933,14 +933,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <?= h($relProd['category']) ?>
               </span>
               <h3 class="card-title">
-                <a href="product-detail.php?slug=<?= urlencode($relSlug) ?>" style="text-decoration: none; color: var(--navy-dark);">
+                <a href="product/<?= urlencode($relSlug) ?>" style="text-decoration: none; color: var(--navy-dark);">
                   <?= h($relProd['name']) ?>
                 </a>
               </h3>
               <p style="font-size: 0.88rem; line-height: 1.5;"><?= h($relProd['tagline']) ?></p>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=<?= urlencode($relSlug) ?>" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
+              <a href="product/<?= urlencode($relSlug) ?>" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
                 <i class="ri-file-list-3-line"></i> View Specifications &rarr;
               </a>
             </div>
@@ -950,7 +950,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
     <div style="text-align: center; margin-top: 2.5rem;">
-      <a href="products.php" class="btn btn-outline-navy btn-lg">
+      <a href="products" class="btn btn-outline-navy btn-lg">
         <i class="ri-arrow-left-line"></i> View Full Product Catalog
       </a>
     </div>

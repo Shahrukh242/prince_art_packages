@@ -81,7 +81,11 @@ function get_content(string $pageSlug, string $blockKey, string $fallback = ''):
         preload_content($pageSlug);
     }
     $val = $_pac_content_cache[$pageSlug][$blockKey] ?? null;
-    return clean_mojibake(($val !== null && $val !== '') ? $val : $fallback);
+    $out = clean_mojibake(($val !== null && $val !== '') ? $val : $fallback);
+    if (stripos($out, 'href=') !== false) {
+        $out = clean_html_links($out);
+    }
+    return $out;
 }
 
 /**
@@ -194,6 +198,126 @@ function h(?string $value): string {
 }
 
 /**
+ * Determine whether the site is running in a local development environment.
+ */
+function is_local_env(): bool {
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    return $host === ''
+        || in_array($host, ['localhost', '127.0.0.1'], true)
+        || strpos($host, 'localhost:') === 0
+        || strpos($host, '127.0.0.1:') === 0;
+}
+
+/**
+ * Return the canonical base href / home URL:
+ *   - '/' on live production domains
+ *   - subfolder path (e.g. '/pap-dashboard/public_site/') on localhost
+ */
+function get_home_url(): string {
+    if (!is_local_env()) {
+        return '/';
+    }
+    $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+    $baseHref = rtrim($scriptDir, '/') . '/';
+    if ($baseHref === '//' || $baseHref === '') {
+        return '/';
+    }
+    return $baseHref;
+}
+
+/**
+ * Normalize internal site URLs to clean, canonical root-relative paths:
+ *   - Strips /public_site/ or public_site/ prefixes
+ *   - Converts product-detail(.php)?slug=X  -> product/X
+ *   - Converts blog-post(.php)?slug=X       -> blog/X
+ *   - Converts index(.php) or /             -> get_home_url()
+ *   - Strips .php extensions while preserving query strings and #fragments
+ * External URLs, mailto:, tel:, #anchors, and admin/ paths are left untouched.
+ */
+function clean_url(?string $url): string {
+    $url = trim((string)$url);
+    if ($url === '') {
+        return get_home_url();
+    }
+    if (
+        $url[0] === '#'
+        || preg_match('/^(?:https?:|mailto:|tel:|javascript:|data:|vbscript:|\/\/)/i', $url)
+    ) {
+        return $url;
+    }
+
+    // Separate fragment (#...) and query (?...)
+    $fragment = '';
+    $hashPos = strpos($url, '#');
+    if ($hashPos !== false) {
+        $fragment = substr($url, $hashPos);
+        $url = substr($url, 0, $hashPos);
+    }
+
+    $query = '';
+    $qPos = strpos($url, '?');
+    if ($qPos !== false) {
+        $query = substr($url, $qPos + 1);
+        $url = substr($url, 0, $qPos);
+    }
+
+    // Strip leading ./ or / and any public_site/ prefix
+    $path = ltrim($url, '/');
+    if (strpos($path, './') === 0) {
+        $path = substr($path, 2);
+    }
+    $path = preg_replace('#^public_site/#i', '', $path);
+    $path = ltrim($path, '/');
+
+    // Never rewrite admin panel links
+    if (preg_match('#^admin(?:/|$)#i', $path)) {
+        return $path . ($query !== '' ? '?' . $query : '') . $fragment;
+    }
+
+    // Convert product-detail(.php)?slug=... -> product/{slug}
+    if (preg_match('#^product-detail(?:\.php)?$#i', $path) && $query !== '') {
+        parse_str($query, $params);
+        if (!empty($params['slug'])) {
+            $slug = rawurlencode((string)$params['slug']);
+            unset($params['slug']);
+            $restQuery = http_build_query($params);
+            return 'product/' . $slug . ($restQuery !== '' ? '?' . $restQuery : '') . $fragment;
+        }
+    }
+
+    // Convert blog-post(.php)?slug=... -> blog/{slug}
+    if (preg_match('#^blog-post(?:\.php)?$#i', $path) && $query !== '') {
+        parse_str($query, $params);
+        if (!empty($params['slug'])) {
+            $slug = rawurlencode((string)$params['slug']);
+            unset($params['slug']);
+            $restQuery = http_build_query($params);
+            return 'blog/' . $slug . ($restQuery !== '' ? '?' . $restQuery : '') . $fragment;
+        }
+    }
+
+    // Home page normalization
+    if ($path === '' || preg_match('#^index(?:\.php)?$#i', $path)) {
+        return get_home_url() . ($query !== '' ? '?' . $query : '') . $fragment;
+    }
+
+    // Strip .php extension from internal pages
+    $path = preg_replace('/\.php$/i', '', $path);
+
+    return $path . ($query !== '' ? '?' . $query : '') . $fragment;
+}
+
+/**
+ * Clean all <a href="..."> links inside an HTML snippet using clean_url().
+ */
+function clean_html_links(string $html): string {
+    return preg_replace_callback('/(<a\b[^>]*\bhref\s*=\s*)(["\'])([^"\']*)\2/i', function ($m) {
+        $cleaned = clean_url(html_entity_decode($m[3], ENT_QUOTES, 'UTF-8'));
+        return $m[1] . $m[2] . htmlspecialchars($cleaned, ENT_QUOTES, 'UTF-8') . $m[2];
+    }, $html);
+}
+
+/**
  * Render text with full support for inline page links (<a href="...">, [text](url)),
  * bold (<strong>, <b>), italics (<em>, <i>), and safe HTML tags.
  */
@@ -204,7 +328,7 @@ function render_content(?string $value): string {
     // Support markdown links [Text](URL)
     $value = preg_replace_callback('/\[([^\]]+)\]\(([^)]+)\)/', function($m) {
         $text = htmlspecialchars($m[1], ENT_QUOTES, 'UTF-8');
-        $url  = htmlspecialchars($m[2], ENT_QUOTES, 'UTF-8');
+        $url  = htmlspecialchars(clean_url($m[2]), ENT_QUOTES, 'UTF-8');
         return '<a href="' . $url . '" class="text-link">' . $text . '</a>';
     }, $value);
 
@@ -220,6 +344,7 @@ function render_content(?string $value): string {
             }
             return $m[0];
         }, $value);
+        $value = clean_html_links($value);
         $value = preg_replace('/<a\s+(?!.*?class=)(href="[^"]*")/i', '<a class="text-link" $1', $value);
         return strip_tags($value, '<a><strong><b><em><i><u><span><br><p><code><small><ul><ol><li><h3><h4>');
     }
@@ -343,7 +468,7 @@ function get_cta_buttons(string $pageSlug, string $placement): array {
 function render_cta_buttons(string $pageSlug, string $placement, string $fallbackHtml = ''): string {
     $buttons = get_cta_buttons($pageSlug, $placement);
     if (empty($buttons)) {
-        return $fallbackHtml;
+        return stripos($fallbackHtml, 'href=') !== false ? clean_html_links($fallbackHtml) : $fallbackHtml;
     }
     $html = '';
     foreach ($buttons as $btn) {
@@ -367,7 +492,7 @@ function render_cta_buttons(string $pageSlug, string $placement, string $fallbac
             $btnStyleAttr = ($placement === 'footer') ? $extraStyle : ' style="cursor:pointer;"';
             $html .= '<button type="button" class="btn ' . $style . $extraClass . ' open-rfq-modal" data-source-button="' . h($sourceBtnLabel) . '"' . $btnStyleAttr . '>' . $icon . h($btn['label']) . '</button>';
         } else {
-            $html .= '<a href="' . h($btn['url']) . '" class="btn ' . $style . $extraClass . '"' . $extraStyle . '>' . $icon . h($btn['label']) . '</a>';
+            $html .= '<a href="' . h(clean_url($btn['url'] ?? '')) . '" class="btn ' . $style . $extraClass . '"' . $extraStyle . '>' . $icon . h($btn['label']) . '</a>';
         }
     }
     return $html;
@@ -588,12 +713,12 @@ function generate_llms_txt(): string {
          . "- Primary Products: Folding & Printed Cartons, High-Density Prescribing Information Leaflets (PIL) & Outserts, Small-Diameter Vial & Ampoule Printed Labels, Glass Ampoule Honeycomb Separators, Dose Adherence Pill-Folders, Tamper-Evident Security Cartons, 3D-ENGRAVIX™ Optical Security Packaging, and ColdSeal Blister Wallets.\n\n"
          . "## Key Website Links\n"
          . "- Main Website: {$baseUrl}/\n"
-         . "- Secondary Packaging Products: {$baseUrl}/products.php\n"
-         . "- Quality & cGMP Assurance: {$baseUrl}/quality.php\n"
-         . "- Plant Capabilities: {$baseUrl}/capabilities.php\n"
-         . "- Anti-Counterfeit Innovations: {$baseUrl}/innovation.php\n"
-         . "- Technical Articles: {$baseUrl}/blog.php\n"
-         . "- How to Contact us: {$baseUrl}/contact.php\n\n"
+         . "- Secondary Packaging Products: {$baseUrl}/products\n"
+         . "- Quality & cGMP Assurance: {$baseUrl}/quality\n"
+         . "- Plant Capabilities: {$baseUrl}/capabilities\n"
+         . "- Anti-Counterfeit Innovations: {$baseUrl}/innovation\n"
+         . "- Technical Articles: {$baseUrl}/blog\n"
+         . "- How to Contact us: {$baseUrl}/contact\n\n"
          . "## Contact & Plant Coordinates\n"
          . "- Plant Unit 1: ST-1, Sector 38, Korangi Creek Industrial Park, Karachi, Pakistan\n"
          . "- Plant Unit 2: Opp. Masco, Main Korangi Creek Road, Karachi, Pakistan\n"

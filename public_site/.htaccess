@@ -20,6 +20,16 @@ ErrorDocument 404 /404.php
 # ------------------------------------------------------------------------------
 # 3. Canonical URL Redirects: Strip public_site, index, & .php Extensions
 # ------------------------------------------------------------------------------
+# Redirect legacy product-detail(.php)?slug=X to clean /product/X
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
+RewriteCond %{THE_REQUEST} \s/+(?:public_site/)?product-detail(?:\.php)?\?slug=([a-zA-Z0-9_-]+)[\s&] [NC]
+RewriteRule ^ https://%{HTTP_HOST}/product/%1 [R=301,L,QSD]
+
+# Redirect legacy blog-post(.php)?slug=X to clean /blog/X
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
+RewriteCond %{THE_REQUEST} \s/+(?:public_site/)?blog-post(?:\.php)?\?slug=([a-zA-Z0-9_-]+)[\s&] [NC]
+RewriteRule ^ https://%{HTTP_HOST}/blog/%1 [R=301,L,QSD]
+
 # Redirect /public_site/index or /public_site/ or /index.php or /index to root /
 RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
 RewriteCond %{THE_REQUEST} \s/+(?:public_site/)?index(?:\.php)?[\s?] [NC,OR]

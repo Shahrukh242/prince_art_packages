@@ -35,7 +35,7 @@ require __DIR__ . '/includes/header.php';
         <?= h(get_content('about', 'intro_title', 'Who We Are')) ?>
       </h2>
       <p class="company-overview-lead" style="margin-bottom: 1.15rem;">
-        <?= get_content('about', 'intro_overview', 'Prince Art Packages is a pharmaceutical secondary packaging manufacturer focused on delivering reliable, precision-engineered <a href="products.php" class="text-link">pharmaceutical packaging solutions</a> for pharmaceutical and healthcare companies.') ?>
+        <?= get_content('about', 'intro_overview', 'Prince Art Packages is a pharmaceutical secondary packaging manufacturer focused on delivering reliable, precision-engineered <a href="products" class="text-link">pharmaceutical packaging solutions</a> for pharmaceutical and healthcare companies.') ?>
       </p>
       <p style="font-size: 1.05rem; line-height: 1.75; color: var(--text-body); max-width: 820px; margin: 0 auto;">
         <?= h(get_content('about', 'intro_narrative', 'Operating two cGMP-aligned manufacturing plants in Korangi Creek Industrial Park, Karachi, we combine more than 40 years of industrial heritage with state-of-the-art multi-color offset printing, precision converting, and in-house laboratory quality controls to ensure zero-defect secondary packaging for regulated domestic and export healthcare markets.')) ?>
@@ -130,7 +130,7 @@ require __DIR__ . '/includes/header.php';
         </p>
       </div>
       <div style="display: flex; gap: 0.85rem; flex-wrap: wrap; align-items: center;">
-        <?= render_cta_buttons('about', 'intro_cta', '<a href="products.php" class="btn btn-gold btn-lg"><i class="ri-arrow-right-line"></i> Explore Packaging Solutions &rarr;</a><a href="contact.php" class="btn btn-outline-navy btn-lg"><i class="ri-file-list-3-line"></i> Request a Quote</a>') ?>
+        <?= render_cta_buttons('about', 'intro_cta', '<a href="products" class="btn btn-gold btn-lg"><i class="ri-arrow-right-line"></i> Explore Packaging Solutions &rarr;</a><a href="contact" class="btn btn-outline-navy btn-lg"><i class="ri-file-list-3-line"></i> Request a Quote</a>') ?>
       </div>
     </div>
   </div>
@@ -152,7 +152,7 @@ require __DIR__ . '/includes/header.php';
         <?= h(get_content('about', 'journey_title', 'Built on Decades of Packaging Experience')) ?>
       </h2>
       <p style="font-size: 1.08rem; line-height: 1.75; color: var(--text-body); margin: 0 auto;">
-        <?= get_content('about', 'journey_paragraph', 'With more than three decades of specialized manufacturing heritage, Prince Art Packages has developed deep engineering mastery across printed cartons, prescribing leaflets, bottle labels, and anti-counterfeit packaging. Our journey from foundational offset printing to advanced dual-plant <a href="capabilities.php" class="text-link">pharmaceutical packaging manufacturing capabilities</a> reflects an enduring commitment to regulatory precision, continuous technical reinvestment, and zero-defect packaging integrity for healthcare leaders across the region.') ?>
+        <?= get_content('about', 'journey_paragraph', 'With more than three decades of specialized manufacturing heritage, Prince Art Packages has developed deep engineering mastery across printed cartons, prescribing leaflets, bottle labels, and anti-counterfeit packaging. Our journey from foundational offset printing to advanced dual-plant <a href="capabilities" class="text-link">pharmaceutical packaging manufacturing capabilities</a> reflects an enduring commitment to regulatory precision, continuous technical reinvestment, and zero-defect packaging integrity for healthcare leaders across the region.') ?>
       </p>
     </div>
 
@@ -211,7 +211,7 @@ require __DIR__ . '/includes/header.php';
 
     <!-- CTA Anchor -->
     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; align-items: center; margin-top: 2rem;">
-      <?= render_cta_buttons('about', 'journey_cta', '<a href="capabilities.php" class="btn btn-navy btn-lg"><i class="ri-settings-4-line"></i> View Manufacturing Capabilities</a><a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-phone-line"></i> Speak with Our Specialists</a>') ?>
+      <?= render_cta_buttons('about', 'journey_cta', '<a href="capabilities" class="btn btn-navy btn-lg"><i class="ri-settings-4-line"></i> View Manufacturing Capabilities</a><a href="contact" class="btn btn-gold btn-lg"><i class="ri-phone-line"></i> Speak with Our Specialists</a>') ?>
     </div>
 
   </div>
@@ -232,7 +232,7 @@ require __DIR__ . '/includes/header.php';
         <?= h(get_content('about', 'qc_sec_title', 'Quality and Compliance at the Core of Our Operations')) ?>
       </h2>
       <p style="font-size: 1.08rem; line-height: 1.75; color: var(--text-body); margin: 0 auto;">
-        <?= get_content('about', 'qc_sec_intro', 'Pharmaceutical packaging demands zero error tolerance. We place <a href="quality.php" class="text-link">quality and compliance</a> at the core of our operations, providing procurement leaders, QA managers, and regulatory auditors with absolute confidence through internationally verified certifications, strict cGMP line clearance, and in-house laboratory testing.') ?>
+        <?= get_content('about', 'qc_sec_intro', 'Pharmaceutical packaging demands zero error tolerance. We place <a href="quality" class="text-link">quality and compliance</a> at the core of our operations, providing procurement leaders, QA managers, and regulatory auditors with absolute confidence through internationally verified certifications, strict cGMP line clearance, and in-house laboratory testing.') ?>
       </p>
     </div>
 
@@ -342,7 +342,7 @@ require __DIR__ . '/includes/header.php';
         </p>
       </div>
       <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-        <?= render_cta_buttons('about', 'quality_compliance_cta', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-calendar-check-line"></i> Schedule a Facility Audit</a><a href="quality.php" class="btn btn-outline-navy btn-lg" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); color: #ffffff;"><i class="ri-external-link-line"></i> View Quality Accreditations</a>') ?>
+        <?= render_cta_buttons('about', 'quality_compliance_cta', '<a href="contact" class="btn btn-gold btn-lg"><i class="ri-calendar-check-line"></i> Schedule a Facility Audit</a><a href="quality" class="btn btn-outline-navy btn-lg" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); color: #ffffff;"><i class="ri-external-link-line"></i> View Quality Accreditations</a>') ?>
       </div>
     </div>
 
@@ -414,7 +414,7 @@ require __DIR__ . '/includes/header.php';
           <div class="usp-card-icon"><i class="ri-shield-keyhole-line"></i></div>
         </div>
         <h3><?= h(get_content('about', 'usp_5_title', 'Security & Innovation')) ?></h3>
-        <p><?= get_content('about', 'usp_5_text', 'Advanced <a href="innovation.php" class="text-link">anti-counterfeit packaging solutions</a> for product and brand protection.') ?></p>
+        <p><?= get_content('about', 'usp_5_text', 'Advanced <a href="innovation" class="text-link">anti-counterfeit packaging solutions</a> for product and brand protection.') ?></p>
       </div>
 
       <!-- 06 — Customer-Focused Solutions -->
@@ -430,7 +430,7 @@ require __DIR__ . '/includes/header.php';
 
     <!-- CTA -->
     <div class="why-choose-cta-wrap">
-      <?= render_cta_buttons('about', 'diff_cta', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-chat-smile-3-line"></i> Discuss Your Requirements &rarr;</a>') ?>
+      <?= render_cta_buttons('about', 'diff_cta', '<a href="contact" class="btn btn-gold btn-lg"><i class="ri-chat-smile-3-line"></i> Discuss Your Requirements &rarr;</a>') ?>
     </div>
   </div>
 </section>
@@ -561,7 +561,7 @@ require __DIR__ . '/includes/header.php';
             <span class="faq-icon"><i class="ri-add-line"></i></span>
           </summary>
           <div class="faq-answer">
-            <p><?= get_content('about', 'faq_10_a', 'You can easily <a href="contact.php" class="text-link">request a pharmaceutical packaging quote</a> by submitting our online RFQ form on the Contact page, emailing your technical specifications and dielines directly to info@princeartpackages.com, or calling our technical sales desk at +92 21-38893400-3. Our packaging engineers typically evaluate specifications and deliver a formal quotation within 24 hours.') ?></p>
+            <p><?= get_content('about', 'faq_10_a', 'You can easily <a href="contact" class="text-link">request a pharmaceutical packaging quote</a> by submitting our online RFQ form on the Contact page, emailing your technical specifications and dielines directly to info@princeartpackages.com, or calling our technical sales desk at +92 21-38893400-3. Our packaging engineers typically evaluate specifications and deliver a formal quotation within 24 hours.') ?></p>
           </div>
         </details>
 
@@ -570,7 +570,7 @@ require __DIR__ . '/includes/header.php';
 
     <!-- CTA / Contact Prompt -->
     <div class="faq-cta-wrap">
-      <?= render_cta_buttons('about', 'faq_cta', '<a href="contact.php" class="btn btn-navy btn-lg"><i class="ri-question-answer-line"></i> Have Additional Questions? Contact Our Technical Team &rarr;</a>') ?>
+      <?= render_cta_buttons('about', 'faq_cta', '<a href="contact" class="btn btn-navy btn-lg"><i class="ri-question-answer-line"></i> Have Additional Questions? Contact Our Technical Team &rarr;</a>') ?>
     </div>
   </div>
 </section>

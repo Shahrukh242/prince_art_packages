@@ -131,7 +131,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
           <p class="hero-subtitle"><?= h(get_content('home', 'hero_subtitle', 'ISO 9001:2015 certified manufacturer of printed cartons, leaf-inserts, printed labels, ColdSeal blister wallets, and 3D-Engravix™ optical anti-counterfeit security packaging based in Korangi Creek Industrial Park, Karachi.')) ?></p>
 
           <div class="hero-cta">
-            <?= render_cta_buttons('home', 'hero', '<a href="products.php" class="btn btn-gold"><i class="ri-arrow-right-line"></i> Explore Products &amp; Capabilities</a><a href="contact.php" class="btn btn-outline-navy"><i class="ri-file-list-3-line"></i> Request a Formal Quote</a>') ?>
+            <?= render_cta_buttons('home', 'hero', '<a href="products" class="btn btn-gold"><i class="ri-arrow-right-line"></i> Explore Products &amp; Capabilities</a><a href="contact" class="btn btn-outline-navy"><i class="ri-file-list-3-line"></i> Request a Formal Quote</a>') ?>
           </div>
         </div>
 
@@ -193,7 +193,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
             <h2><?= h(get_content('home', 'values_title', 'Engineered for Compliance & Pharmaceutical Precision')) ?></h2>
             <p class="values-intro"><?= h(get_content('home', 'values_intro', 'As a dedicated pharmaceutical secondary packaging partner, Prince Art Packages operates under strict cGMP and ISO 9001:2015 standards across two state-of-the-art facilities in Korangi Creek Industrial Park, Karachi. We deliver audited packaging integrity designed to meet rigorous global regulatory audits.')) ?></p>
             <div class="values-cta">
-              <?= render_cta_buttons('home', 'values_cta', '<a href="about.php" class="btn btn-navy"><i class="ri-information-line"></i> About Prince Art <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
+              <?= render_cta_buttons('home', 'values_cta', '<a href="about" class="btn btn-navy"><i class="ri-information-line"></i> About Prince Art <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
             </div>
           </div>
 
@@ -277,7 +277,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                   <p><?= h(get_content('home', 'feat_1_text', 'Reverse tuck, crash lock, tamper-evident, and child-resistant cartons printed on food & pharma-grade virgin board.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
-                  <?= render_cta_buttons('home', 'feat_cartons', '<a href="product-detail.php?slug=printed-cartons" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
+                  <?= render_cta_buttons('home', 'feat_cartons', '<a href="product/printed-cartons" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
                 </div>
               </div>
             </div>
@@ -291,7 +291,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                   <p><?= h(get_content('home', 'feat_2_text', 'Ultra-thin 27gsm to 60gsm prescribing information inserts, cross-folded or miniature outserts for automated packaging lines.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
-                  <?= render_cta_buttons('home', 'feat_leaflets', '<a href="product-detail.php?slug=leaf-inserts" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
+                  <?= render_cta_buttons('home', 'feat_leaflets', '<a href="product/leaf-inserts" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
                 </div>
               </div>
             </div>
@@ -305,7 +305,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                   <p><?= h(get_content('home', 'feat_3_text', 'Precision bottle and container labels for vials, bottles, ampoules, and destructible tamper-evident security seals with 2D barcode serialization.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
-                  <?= render_cta_buttons('home', 'feat_labels', '<a href="product-detail.php?slug=printed-labels" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
+                  <?= render_cta_buttons('home', 'feat_labels', '<a href="product/printed-labels" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
                 </div>
               </div>
             </div>
@@ -319,7 +319,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                   <p><?= h(get_content('home', 'feat_4_text', 'Security-focused packaging and tamper-evident solutions designed to help protect pharmaceutical products.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
-                  <?= render_cta_buttons('home', 'feat_tamper', '<a href="product-detail.php?slug=tamper-evident" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
+                  <?= render_cta_buttons('home', 'feat_tamper', '<a href="product/tamper-evident" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
                 </div>
               </div>
             </div>
@@ -333,7 +333,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                   <p><?= h(get_content('home', 'feat_5_text', 'Secure, cold-seal packaging designed to protect pharmaceutical products with reliable sealing and easy handling.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
-                  <?= render_cta_buttons('home', 'feat_coldseal', '<a href="product-detail.php?slug=coldseal-blister-wallet" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
+                  <?= render_cta_buttons('home', 'feat_coldseal', '<a href="product/coldseal-blister-wallet" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
                 </div>
               </div>
             </div>
@@ -347,7 +347,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                   <p><?= h(get_content('home', 'feat_6_text', 'Security-focused packaging solutions designed to help protect pharmaceutical products from counterfeiting and tampering.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
-                  <?= render_cta_buttons('home', 'feat_anticounterfeit', '<a href="product-detail.php?slug=3d-engravix" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
+                  <?= render_cta_buttons('home', 'feat_anticounterfeit', '<a href="product/3d-engravix" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
                 </div>
               </div>
             </div>
@@ -361,7 +361,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
                   <p><?= h(get_content('home', 'feat_7_text', 'Two-piece sliding drawer carton with ergonomic pull-out tray, tamper-evidence compatible, fully printable and GS1 serialization ready for high-speed cartoning lines.')) ?></p>
                 </div>
                 <div class="card-btn-wrapper">
-                  <?= render_cta_buttons('home', 'feat_sliderpack', '<a href="product-detail.php?slug=slider-pack" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
+                  <?= render_cta_buttons('home', 'feat_sliderpack', '<a href="product/slider-pack" class="btn btn-gold btn-sm">Specifications &rarr;</a>') ?>
                 </div>
               </div>
             </div>
@@ -455,7 +455,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
 
         <!-- CTA: Explore Our Capabilities -->
         <div class="why-choose-cta-wrap">
-          <?= render_cta_buttons('home', 'why_choose_cta', '<a href="capabilities.php" class="btn btn-navy"><i class="ri-settings-4-line"></i> Explore Our Capabilities <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
+          <?= render_cta_buttons('home', 'why_choose_cta', '<a href="capabilities" class="btn btn-navy"><i class="ri-settings-4-line"></i> Explore Our Capabilities <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
         </div>
       </div>
     </section>
@@ -538,7 +538,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
 
         <!-- CTA: Explore Industry Solutions -->
         <div class="industry-cta-wrap">
-          <?= render_cta_buttons('home', 'industry_solutions_cta', '<a href="industries.php" class="btn btn-navy btn-sm"><i class="ri-building-line"></i> Explore Industry Solutions <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
+          <?= render_cta_buttons('home', 'industry_solutions_cta', '<a href="industries" class="btn btn-navy btn-sm"><i class="ri-building-line"></i> Explore Industry Solutions <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
         </div>
       </div>
     </section>
@@ -623,7 +623,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
 
         <!-- CTA: Explore Quality & Compliance -->
         <div class="quality-cta-wrap">
-          <?= render_cta_buttons('home', 'quality_compliance_cta', '<a href="quality.php" class="btn btn-navy"><i class="ri-shield-check-line"></i> Explore Quality & Compliance <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
+          <?= render_cta_buttons('home', 'quality_compliance_cta', '<a href="quality" class="btn btn-navy"><i class="ri-shield-check-line"></i> Explore Quality & Compliance <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
         </div>
       </div>
     </section>
@@ -731,7 +731,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
 
         <!-- CTA: Explore Case Studies -->
         <div class="social-proof-cta-wrap">
-          <?= render_cta_buttons('home', 'social_proof_cta', '<a href="case-studies.php" class="btn btn-navy"><i class="ri-article-line"></i> Explore Case Studies &amp; Results <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
+          <?= render_cta_buttons('home', 'social_proof_cta', '<a href="case-studies" class="btn btn-navy"><i class="ri-article-line"></i> Explore Case Studies &amp; Results <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
         </div>
       </div>
     </section>
@@ -1015,7 +1015,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
 
         <!-- CTA / Contact Prompt -->
         <div class="faq-cta-wrap">
-          <?= render_cta_buttons('home', 'faq_cta', '<a href="contact.php" class="btn btn-navy"><i class="ri-question-answer-line"></i> Have More Questions? Contact Our Technical Team <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
+          <?= render_cta_buttons('home', 'faq_cta', '<a href="contact" class="btn btn-navy"><i class="ri-question-answer-line"></i> Have More Questions? Contact Our Technical Team <i class="ri-arrow-right-line" style="margin-left:0.35rem;"></i></a>') ?>
         </div>
       </div>
     </section>
@@ -1127,7 +1127,7 @@ $heroCtas = get_cta_buttons('home', 'hero');
               <span class="cert-pill innovation-pill" style="display:inline-block; background:rgba(255,255,255,0.2); color:#fff; font-size:0.75rem; padding:4px 10px; border-radius:20px; font-weight:700; letter-spacing:0.06em; margin-bottom:0.75rem;"><?= h(get_content('home', 'banner_eyebrow', 'FEATURED INNOVATIONS')) ?></span>
               <h2 class="innovation-banner-heading" style="color:#ffffff; font-size:clamp(1.3rem, 3.5vw, 2.1rem); line-height:1.25; margin:0 0 0.85rem; word-wrap:break-word;"><?= h(get_content('home', 'banner_title', 'ColdSeal Blister Wallet & 3D-Engravix™ Security')) ?></h2>
               <p class="innovation-banner-desc" style="color:rgba(255,255,255,0.9); font-size:clamp(0.85rem, 2vw, 0.98rem); line-height:1.55; margin:0 0 1.25rem;"><?= h(get_content('home', 'banner_text', 'Discover our proprietary anti-counterfeit optical security technology (3D-Engravix™) and pressure-sealed eco packaging (ColdSeal Blister Wallet) that reduces plastic/foil footprint by up to 50%.')) ?></p>
-              <?= render_cta_buttons('home', 'banner', '<a href="innovation.php" class="btn btn-gold innovation-banner-btn" style="display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; text-align:center; white-space:normal; line-height:1.35; max-width:100%; box-sizing:border-box;"><i class="ri-lightbulb-line"></i> <span>Learn About Innovation &amp; Technology</span></a>') ?>
+              <?= render_cta_buttons('home', 'banner', '<a href="innovation" class="btn btn-gold innovation-banner-btn" style="display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; text-align:center; white-space:normal; line-height:1.35; max-width:100%; box-sizing:border-box;"><i class="ri-lightbulb-line"></i> <span>Learn About Innovation &amp; Technology</span></a>') ?>
             </div>
             <div class="innovation-banner-img-wrap" style="width:100%; max-width:100%; overflow:hidden; border-radius:8px;">
               <?= render_image(get_content('home', 'banner_image', 'assets/images/coldseal.jpg'), 'ColdSeal Blister Packaging', 'innovation-banner-img', ['style' => 'width:100%; max-width:100%; height:auto; max-height:220px; object-fit:cover; display:block; border-radius:8px; border:2px solid rgba(255,255,255,0.3);']) ?>

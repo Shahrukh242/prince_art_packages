@@ -276,10 +276,10 @@ require __DIR__ . '/includes/header.php';
         Our Quality Assurance Directorate regularly welcomes client regulatory audits and provides verified Certificates of Analysis (CoA) and FSC compliance documentation.
       </p>
       <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; flex-wrap: wrap;">
-        <a href="contact.php?action=audit#enquiry-form" class="btn btn-gold btn-lg">
+        <a href="contact?action=audit#enquiry-form" class="btn btn-gold btn-lg">
           <i class="ri-calendar-check-line"></i> Schedule a Facility Audit
         </a>
-        <a href="contact.php#enquiry-form" class="btn btn-outline-white btn-lg" style="background: rgba(255,255,255,0.1);">
+        <a href="contact#enquiry-form" class="btn btn-outline-white btn-lg" style="background: rgba(255,255,255,0.1);">
           <i class="ri-mail-send-line"></i> Contact Compliance Team
         </a>
       </div>

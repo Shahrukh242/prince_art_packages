@@ -17,7 +17,7 @@ require __DIR__ . '/includes/header.php';
             <?= h(get_content('capabilities', 'hero_sublead', 'From structural dieline engineering and substrate selection to high-speed cartoning machine compatibility, serialization, and brand security — our packaging consultants deliver end-to-end technical expertise for domestic and global healthcare brands.')) ?>
           </p>
           <div style="display:flex; gap:1.25rem; flex-wrap:wrap; align-items:center;">
-            <?= render_cta_buttons('capabilities', 'hero', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-question-answer-line"></i> How to Contact us</a><a href="#consultancy-pillars" class="btn btn-outline-white btn-lg" style="border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 0.85rem 1.75rem; border-radius: 8px; font-weight: 600; text-decoration: none;"><i class="ri-compass-3-line"></i> Explore Consultancy Services</a>') ?>
+            <?= render_cta_buttons('capabilities', 'hero', '<a href="contact" class="btn btn-gold btn-lg"><i class="ri-question-answer-line"></i> How to Contact us</a><a href="#consultancy-pillars" class="btn btn-outline-white btn-lg" style="border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 0.85rem 1.75rem; border-radius: 8px; font-weight: 600; text-decoration: none;"><i class="ri-compass-3-line"></i> Explore Consultancy Services</a>') ?>
           </div>
         </div>
       </div>
@@ -199,7 +199,7 @@ require __DIR__ . '/includes/header.php';
             <span class="cap-eyebrow cap-eyebrow-dark">PRODUCTION SCALE</span>
             <h2 style="font-size:2.8rem; color:#ffffff; line-height:1.15; margin-bottom:1.5rem;"><?= h(get_content('capabilities', 'scale_title', 'Built to Keep Production Moving.')) ?></h2>
             <p style="color:rgba(255,255,255,0.85); font-size:1.05rem; line-height:1.6; margin-bottom:2rem;"><?= h(get_content('capabilities', 'scale_desc', 'Integrated printing, coating, cutting, converting and finishing capabilities provide the production infrastructure required for high-volume pharmaceutical packaging.')) ?></p>
-            <?= render_cta_buttons('capabilities', 'cta_mid', '<a href="contact.php" class="btn btn-gold btn-lg" style="padding:0.85rem 2rem;">Discuss Your Requirement &rarr;</a>') ?>
+            <?= render_cta_buttons('capabilities', 'cta_mid', '<a href="contact" class="btn btn-gold btn-lg" style="padding:0.85rem 2rem;">Discuss Your Requirement &rarr;</a>') ?>
           </div>
           <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); padding:2.5rem; border-radius:var(--radius-md);">
             <div style="margin-bottom:2rem;">
@@ -282,7 +282,7 @@ require __DIR__ . '/includes/header.php';
         <h2 style="font-size:2.4rem; color:var(--navy-dark); margin-bottom:0.75rem;"><?= h(get_content('capabilities', 'cta_title', 'Need Expert Packaging Consultancy for Your Brand?')) ?></h2>
         <p style="font-size:1.1rem; color:var(--text-body); margin-bottom:2rem; line-height: 1.7;"><?= h(get_content('capabilities', 'cta_desc', 'We provide our experienced consultancy services internationally to developing the right packaging solution for your brand. Reach out to our technical team to discuss your project.')) ?></p>
         <div style="display:flex; gap:1.25rem; justify-content:center; flex-wrap:wrap; align-items:center;">
-          <?= render_cta_buttons('capabilities', 'bottom_cta', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-question-answer-line"></i> How to Contact us</a>') ?>
+          <?= render_cta_buttons('capabilities', 'bottom_cta', '<a href="contact" class="btn btn-gold btn-lg"><i class="ri-question-answer-line"></i> How to Contact us</a>') ?>
         </div>
       </div>
     </div>

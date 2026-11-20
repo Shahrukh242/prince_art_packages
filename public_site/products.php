@@ -18,7 +18,7 @@ require __DIR__ . '/includes/header.php';
       <?= h(get_content('products', 'hero_intro', 'High-precision Printed Cartons, prescribing leaflets, printed bottle labels, and protective partitions manufactured under ISO 9001:2015 and cGMP guidelines.')) ?>
     </p>
     <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin-top: 1.75rem; flex-wrap: wrap;">
-      <?= render_cta_buttons('products', 'hero', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-file-list-3-line"></i> Request Quotation &amp; Samples</a><a href="innovation.php" class="btn btn-outline-white btn-lg" style="color:#ffffff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08);"><i class="ri-lightbulb-line"></i> Explore 3D-ENGRAVIX™ Technology</a>') ?>
+      <?= render_cta_buttons('products', 'hero', '<a href="contact" class="btn btn-gold btn-lg"><i class="ri-file-list-3-line"></i> Request Quotation &amp; Samples</a><a href="innovation" class="btn btn-outline-white btn-lg" style="color:#ffffff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08);"><i class="ri-lightbulb-line"></i> Explore 3D-ENGRAVIX™ Technology</a>') ?>
     </div>
   </div>
 </section>
@@ -75,21 +75,21 @@ require __DIR__ . '/includes/header.php';
           <?php if ($slug === 'printed-cartons' || $slug === 'folding-cartons'): ?>
             <span id="product-folding-cartons" style="position:relative; top:-85px; display:block; visibility:hidden;"></span>
           <?php endif; ?>
-          <a href="product-detail.php?slug=<?= urlencode($slug) ?>" style="text-decoration: none; color: inherit;">
+          <a href="product/<?= urlencode($slug) ?>" style="text-decoration: none; color: inherit;">
             <?= render_image($image, $title, 'card-img-top') ?>
           </a>
           <div class="card-body">
             <div class="card-text-content">
               <span class="cert-pill" style="background:var(--teal-bg); color:var(--teal-brand); margin-bottom:0.5rem; display:inline-block;"><?= h($tag) ?></span>
               <h3 class="card-title">
-                <a href="product-detail.php?slug=<?= urlencode($slug) ?>" style="text-decoration: none; color: var(--navy-dark);">
+                <a href="product/<?= urlencode($slug) ?>" style="text-decoration: none; color: var(--navy-dark);">
                   <?= h($title) ?>
                 </a>
               </h3>
               <p><?= h(strip_tags($desc)) ?></p>
             </div>
             <div class="btn-quote-wrapper">
-              <a href="product-detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
+              <a href="product/<?= urlencode($slug) ?>" class="btn btn-outline-teal btn-sm" style="width:100%; text-align:center;">
                 <i class="ri-file-list-3-line"></i> View Specifications &rarr;
               </a>
             </div>
@@ -224,7 +224,7 @@ require __DIR__ . '/includes/header.php';
           Have specific packaging requirements or need customized dielines?
         </p>
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; align-items: center;">
-          <?= render_cta_buttons('products', 'bottom_cta', '<a href="contact.php" class="btn btn-gold btn-lg"><i class="ri-mail-send-line"></i> Contact Our Packaging Engineers &rarr;</a><a href="contact.php?action=audit" class="btn btn-outline-navy btn-lg"><i class="ri-calendar-check-line"></i> Schedule a Facility Audit</a>') ?>
+          <?= render_cta_buttons('products', 'bottom_cta', '<a href="contact" class="btn btn-gold btn-lg"><i class="ri-mail-send-line"></i> Contact Our Packaging Engineers &rarr;</a><a href="contact?action=audit" class="btn btn-outline-navy btn-lg"><i class="ri-calendar-check-line"></i> Schedule a Facility Audit</a>') ?>
         </div>
       </div>
 

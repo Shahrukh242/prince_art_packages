@@ -25,12 +25,9 @@ foreach ($rawNav as $l) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php
-  // Compute base href dynamically for root domain (live) and subfolder environments (e.g. localhost/pap-dashboard-OLD5/public_site/)
-  $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
-  $baseHref = rtrim($scriptDir, '/') . '/';
-  if ($baseHref === '//' || $baseHref === '') {
-      $baseHref = '/';
-  }
+  // Root-level canonical base on live production ('/'), subfolder base on localhost
+  $baseHref = get_home_url();
+  $homeUrl  = $baseHref;
   ?>
   <base href="<?= htmlspecialchars($baseHref, ENT_QUOTES, 'UTF-8') ?>">
   <title><?= h($meta['meta_title']) ?></title>
@@ -42,12 +39,8 @@ foreach ($rawNav as $l) {
   $canonicalBase = rtrim($proto . '://' . ($_SERVER['HTTP_HOST'] ?? 'princeartpackages.com'), '/');
   // Build clean canonical for this page
   $reqUri = $_SERVER['REQUEST_URI'] ?? '/';
-  // Remove query strings from canonical for clean pages (keep slug for products/blog)
-  $canonPath = strtok($reqUri, '?');
-  // If slug-based (product/blog), keep it clean
-  if (!empty($_GET['slug'])) {
-    $canonPath = $canonPath; // already clean from RewriteRule
-  }
+  $cleanCanon = clean_url($reqUri);
+  $canonPath = ($cleanCanon === '/' || $cleanCanon === $homeUrl) ? '/' : '/' . ltrim(strtok($cleanCanon, '?#'), '/');
   $canonical = $canonicalBase . $canonPath;
   // OG image fallback
   $ogImage = $canonicalBase . '/assets/images/engravix.jpg';
@@ -104,22 +97,22 @@ foreach ($rawNav as $l) {
 
   <header class="main-header">
     <div class="container header-inner">
-      <a href="index" class="brand-logo"><img src="assets/images/logo.png" alt="Prince Art Packages (Private) Limited" class="brand-logo-img"></a>
+      <a href="<?= $homeUrl ?>" class="brand-logo"><img src="assets/images/logo.png" alt="Prince Art Packages (Private) Limited" class="brand-logo-img"></a>
       <nav>
         <ul class="nav-links">
           <?php if (!empty($navLinks)): ?>
             <?php foreach ($navLinks as $link): ?>
               <?php
-                // Clean extensionless URL
-                $cleanUrl = preg_replace('/\.php$/i', '', $link['url']);
-                $cleanUrl = ($cleanUrl === 'index') ? 'index' : $cleanUrl;
+                // Clean canonical URL (strips public_site/, .php, converts product/blog slugs)
+                $targetUrl = clean_url($link['url'] ?? '');
                 // Derive a slug from the URL for active-state matching
-                $linkSlug = basename($cleanUrl);
-                $linkSlug = ($linkSlug === 'index' || $linkSlug === '') ? 'home' : $linkSlug;
+                $linkPath = strtok($targetUrl, '?#');
+                $linkSlug = basename(rtrim((string)$linkPath, '/'));
+                $linkSlug = ($targetUrl === $homeUrl || $linkSlug === 'index' || $linkSlug === '' || $linkSlug === '/') ? 'home' : $linkSlug;
                 $isActive = ($navCurrent === $linkSlug);
               ?>
               <li>
-                <a href="<?= h($cleanUrl) ?>"
+                <a href="<?= h($targetUrl) ?>"
                    class="<?= $isActive ? 'active' : '' ?>"
                    <?= $link['open_new_tab'] ? 'target="_blank" rel="noopener"' : '' ?>>
                   <?= h($link['label']) ?>
@@ -128,7 +121,7 @@ foreach ($rawNav as $l) {
             <?php endforeach; ?>
           <?php else: ?>
             <!-- Fallback hardcoded clean nav -->
-            <li><a href="index"        class="<?= $navCurrent === 'home'         ? 'active' : '' ?>">Home</a></li>
+            <li><a href="<?= $homeUrl ?>" class="<?= $navCurrent === 'home'         ? 'active' : '' ?>">Home</a></li>
             <li><a href="about"        class="<?= $navCurrent === 'about'        ? 'active' : '' ?>">About</a></li>
             <li><a href="products"     class="<?= $navCurrent === 'products'     ? 'active' : '' ?>">Products</a></li>
             <li><a href="capabilities" class="<?= $navCurrent === 'capabilities' ? 'active' : '' ?>">Packaging Consultant</a></li>

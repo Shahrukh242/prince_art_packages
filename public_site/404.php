@@ -35,7 +35,7 @@ require __DIR__ . '/includes/header.php';
       </p>
 
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
-        <a href="index" class="btn btn-gold btn-lg">
+        <a href="<?= $homeUrl ?? '/' ?>" class="btn btn-gold btn-lg">
           <i class="ri-home-4-line"></i> Return to Homepage
         </a>
         <a href="products" class="btn btn-navy btn-lg">
@@ -52,10 +52,10 @@ require __DIR__ . '/includes/header.php';
           <i class="ri-compass-3-line text-teal" style="margin-right: 0.4rem;"></i> Popular Site Destinations:
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
-          <a href="product-detail.php?slug=printed-cartons" style="color: var(--teal-brand); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
+          <a href="product/printed-cartons" style="color: var(--teal-brand); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
             &rarr; Printed Cartons
           </a>
-          <a href="product-detail.php?slug=leaf-inserts" style="color: var(--teal-brand); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
+          <a href="product/leaf-inserts" style="color: var(--teal-brand); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
             &rarr; Leaf-Inserts (PIL)
           </a>
           <a href="capabilities" style="color: var(--teal-brand); text-decoration: none; font-size: 0.95rem; font-weight: 600;">

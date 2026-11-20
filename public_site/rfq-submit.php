@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode(['success' => false, 'error' => 'Invalid request method.']);
         exit;
     }
-    header('Location: index.php');
+    header('Location: ' . get_home_url());
     exit;
 }
 
@@ -26,7 +26,7 @@ if (!csrf_verify($_POST['csrf_token'] ?? null)) {
         echo json_encode(['success' => false, 'error' => 'Session expired. Please refresh the page and try again.']);
         exit;
     }
-    header('Location: contact.php?error=csrf');
+    header('Location: contact?error=csrf');
     exit;
 }
 
@@ -37,7 +37,7 @@ if (!empty($_POST['website_hp'])) {
         echo json_encode(['success' => false, 'error' => 'Spam submission detected.']);
         exit;
     }
-    header('Location: contact.php?error=spam');
+    header('Location: contact?error=spam');
     exit;
 }
 
@@ -61,7 +61,7 @@ if ($contactName === '' || $email === '' || !filter_var($email, FILTER_VALIDATE_
         echo json_encode(['success' => false, 'error' => 'Please provide a valid contact name and business email address.']);
         exit;
     }
-    header('Location: contact.php?error=validation');
+    header('Location: contact?error=validation');
     exit;
 }
 
@@ -151,7 +151,7 @@ try {
         exit;
     }
 
-    header('Location: thank-you.php');
+    header('Location: thank-you');
     exit;
 
 } catch (Exception $e) {
@@ -160,6 +160,6 @@ try {
         echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
         exit;
     }
-    header('Location: contact.php?error=dberror');
+    header('Location: contact?error=dberror');
     exit;
 }

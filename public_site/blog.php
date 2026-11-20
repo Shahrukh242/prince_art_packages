@@ -45,7 +45,7 @@ $posts = $pdo->query("SELECT * FROM blog_posts WHERE is_published = 1 ORDER BY p
     <div class="grid-3-products" style="gap: 2rem;">
       <?php foreach ($posts as $post): ?>
         <div class="product-card" style="display: flex; flex-direction: column; height: 100%;">
-          <a href="blog-post.php?slug=<?= urlencode($post['slug']) ?>" style="text-decoration: none; color: inherit; display: block; overflow: hidden; border-radius: 8px 8px 0 0;">
+          <a href="blog/<?= urlencode($post['slug']) ?>" style="text-decoration: none; color: inherit; display: block; overflow: hidden; border-radius: 8px 8px 0 0;">
             <img src="<?= h($post['image_path']) ?>" class="card-img-top" alt="<?= h($post['title']) ?>" style="height: 220px; width: 100%; object-fit: cover; transition: transform 0.3s ease;">
           </a>
           <div class="card-body" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
@@ -59,7 +59,7 @@ $posts = $pdo->query("SELECT * FROM blog_posts WHERE is_published = 1 ORDER BY p
                 </span>
               </div>
               <h3 class="card-title" style="font-size: 1.2rem; line-height: 1.4; color: var(--navy-dark); font-weight: 800; margin-bottom: 0.75rem;">
-                <a href="blog-post.php?slug=<?= urlencode($post['slug']) ?>" style="text-decoration: none; color: inherit;">
+                <a href="blog/<?= urlencode($post['slug']) ?>" style="text-decoration: none; color: inherit;">
                   <?= h($post['title']) ?>
                 </a>
               </h3>
@@ -68,7 +68,7 @@ $posts = $pdo->query("SELECT * FROM blog_posts WHERE is_published = 1 ORDER BY p
               </p>
             </div>
             <div class="btn-quote-wrapper" style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-              <a href="blog-post.php?slug=<?= urlencode($post['slug']) ?>" class="btn btn-outline-navy btn-sm" style="width: 100%; text-align: center; justify-content: center;">
+              <a href="blog/<?= urlencode($post['slug']) ?>" class="btn btn-outline-navy btn-sm" style="width: 100%; text-align: center; justify-content: center;">
                 Read Full Article &rarr;
               </a>
             </div>
@@ -83,7 +83,7 @@ $posts = $pdo->query("SELECT * FROM blog_posts WHERE is_published = 1 ORDER BY p
     <div class="innovation-banner" style="margin-top: 4.5rem; text-align: center;">
       <h2 class="innovation-banner-heading">Need Custom Packaging Guidance?</h2>
       <p class="innovation-banner-desc">Speak directly with our packaging engineers and technical sales team to evaluate your secondary packaging requirements.</p>
-      <?= render_cta_buttons('blog', 'blog_bottom', '<a href="contact.php" class="btn btn-gold innovation-banner-btn"><i class="ri-mail-send-line"></i> Discuss Your Packaging Requirements</a>') ?>
+      <?= render_cta_buttons('blog', 'blog_bottom', '<a href="contact" class="btn btn-gold innovation-banner-btn"><i class="ri-mail-send-line"></i> Discuss Your Packaging Requirements</a>') ?>
     </div>
   </div>
 </section>

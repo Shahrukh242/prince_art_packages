@@ -45,9 +45,9 @@ require __DIR__ . '/includes/header.php';
       
       <!-- Breadcrumbs -->
       <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: 1.25rem;">
-        <a href="index.php" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;"><i class="ri-home-line"></i> Home</a>
+        <a href="<?= $homeUrl ?? '/' ?>" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;"><i class="ri-home-line"></i> Home</a>
         <span style="color: rgba(255,255,255,0.4); margin: 0 0.5rem;">/</span>
-        <a href="blog.php" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;">Articles &amp; Insights</a>
+        <a href="blog" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem;">Articles &amp; Insights</a>
         <span style="color: rgba(255,255,255,0.4); margin: 0 0.5rem;">/</span>
         <span style="color: var(--teal-brand); font-size: 0.88rem; font-weight: 600;">Article</span>
       </nav>
@@ -116,10 +116,10 @@ require __DIR__ . '/includes/header.php';
 
       <!-- Return Button -->
       <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <a href="blog.php" class="btn btn-outline-navy btn-sm">
+        <a href="blog" class="btn btn-outline-navy btn-sm">
           &larr; Back to All Articles
         </a>
-        <a href="contact.php" class="btn btn-gold btn-sm">
+        <a href="contact" class="btn btn-gold btn-sm">
           <i class="ri-mail-send-line"></i> Consult Our Engineers &rarr;
         </a>
       </div>
@@ -145,7 +145,7 @@ require __DIR__ . '/includes/header.php';
       <div class="grid-3-products" style="gap: 2rem;">
         <?php foreach ($relatedPosts as $relPost): ?>
           <div class="product-card" style="display: flex; flex-direction: column; height: 100%;">
-            <a href="blog-post.php?slug=<?= urlencode($relPost['slug']) ?>" style="text-decoration: none; color: inherit; display: block; overflow: hidden; border-radius: 8px 8px 0 0;">
+            <a href="blog/<?= urlencode($relPost['slug']) ?>" style="text-decoration: none; color: inherit; display: block; overflow: hidden; border-radius: 8px 8px 0 0;">
               <img src="<?= h($relPost['image_path']) ?>" class="card-img-top" alt="<?= h($relPost['title']) ?>" style="height: 200px; width: 100%; object-fit: cover; transition: transform 0.3s ease;">
             </a>
             <div class="card-body" style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
@@ -159,7 +159,7 @@ require __DIR__ . '/includes/header.php';
                   </span>
                 </div>
                 <h3 class="card-title" style="font-size: 1.15rem; line-height: 1.4; color: var(--navy-dark); font-weight: 800; margin-bottom: 0.75rem;">
-                  <a href="blog-post.php?slug=<?= urlencode($relPost['slug']) ?>" style="text-decoration: none; color: inherit;">
+                  <a href="blog/<?= urlencode($relPost['slug']) ?>" style="text-decoration: none; color: inherit;">
                     <?= h($relPost['title']) ?>
                   </a>
                 </h3>
@@ -168,7 +168,7 @@ require __DIR__ . '/includes/header.php';
                 </p>
               </div>
               <div class="btn-quote-wrapper" style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                <a href="blog-post.php?slug=<?= urlencode($relPost['slug']) ?>" class="btn btn-outline-teal btn-sm" style="width: 100%; text-align: center; justify-content: center;">
+                <a href="blog/<?= urlencode($relPost['slug']) ?>" class="btn btn-outline-teal btn-sm" style="width: 100%; text-align: center; justify-content: center;">
                   <i class="ri-file-list-3-line"></i> Read Article &rarr;
                 </a>
               </div>
@@ -178,7 +178,7 @@ require __DIR__ . '/includes/header.php';
       </div>
 
       <div style="text-align: center; margin-top: 3rem;">
-        <a href="blog.php" class="btn btn-outline-navy btn-lg">
+        <a href="blog" class="btn btn-outline-navy btn-lg">
           <i class="ri-arrow-left-line"></i> View All Technical Articles
         </a>
       </div>
@@ -190,7 +190,7 @@ require __DIR__ . '/includes/header.php';
   <div class="container section" style="max-width: 800px; text-align: center; padding: 6rem 0;">
     <h1>Article Not Found</h1>
     <p style="color: var(--text-muted); margin-bottom: 2rem;">The technical article you are looking for does not exist or has been relocated.</p>
-    <a href="blog.php" class="btn btn-navy">&larr; Return to All Articles</a>
+    <a href="blog" class="btn btn-navy">&larr; Return to All Articles</a>
   </div>
 <?php endif; ?>
 

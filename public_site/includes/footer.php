@@ -6,7 +6,7 @@
       <div class="footer-grid">
         <!-- Brand & SEO Overview Column -->
         <div class="footer-col-brand">
-          <a href="index" class="footer-logo-wrap">
+          <a href="<?= $homeUrl ?? '/' ?>" class="footer-logo-wrap">
             <img src="assets/images/logo.png" alt="Prince Art Packages (Private) Limited" class="footer-logo">
           </a>
           <p class="footer-tagline">
@@ -42,12 +42,12 @@
         <div>
           <h4 class="footer-title">Products</h4>
           <ul class="footer-links">
-            <li><a href="product-detail.php?slug=printed-cartons">Printed Cartons</a></li>
-            <li><a href="product-detail.php?slug=leaf-inserts">Leaflets &amp; Outserts</a></li>
-            <li><a href="product-detail.php?slug=printed-labels">Printed Labels</a></li>
-            <li><a href="product-detail.php?slug=coldseal-blister-wallet">ColdSeal Blister Wallets</a></li>
-            <li><a href="product-detail.php?slug=3d-engravix">Anti-Counterfeit Packaging (3D-ENGRAVIX™)</a></li>
-            <li><a href="product-detail.php?slug=slider-pack">Slider Pack</a></li>
+            <li><a href="product/printed-cartons">Printed Cartons</a></li>
+            <li><a href="product/leaf-inserts">Leaflets &amp; Outserts</a></li>
+            <li><a href="product/printed-labels">Printed Labels</a></li>
+            <li><a href="product/coldseal-blister-wallet">ColdSeal Blister Wallets</a></li>
+            <li><a href="product/3d-engravix">Anti-Counterfeit Packaging (3D-ENGRAVIX™)</a></li>
+            <li><a href="product/slider-pack">Slider Pack</a></li>
           </ul>
         </div>
 

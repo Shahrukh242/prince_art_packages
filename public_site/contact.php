@@ -90,7 +90,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             ];
 
             // ---------- Redirect to Thank You page ----------
-            header('Location: thank-you.php');
+            header('Location: thank-you');
             exit;
         }
     }
